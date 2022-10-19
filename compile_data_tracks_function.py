@@ -29,14 +29,14 @@ def compile_data_tracks(treatment, min_track_length, region):
         tracks_geo += tracksgeop
 
     lengths = [len(tracks_geo[i]) for i in range(len(tracks_geo)) ]
-    #print("number of tracks before filtering = ", len(tracks_geo))
+    print("number of tracks before filtering = ", len(tracks_geo))
 
     #remove tracks with less than 'mintracklength' points
     tracks = [track for track in tracks if len(track) >= min_track_length ]
     tracks_geo = [track for track in tracks_geo if len(track) >= min_track_length ]
 
     lengths = [len(tracks_geo[i]) for i in range(len(tracks_geo)) ]
-    #print(len(tracks_geo))
+    print("number of tracks after filtering = ", len(tracks_geo))
 
     #ADD FEATURES TO TRACKS
 
@@ -145,7 +145,8 @@ def compile_data_tracks(treatment, min_track_length, region):
 
     cells = pd.concat([cellsshape.reset_index(drop=True), cellsshape_std.reset_index(drop=True)],1)
 
-    cells.to_csv("cells.csv")
+    #save as csv if wanted
+    #cells.to_csv("cells.csv")
 
     #GET CELL-AVERAGED METRICS, get gel-region, experiment
     gelregion=[]
@@ -169,6 +170,7 @@ def compile_data_tracks(treatment, min_track_length, region):
     endpointcells['abs-skew']=absskew
     endpointcells['mean_retr_norm_radii']=mean_retr_norm_radii
 
-    endpointcells.to_csv("endpointtable.csv")
+    #save as csv if wanted
+    #endpointcells.to_csv("endpointtable.csv")
 
     return tracks_region, tracks_geo_region, cells, endpointcells
