@@ -15,9 +15,7 @@ clean:
 	mkdir -p derived_data
 	touch .created-dirs
 
-# It is usefual to propogate the panas_na and panas_pa values forward
-# in time for subsequent analysis which attempts to cluster the state
-# of each person in the study regardless of time so that we can track
-# their progress through a lower dimensional space.
-derived_data/clinical-outcomes-preprocessed.csv: .created-dirs pre-process.R source_data/clinical_outcomes.csv
-	Rscript pre-process.R
+# Here we create the autocorrelation figures
+figures/acf_figures: .created-dirs celltrack_data/gel_data celltrack_data/glass_data acf_functions.py compile_data_tracks.py\
+ libraries
+	python3 acf_functions.py

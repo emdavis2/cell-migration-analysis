@@ -1,5 +1,5 @@
-from acf_functions import *
-from compile_data_tracks_function import *
+from functions.acf_functions import *
+from functions.compile_data_tracks_function import *
 
 import ntpath
 import os

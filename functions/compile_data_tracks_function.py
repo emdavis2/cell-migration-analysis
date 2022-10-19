@@ -3,7 +3,7 @@ import os
 import numpy as np
 import pandas as pd
 
-from libraries.track_functions import *
+from functions.libraries.track_functions import *
 
 # treatment path to folder containing pickle files of track data for region of interest (gel or glass)
 # min_track_length is an integer of the minimum track length we are going to analyze
