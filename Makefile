@@ -12,10 +12,13 @@ clean:
 .created-dirs:
 	mkdir -p model
 	mkdir -p figures
+	mkdir -p figures/acf_figures
 	mkdir -p derived_data
 	touch .created-dirs
 
 # Here we create the autocorrelation figures
-figures/acf_figures: .created-dirs celltrack_data/gel_data celltrack_data/glass_data acf_functions.py compile_data_tracks.py\
- libraries
-	python3 acf_functions.py
+figures/acf_figures: .created-dirs celltrack_data/gel_data celltrack_data/glass_data\
+ functions/acf_functions.py functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3 GenerateDataACF.py
