@@ -71,7 +71,7 @@ plt.ylim(-0.6,1)
 plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err)
 plt.xlabel("time lag")
 plt.title("Autocorrelaton polarity_angle {}".format(region))
-plt.savefig('figures/acf_figures/{}_polarity_anlge_acf_avg.png'.format(region))
+plt.savefig('figures/acf_figures/{}_polarity_angle_acf_avg.png'.format(region))
 plt.clf()
 
 #Autocorrelation abs-skew
