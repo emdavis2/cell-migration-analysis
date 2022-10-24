@@ -28,7 +28,7 @@ make figures/acf_figures_glass
 To do the same for gel, run:
 
 ```
-figures/acf_figures_gel
+make figures/acf_figures_gel
 ```
 
 To build the report, run:
