@@ -29,13 +29,15 @@ plt.hist(region1_endpointcells['DoverT'],bins=30)
 plt.title('D/T for {}'.format(region1))
 plt.xlabel('D/T')
 plt.ylabel('counts')
-plt.savefig('histograms/DT_{}.png'.format(region1))
+plt.savefig('figures/histogram_boxplot/DT_{}.png'.format(region1))
+plt.clf()
 
 plt.hist(region2_endpointcells['DoverT'],bins=30)
 plt.title('D/T for {}'.format(region2))
 plt.xlabel('D/T')
 plt.ylabel('counts')
-plt.savefig('histograms/DT_{}.png'.format(region2))
+plt.savefig('figures/histogram_boxplot/DT_{}.png'.format(region2))
+plt.clf()
 
 
 #Plot histogram for velocity
@@ -47,7 +49,8 @@ v_region1 = np.concatenate(v_region1).ravel()
 
 plt.hist(v_region1,bins=50)
 plt.title('velocity {}'.format(region1))
-plt.savefig('histograms/vel_hist_{}.png'.format(region1))
+plt.savefig('figures/histogram_boxplot/vel_hist_{}.png'.format(region1))
+plt.clf()
 
 v_region2 = []
 for i in range(len(tracks_geo_region2)):
@@ -57,7 +60,8 @@ v_region2 = np.concatenate(v_region2).ravel()
 
 plt.hist(v_region2,bins=50)
 plt.title('velocity {}'.format(region2))
-plt.savefig('histograms/vel_hist_{}.png'.format(region2))
+plt.savefig('figures/histogram_boxplot/vel_hist_{}.png'.format(region2))
+plt.clf()
 
 #Plot histogram for vx and vy
 vx_region1 = []
@@ -71,11 +75,13 @@ vy_region1 = np.concatenate(vy_region1).ravel()
 
 plt.hist(vx_region1,bins=50)
 plt.title('vx {}'.format(region1))
-plt.savefig('histograms/velx_hist_{}.png'.format(region1))
+plt.savefig('figures/histogram_boxplot/velx_hist_{}.png'.format(region1))
+plt.clf()
 
 plt.hist(vy_region1,bins=50)
 plt.title('vy {}'.format(region1))
-plt.savefig('histograms/vely_hist_{}.png'.format(region1))
+plt.savefig('figures/histogram_boxplot/vely_hist_{}.png'.format(region1))
+plt.clf()
 
 vx_region2 = []
 vy_region2 = []
@@ -88,11 +94,13 @@ vy_region2 = np.concatenate(vy_region2).ravel()
 
 plt.hist(vx_region2,bins=50)
 plt.title('vx {}'.format(region2))
-plt.savefig('histograms/velx_hist_{}.png'.format(region2))
+plt.savefig('figures/histogram_boxplot/velx_hist_{}.png'.format(region2))
+plt.clf()
 
 plt.hist(vy_region2,bins=50)
 plt.title('vy {}'.format(region2))
-plt.savefig('histograms/vely_hist_{}.png'.format(region2))
+plt.savefig('figures/histogram_boxplot/vely_hist_{}.png'.format(region2))
+plt.clf()
 
 #Plot histogram for dx and dy
 dx_region1 = []
@@ -106,11 +114,13 @@ dy_region1 = np.concatenate(dy_region1).ravel()
 
 plt.hist(dx_region1,bins=50)
 plt.title('dx {}'.format(region1))
-plt.savefig('histograms/dx_hist_{}.png'.format(region1))
+plt.savefig('figures/histogram_boxplot/dx_hist_{}.png'.format(region1))
+plt.clf()
 
 plt.hist(dy_region1,bins=50)
 plt.title('dy {}'.format(region1))
-plt.savefig('histograms/dy_hist_{}.png'.format(region1))
+plt.savefig('figures/histogram_boxplot/dy_hist_{}.png'.format(region1))
+plt.clf()
 
 dx_region2 = []
 dy_region2 = []
@@ -123,11 +133,13 @@ dy_region2 = np.concatenate(dy_region2).ravel()
 
 plt.hist(dx_region2,bins=50)
 plt.title('dx {}'.format(region2))
-plt.savefig('histograms/dx_hist_{}.png'.format(region2))
+plt.savefig('figures/histogram_boxplot/dx_hist_{}.png'.format(region2))
+plt.clf()
 
 plt.hist(dy_region2,bins=50)
 plt.title('dy {}'.format(region2))
-plt.savefig('histograms/dy_hist_{}.png'.format(region2))
+plt.savefig('figures/histogram_boxplot/dy_hist_{}.png'.format(region2))
+plt.clf()
 
 #make boxplots
 data_bp = {'{}'.format(region1):v_region1, '{}'.format(region2):v_region2}
@@ -137,6 +149,8 @@ plt.xlabel("Source")
 plt.ylabel("Velocity")
 tstat, pval = ttest_ind(v_region1,v_region2)
 plt.text(.2, 20, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.savefig('figures/histogram_boxplot/velocity_boxplot.png')
+plt.clf()
 
 data_bp = {'{}'.format(region1):vx_region1, '{}'.format(region2):vx_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -145,6 +159,8 @@ plt.xlabel("Source")
 plt.ylabel("Velocity x")
 tstat, pval = ttest_ind(vx_region1,vx_region2)
 plt.text(.1, 18, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.savefig('figures/histogram_boxplot/velocity_x_boxplot.png')
+plt.clf()
 
 data_bp = {'{}'.format(region1):vy_region1, '{}'.format(region2):vy_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -153,6 +169,8 @@ plt.xlabel("Source")
 plt.ylabel("Velocity y")
 tstat, pval = ttest_ind(vy_region1,vy_region2)
 plt.text(.1, 12, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.savefig('figures/histogram_boxplot/velocity_y_boxplot.png')
+plt.clf()
 
 data_bp = {'{}'.format(region1):dx_region1, '{}'.format(region2):dx_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -161,6 +179,8 @@ plt.xlabel("Source")
 plt.ylabel("dx")
 tstat, pval = ttest_ind(dx_region1,dx_region2)
 plt.text(.1, 12, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.savefig('figures/histogram_boxplot/dx_boxplot.png')
+plt.clf()
 
 data_bp = {'{}'.format(region1):dy_region1, '{}'.format(region2):dy_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -169,6 +189,8 @@ plt.xlabel("Source")
 plt.ylabel("dy")
 tstat, pval = ttest_ind(dy_region1,dy_region2)
 plt.text(.1, 12, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.savefig('figures/histogram_boxplot/dy_boxplot.png')
+plt.clf()
 
 data_bp = {'{}'.format(region1):region1_endpointcells['speed'], '{}'.format(region2):region2_endpointcells['speed']}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -177,6 +199,8 @@ plt.xlabel("Source")
 plt.ylabel("Speed")
 tstat, pval = ttest_ind(region1_endpointcells['speed'],region2_endpointcells['speed'])
 plt.text(.1, 15, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.savefig('figures/histogram_boxplot/speed_boxplot.png')
+plt.clf()
 
 data_bp = {'{}'.format(region1):region1_endpointcells['DoverT'], '{}'.format(region2):region2_endpointcells['DoverT']}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -185,6 +209,8 @@ plt.xlabel("Source")
 plt.ylabel("D/T")
 tstat, pval = ttest_ind(region1_endpointcells['DoverT'],region2_endpointcells['DoverT'])
 plt.text(.1, 0.8, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.savefig('figures/histogram_boxplot/DoverT_boxplot.png')
+plt.clf()
 
 data_bp = {'{}'.format(region1):region1_endpointcells['FMI'], '{}'.format(region2):region2_endpointcells['FMI']}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -193,3 +219,5 @@ plt.xlabel("Source")
 plt.ylabel("FMI")
 tstat, pval = ttest_ind(region1_endpointcells['FMI'],region2_endpointcells['FMI'])
 plt.text(.1, 0.7, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.savefig('figures/histogram_boxplot/FMI_boxplot.png')
+plt.clf()
