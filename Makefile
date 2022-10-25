@@ -15,6 +15,7 @@ clean:
 	mkdir -p model
 	mkdir -p figures
 	mkdir -p figures/acf_figures
+	mkdir -p figures/histogram_boxplot
 	mkdir -p derived_data
 	touch .created-dirs
 
@@ -31,6 +32,13 @@ figures/acf_figures_gel: .created-dirs celltrack_data/gel_data\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
 	python3.7 GenerateDataACF.py 'celltrack_data/gel_data' 30 'stiff'
+
+# Create the boxplot and histogram figures for both glass and gel data
+figures/histogram_boxplot: .created-dirs celltrack_data/gel_data\
+ celltrack_data/glass_data functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3.7 GenerateDataHistogramBoxplot.py 'celltrack_data/glass_data' 'celltrack_data/gel_data' 30 'glass' 'stiff'
 
 # Build the final report for the project.
 writeup.pdf: figures/acf_figures/glass_polarity_vector_acf_avg.png figures/acf_figures/stiff_polarity_vector_acf_avg.png\
