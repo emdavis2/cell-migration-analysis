@@ -1,8 +1,6 @@
 from functions.acf_functions import *
 from functions.compile_data_tracks_function import *
 
-import ntpath
-import os
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
