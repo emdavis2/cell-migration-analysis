@@ -1,10 +1,10 @@
 from functions.PRW_model_functions import *
+from functions.PRWpolaritybias_model_functions import *
 from functions.acf_functions import *
-from functions.compile_data_tracks_function import *
 
 import numpy as np 
 
-def run_sim_get_err(poslagaverage_data, run_sim_fn, track_length):
+def run_sim_get_err(poslagaverage_data, run_sim_fn, min_track_length):
     #np.random.seed(20)
 
     data_sim = run_sim_fn
@@ -13,7 +13,7 @@ def run_sim_get_err(poslagaverage_data, run_sim_fn, track_length):
     all_ac = []
     for df in data_sim:
         track=df
-        combined = make_comb_df(track['vx'].to_list()[2:track_length-2],track['vy'].to_list()[2:track_length-2])
+        combined = make_comb_df(track['vx'].to_list()[2:min_track_length-2],track['vy'].to_list()[2:min_track_length-2])
         combined = combined.dropna()
         poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined)
 
@@ -23,7 +23,7 @@ def run_sim_get_err(poslagaverage_data, run_sim_fn, track_length):
         poslagaverage[0:len(poslagsmean)] += poslagsmean #Nposlags*poslagsmean
     poslagaverage /= len(data_sim) #Nposlagtotal 
 
-    poslagaverage_sim = poslagaverage[0:track_length-4]
+    poslagaverage_sim = poslagaverage[0:min_track_length-4]
 
     acf_vel_err = np.sum(np.abs(poslagaverage_data - poslagaverage_sim))
 
