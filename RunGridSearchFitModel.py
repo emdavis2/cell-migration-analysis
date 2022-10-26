@@ -43,7 +43,7 @@ poslagaverage_data = poslagaverage_data[0:min_track_length-4]
 if model_type == 'PRW':
     std_dev_theta_vals = np.linspace(0.9, 1.1, 10)
     min_err, std_dev_theta = perform_gridsearch_1param(poslagaverage_data, std_dev_theta_vals, Nwalkers, dt, time, min_track_length)
-    with open(r'model/model_params.txt', 'w') as f:
+    with open(r'model/model_params_{}_{}.txt'.format(region, model_type), 'w') as f:
         f.write('min_err={}'.format(str(min_err)))
         f.write('\n')
         f.write('std_dev_theta={}'.format(str(std_dev_theta)))
@@ -51,7 +51,7 @@ elif model_type == 'PRW_PB':
     std_dev_w_vals = np.linspace(0.2, .4, 10)
     std_dev_theta_vals = np.linspace(0.9, 1.1, 10)
     min_err, std_dev_w, std_dev_theta = perform_gridsearch_2params(poslagaverage_data, std_dev_w_vals, std_dev_theta_vals, Nwalkers, dt, time, min_track_length)
-    with open(r'model/model_params.txt', 'w') as f:
+    with open(r'model/model_params_{}_{}.txt'.format(region, model_type), 'w') as f:
         f.write('min_err={}'.format(str(min_err)))
         f.write('\n')
         f.write('std_dev_w={}'.format(str(std_dev_w)))
