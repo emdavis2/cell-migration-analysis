@@ -1,0 +1,11 @@
+.DS_Store
+.created-dirs
+functions/.DS_Store
+functions/__pycache__
+functions/libraries/__pycache__
+model
+x.log
+figures
+*.aux
+*.log
+*.pdf
