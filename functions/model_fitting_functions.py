@@ -3,6 +3,13 @@ from functions.PRWpolaritybias_model_functions import *
 from functions.acf_functions import *
 
 import numpy as np 
+import pandas as pd
+
+def make_comb_df(vx, vy):
+    d = {'vx': vx, 'vy': vy}
+    vel_df=pd.DataFrame(data=d)
+    combined = pd.concat([vel_df[['vx','vy']].reset_index(drop=True), vel_df[['vx','vy']].reset_index(drop=True)], axis = 1 )
+    return combined
 
 def run_sim_get_err(poslagaverage_data, run_sim_fn, min_track_length):
     #np.random.seed(20)
@@ -15,7 +22,7 @@ def run_sim_get_err(poslagaverage_data, run_sim_fn, min_track_length):
         track=df
         combined = make_comb_df(track['vx'].to_list()[2:min_track_length-2],track['vy'].to_list()[2:min_track_length-2])
         combined = combined.dropna()
-        poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined)
+        poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined, min_track_length)
 
         #remove nans here
         poslagsmean[np.isnan(poslagsmean)] = 0
