@@ -275,3 +275,49 @@ tstat_PRW, pval_PRW = ttest_ind(DoverT_data,DoverT_PRWsim)
 plt.text(.2, 0.7, 'tstatistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/model/DoverT_boxplot_{}.png'.format(region))
 plt.clf()
+
+#Plot trajectories 
+#x_data = {}
+#y_data = {}
+#i = 1
+for df in tracks_region:
+    plt.plot(df[:,0],df[:,1])
+    #x_data[i] = df[:,0]
+    #y_data[i] = df[:,1]
+    #i += 1
+plt.xlabel(('x position ($\mu$m)'))
+plt.ylabel(('y position ($\mu$m)'))
+plt.savefig('figures/model/trajectories_data_{}'.format(region))
+plt.clf()
+
+for df in data_PRWPBsim:
+  plt.plot(df['x'],df['y'])
+plt.xlabel(('x position ($\mu$m)'))
+plt.ylabel(('y position ($\mu$m)'))
+plt.savefig('figures/model/trajectories_PRWPBsim_{}'.format(region))
+plt.clf()
+
+for df in data_PRWsim:
+  plt.plot(df['x'],df['y'])
+plt.xlabel(('x position ($\mu$m)'))
+plt.ylabel(('y position ($\mu$m)'))
+plt.savefig('figures/model/trajectories_PRWsim_{}'.format(region))
+plt.clf()
+
+#track lengths of data
+lengths = [len(tracks_geo_region[i]) for i in range(len(tracks_geo_region)) ]
+plt.hist(lengths,bins=30)
+plt.xlabel('track length (number of frames)')
+plt.ylabel('counts')
+plt.title('Track lengths for {} data'.format(region))
+plt.savefig('figures/model/track_lengths_data_{}.png'.format(region))
+plt.clf()
+
+###Try plotting polarity angle over time...can delete later
+for i in data_PRWPBsim:
+  plt.plot(i['omega']-i['omega'][0])
+plt.xlabel('time (10 min)')
+plt.ylabel('angle (radians)')
+plt.title(r'$\omega$ vs time for PRW Polarity Bias Sim {}'.format(region))
+plt.savefig('figures/model/omega_vs_time_{}.png'.format(region))
+plt.clf()
