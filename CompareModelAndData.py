@@ -7,6 +7,8 @@ from functions.model_fitting_functions import *
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import ttest_ind
 
 treatment = str(sys.argv[1])
 
@@ -95,7 +97,7 @@ poslagaverage_PRWPBsim = poslagaverage_PRWPBsim[0:min_track_length-4]
 plt.plot(poslagaverage_data,label = "Data")
 plt.plot(poslagaverage_PRWPBsim,label = "PRW Polarity Bias, error={}".format(round(PRWPB_err,3)))
 plt.plot(poslagaverage_PRWsim,label = "PRW, error={}".format(round(PRW_err,3)))
-plt.hlines(y=0,xmin=0,xmax=min_track_length)
+plt.hlines(y=0,xmin=0,xmax=min_track_length,color='k')
 plt.xlim(0,min_track_length-2)
 plt.ylim(-1,1)
 plt.xlabel("time lag")
@@ -166,4 +168,110 @@ plt.plot(bins_count_PRWsim[1:], cdf_PRWsim, label="PRW sim, error={}".format(rou
 plt.title('CDF for dx and dy {}'.format(region))
 plt.legend()
 plt.savefig('figures/model/dxdy_cdf_modelcomaparion_{}'.format(region))
+plt.clf()
+
+#Compare dx dy with boxplot
+data_bp = {'{} Data'.format(region):dx_dy_data, 'PRW Polarity Bias':dx_dy_PRWPBsim, 'PRW':dx_dy_PRWsim}
+data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
+sns.boxplot(data=data_boxplot)
+plt.xlabel("Source")
+plt.ylabel("DX DY")
+tstat_PRWPB, pval_PRWPB = ttest_ind(dx_dy_data,dx_dy_PRWPBsim)
+plt.text(.2, 40, 'tstatistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+tstat_PRW, pval_PRW = ttest_ind(dx_dy_data,dx_dy_PRWsim)
+plt.text(.2, 30, 'tstatistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.savefig('figures/model/dx_dy_boxplot_{}.png'.format(region))
+plt.clf()
+
+#Compare vx and vy with boxplot
+vx_PRWsim = []
+vy_PRWsim = []
+v_PRWsim = []
+for i in range(len(data_PRWsim)):
+  vx_PRWsim.append(np.array(data_PRWsim[i]['vx'].dropna().tolist()))
+  vy_PRWsim.append(np.array(data_PRWsim[i]['vy'].dropna().tolist()))
+  v_PRWsim.append(np.array(data_PRWsim[i]['v'].dropna().tolist()))
+
+vx_PRWsim = np.concatenate(vx_PRWsim).ravel()
+vy_PRWsim = np.concatenate(vy_PRWsim).ravel()
+v_PRWsim = np.concatenate(v_PRWsim).ravel()
+
+vx_vy_PRWsim = np.concatenate((vx_PRWsim,vy_PRWsim))
+
+vx_PRWPBsim = []
+vy_PRWPBsim = []
+v_PRWPBsim = []
+for i in range(len(data_PRWPBsim)):
+  vx_PRWPBsim.append(np.array(data_PRWPBsim[i]['vx'].dropna().tolist()))
+  vy_PRWPBsim.append(np.array(data_PRWPBsim[i]['vy'].dropna().tolist()))
+  v_PRWPBsim.append(np.array(data_PRWPBsim[i]['v'].dropna().tolist()))
+
+vx_PRWPBsim = np.concatenate(vx_PRWPBsim).ravel()
+vy_PRWPBsim = np.concatenate(vy_PRWPBsim).ravel()
+v_PRWPBsim = np.concatenate(v_PRWPBsim).ravel()
+
+vx_vy_PRWPBsim = np.concatenate((vx_PRWPBsim,vy_PRWPBsim))
+
+vx_data = []
+vy_data = []
+v_data = []
+for i in range(len(tracks_geo_region)):
+  vx_data.append(np.array(tracks_geo_region[i]['vx'].dropna().tolist()))
+  vy_data.append(np.array(tracks_geo_region[i]['vy'].dropna().tolist()))
+  v_data.append(np.array(tracks_geo_region[i]['v'].dropna().tolist()))
+
+vx_data = np.concatenate(vx_data).ravel()
+vy_data = np.concatenate(vy_data).ravel()
+v_data = np.concatenate(v_data).ravel()
+
+vx_vy_data = np.concatenate((vx_data,vy_data))
+
+data_bp = {'{} Data'.format(region):vx_vy_data, 'PRW Polarity Bias':vx_vy_PRWPBsim, 'PRW':vx_vy_PRWsim}
+data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
+sns.boxplot(data=data_boxplot)
+plt.xlabel("Source")
+plt.ylabel("VX VY")
+tstat_PRWPB, pval_PRWPB = ttest_ind(vx_vy_data,vx_vy_PRWPBsim)
+plt.text(.2, -16, 'tstatistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+tstat_PRW, pval_PRW = ttest_ind(vx_vy_data,vx_vy_PRWsim)
+plt.text(.2, -20, 'tstatistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.savefig('figures/model/vx_vy_boxplot_{}.png'.format(region))
+plt.clf()
+
+data_bp = {'{} Data'.format(region):v_data, 'PRW Polarity Bias':v_PRWPBsim, 'PRW':v_PRWsim}
+data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
+sns.boxplot(data=data_boxplot)
+plt.xlabel("Source")
+plt.ylabel("Velocity")
+tstat_PRWPB, pval_PRWPB = ttest_ind(v_data,v_PRWPBsim)
+plt.text(.2, 22, 'tstatistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+tstat_PRW, pval_PRW = ttest_ind(v_data,v_PRWsim)
+plt.text(.2, 20, 'tstatistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.savefig('figures/model/velocity_boxplot_{}.png'.format(region))
+plt.clf()
+
+
+#Compare D/T with boxplot
+DoverT_PRWsim = []
+for i in range(len(data_PRWsim)):
+  DoverT_PRWsim.append(np.array(data_PRWsim[i]['DoverT'].dropna().tolist()))
+DoverT_PRWsim = np.concatenate(DoverT_PRWsim).ravel()
+
+DoverT_PRWPBsim = []
+for i in range(len(data_PRWPBsim)):
+  DoverT_PRWPBsim.append(np.array(data_PRWPBsim[i]['DoverT'].dropna().tolist()))
+DoverT_PRWPBsim = np.concatenate(DoverT_PRWPBsim).ravel()
+
+DoverT_data = region_endpointcells['DoverT']
+
+data_bp = {'{} Data'.format(region):DoverT_data, 'PRW Polarity Bias':DoverT_PRWPBsim, 'PRW':DoverT_PRWsim}
+data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
+sns.boxplot(data=data_boxplot)
+plt.xlabel("Source")
+plt.ylabel("D/T")
+tstat_PRWPB, pval_PRWPB = ttest_ind(DoverT_data,DoverT_PRWPBsim)
+plt.text(.2, 0.8, 'tstatistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+tstat_PRW, pval_PRW = ttest_ind(DoverT_data,DoverT_PRWsim)
+plt.text(.2, 0.7, 'tstatistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.savefig('figures/model/DoverT_boxplot_{}.png'.format(region))
 plt.clf()
