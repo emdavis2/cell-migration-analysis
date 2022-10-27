@@ -29,14 +29,44 @@ plt.hist(region1_endpointcells['DoverT'],bins=30)
 plt.title('D/T for {}'.format(region1))
 plt.xlabel('D/T')
 plt.ylabel('counts')
-plt.savefig('figures/histogram_boxplot/DT_{}.png'.format(region1))
+plt.savefig('figures/histogram_boxplot/DT_hist_{}.png'.format(region1))
 plt.clf()
 
 plt.hist(region2_endpointcells['DoverT'],bins=30)
 plt.title('D/T for {}'.format(region2))
 plt.xlabel('D/T')
 plt.ylabel('counts')
-plt.savefig('figures/histogram_boxplot/DT_{}.png'.format(region2))
+plt.savefig('figures/histogram_boxplot/DT_hist_{}.png'.format(region2))
+plt.clf()
+
+#Plot histogram for speed
+plt.hist(region1_endpointcells['speed'],bins=30)
+plt.title('speed for {}'.format(region1))
+plt.xlabel('speed')
+plt.ylabel('counts')
+plt.savefig('figures/histogram_boxplot/speed_hist_{}.png'.format(region1))
+plt.clf()
+
+plt.hist(region2_endpointcells['speed'],bins=30)
+plt.title('speed for {}'.format(region2))
+plt.xlabel('speed')
+plt.ylabel('counts')
+plt.savefig('figures/histogram_boxplot/speed_hist_{}.png'.format(region2))
+plt.clf()
+
+#Plot histogram for FMI
+plt.hist(region1_endpointcells['FMI'],bins=30)
+plt.title('FMI for {}'.format(region1))
+plt.xlabel('FMI')
+plt.ylabel('counts')
+plt.savefig('figures/histogram_boxplot/FMI_hist_{}.png'.format(region1))
+plt.clf()
+
+plt.hist(region2_endpointcells['FMI'],bins=30)
+plt.title('FMI for {}'.format(region2))
+plt.xlabel('FMI')
+plt.ylabel('counts')
+plt.savefig('figures/histogram_boxplot/FMI_hist_{}.png'.format(region2))
 plt.clf()
 
 
