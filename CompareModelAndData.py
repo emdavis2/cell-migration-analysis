@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import ttest_ind
+from scipy.optimize import curve_fit
 
 treatment = str(sys.argv[1])
 
@@ -104,6 +105,94 @@ plt.xlabel("time lag")
 plt.title(" Autocorrelation velocity {}".format(region))
 plt.legend()
 plt.savefig('figures/model/acf_velocity_modelcomaparion_{}'.format(region))
+plt.clf()
+
+#single exponential fits for acf velocity
+# Fit the function 
+popt, pcov = curve_fit(lambda t, b: np.exp(-t*b), np.arange(0,min_track_length-4),poslagaverage_PRWPBsim[0:min_track_length-4],method='trf')
+# Create the fitted curve
+b = popt[0]
+x_fitted = np.linspace(0, min_track_length-4, 100)
+y_fitted = np.exp(-x_fitted*b)
+# Plot
+plt.scatter(np.arange(0,min_track_length-4), poslagaverage_PRWPBsim[0:min_track_length-4], label='Raw data')
+plt.plot(x_fitted, y_fitted, 'k', label='Fitted curve')
+plt.title(r'Single exponential fit for acf velocity PRW Polarity Bias {}'.format(region))
+plt.xlabel(r'time lag $\tau$ (10 min)')
+plt.ylabel(r'acf($\tau$)')
+plt.legend()
+plt.text(12,0.9,r'$acf(\tau)=e^{-\tau b}$')
+plt.text(12,0.7,'$b$={}'.format(round(b,3)))
+plt.hlines(y=0,xmin=0,xmax=min_track_length,color='k')
+plt.xlim(0,min_track_length-2)
+plt.ylim(-1,1)
+plt.savefig('figures/model/single_exp_acf_vel_fit_PRWPB_{}.png'.format(region))
+plt.clf()
+
+# Fit the function 
+popt, pcov = curve_fit(lambda t, b: np.exp(-t*b), np.arange(0,min_track_length-4),poslagaverage_data[0:min_track_length-4],method='trf')
+# Create the fitted curve
+b = popt[0]
+x_fitted = np.linspace(0, min_track_length-4, 100)
+y_fitted = np.exp(-x_fitted*b)
+# Plot
+plt.scatter(np.arange(0,min_track_length-4), poslagaverage_data[0:min_track_length-4], label='Raw data')
+plt.plot(x_fitted, y_fitted, 'k', label='Fitted curve')
+plt.title(r'Single exponential fit for acf velocity {} data'.format(region))
+plt.xlabel(r'time lag $\tau$ (10 min)')
+plt.ylabel(r'acf($\tau$)')
+plt.legend()
+plt.text(12,0.9,r'$acf(\tau)=e^{-\tau b}$')
+plt.text(12,0.7,'$b$={}'.format(round(b,3)))
+plt.hlines(y=0,xmin=0,xmax=min_track_length,color='k')
+plt.xlim(0,min_track_length-2)
+plt.ylim(-1,1)
+plt.savefig('figures/model/single_exp_acf_vel_fit_data_{}.png'.format(region))
+plt.clf()
+
+#double exponential fits for acf velocity
+# Fit the function 
+popt, pcov = curve_fit(lambda t, b, a: np.exp(-t*b) + np.exp(-t*a), np.arange(0,min_track_length-4),poslagaverage_PRWPBsim[0:min_track_length-4],method='trf')
+# Create the fitted curve
+b = popt[0]
+a = popt[1]
+x_fitted = np.linspace(0, min_track_length-4, 100)
+y_fitted = np.exp(-x_fitted*b) + np.exp(-x_fitted*a)
+# Plot
+plt.scatter(np.arange(0,min_track_length-4), poslagaverage_PRWPBsim[0:min_track_length-4], label='Raw data')
+plt.plot(x_fitted, y_fitted, 'k', label='Fitted curve')
+plt.title(r'Single exponential fit for acf velocity PRW Polarity Bias {}'.format(region))
+plt.xlabel(r'time lag $\tau$ (10 min)')
+plt.ylabel(r'acf($\tau$)')
+plt.legend()
+plt.text(12,0.9,r'$acf(\tau)=e^{-\tau b} + e^{-\tau b}$')
+plt.text(12,0.7,'$b$={} $a$={}'.format(round(b,3),round(a,3)))
+plt.hlines(y=0,xmin=0,xmax=min_track_length,color='k')
+plt.xlim(0,min_track_length-2)
+plt.ylim(-1,1)
+plt.savefig('figures/model/double_exp_acf_vel_fit_PRWPB_{}.png'.format(region))
+plt.clf()
+
+# Fit the function 
+popt, pcov = curve_fit(lambda t, b, a: np.exp(-t*b) + np.exp(-t*a), np.arange(0,min_track_length-4),poslagaverage_data[0:min_track_length-4],method='trf')
+# Create the fitted curve
+b = popt[0]
+a = popt[1]
+x_fitted = np.linspace(0, min_track_length-4, 100)
+y_fitted = np.exp(-x_fitted*b) + np.exp(-x_fitted*a)
+# Plot
+plt.scatter(np.arange(0,min_track_length-4), poslagaverage_data[0:min_track_length-4], label='Raw data')
+plt.plot(x_fitted, y_fitted, 'k', label='Fitted curve')
+plt.title(r'Single exponential fit for acf velocity data {}'.format(region))
+plt.xlabel(r'time lag $\tau$ (10 min)')
+plt.ylabel(r'acf($\tau$)')
+plt.legend()
+plt.text(12,0.9,r'$acf(\tau)=e^{-\tau b} + e^{-\tau b}$')
+plt.text(12,0.7,'$b$={} $a$={}'.format(round(b,3),round(a,3)))
+plt.hlines(y=0,xmin=0,xmax=min_track_length,color='k')
+plt.xlim(0,min_track_length-2)
+plt.ylim(-1,1)
+plt.savefig('figures/model/double_exp_acf_vel_fit_data_{}.png'.format(region))
 plt.clf()
 
 #compare dx and dy with cdf
@@ -287,6 +376,7 @@ for df in tracks_region:
     #i += 1
 plt.xlabel(('x position ($\mu$m)'))
 plt.ylabel(('y position ($\mu$m)'))
+plt.title('Trajectories for {} Data'.format(region))
 plt.savefig('figures/model/trajectories_data_{}'.format(region))
 plt.clf()
 
@@ -294,6 +384,7 @@ for df in data_PRWPBsim:
   plt.plot(df['x'],df['y'])
 plt.xlabel(('x position ($\mu$m)'))
 plt.ylabel(('y position ($\mu$m)'))
+plt.title('Trajectories for PRW Polarity Bias')
 plt.savefig('figures/model/trajectories_PRWPBsim_{}'.format(region))
 plt.clf()
 
@@ -301,6 +392,7 @@ for df in data_PRWsim:
   plt.plot(df['x'],df['y'])
 plt.xlabel(('x position ($\mu$m)'))
 plt.ylabel(('y position ($\mu$m)'))
+plt.title('Trajectories for PRW')
 plt.savefig('figures/model/trajectories_PRWsim_{}'.format(region))
 plt.clf()
 
