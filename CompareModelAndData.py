@@ -411,5 +411,24 @@ for i in data_PRWPBsim:
 plt.xlabel('time (10 min)')
 plt.ylabel('angle (radians)')
 plt.title(r'$\omega$ vs time for PRW Polarity Bias Sim {}'.format(region))
-plt.savefig('figures/model/omega_vs_time_{}.png'.format(region))
+plt.savefig('figures/model/omega_vs_time_PRWPB_{}.png'.format(region))
+plt.clf()
+
+for i in data_PRWPBsim:
+  plt.plot(i['theta']-i['theta'][0])
+plt.xlabel('time (10 min)')
+plt.ylabel('angle (radians)')
+plt.title(r'$\theta$ vs time for PRW Polarity Bias Sim {}'.format(region))
+plt.savefig('figures/model/theta_vs_time_PRWPB_{}.png'.format(region))
+plt.clf()
+
+for df in tracks_region:
+    plt.plot(np.arctan2(np.array(df[:,1]),np.array(df[:,0]))-np.arctan2(np.array(df[0,1]),np.array(df[0,0])))
+    #x_data[i] = df[:,0]
+    #y_data[i] = df[:,1]
+    #i += 1
+plt.xlabel('time (10 min)')
+plt.ylabel('angle (radians)')
+plt.title(r'$\theta$ vs time for Data {}'.format(region))
+plt.savefig('figures/model/theta_vs_time_data_{}.png'.format(region))
 plt.clf()
