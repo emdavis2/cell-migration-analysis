@@ -104,10 +104,11 @@ def run_PRWpolaritybias_sim(Nwalkers, dt, time, std_dev_w, std_dev_theta):
         x_vel = calc_vel(x)
         y_vel = calc_vel(y)
         vel = np.sqrt(x_vel**2 + y_vel**2)
+        stepsize = np.sqrt((np.array(x[0:-1])-np.array(x[1:]))**2 +(np.array(y[0:-1])-np.array(y[1:]))**2)
         r = np.sqrt(np.array(x)**2 + np.array(y)**2)
         net_disp = abs(r[-1] - r[0])
-        tot_path_len = np.sum(r)
-        onewalker = {'x': x, 'y': y, 'x_pol':x_pol, 'y_pol': y_pol, 'vx': x_vel, 'vy': y_vel, 'v': vel, 'omega': omega, 'theta': theta, 'DoverT': net_disp/tot_path_len}
+        #tot_path_len = np.sum(r)
+        onewalker = {'x': x, 'y': y, 'x_pol':x_pol, 'y_pol': y_pol, 'vx': x_vel, 'vy': y_vel, 'v': vel, 'omega': omega, 'theta': theta, 'DoverT': net_disp/np.sum(stepsize)}
         onewalker_df = pd.DataFrame(data=onewalker)
         data_sim.append(onewalker_df)
     return data_sim
