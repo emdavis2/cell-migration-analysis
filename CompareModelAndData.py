@@ -424,6 +424,7 @@ plt.clf()
 
 for df in tracks_geo_region:
     plt.plot(df['theta']-df['theta'][0])
+plt.xlim(0,min_track_length)
 plt.xlabel('time (10 min)')
 plt.ylabel('angle (radians)')
 plt.title(r'$\theta$ vs time for Data {}'.format(region))
