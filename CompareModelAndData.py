@@ -405,7 +405,7 @@ plt.title('Track lengths for {} data'.format(region))
 plt.savefig('figures/model/track_lengths_data_{}.png'.format(region))
 plt.clf()
 
-###Try plotting polarity angle over time...can delete later
+#Plotting angles over time
 for i in data_PRWPBsim:
   plt.plot(i['omega']-i['omega'][0])
 plt.xlabel('time (10 min)')
@@ -422,11 +422,8 @@ plt.title(r'$\theta$ vs time for PRW Polarity Bias Sim {}'.format(region))
 plt.savefig('figures/model/theta_vs_time_PRWPB_{}.png'.format(region))
 plt.clf()
 
-for df in tracks_region:
-    plt.plot(np.arctan2(np.array(df[:,1]),np.array(df[:,0]))-np.arctan2(np.array(df[0,1]),np.array(df[0,0])))
-    #x_data[i] = df[:,0]
-    #y_data[i] = df[:,1]
-    #i += 1
+for df in tracks_geo_region:
+    plt.plot(df['theta']-df['theta'][0])
 plt.xlabel('time (10 min)')
 plt.ylabel('angle (radians)')
 plt.title(r'$\theta$ vs time for Data {}'.format(region))
