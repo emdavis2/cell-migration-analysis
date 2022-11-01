@@ -4,6 +4,7 @@ functions/.DS_Store
 functions/__pycache__
 functions/libraries/__pycache__
 model
+hetero_model
 x.log
 figures
 *.aux
