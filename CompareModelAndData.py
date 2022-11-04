@@ -1,4 +1,5 @@
 from functions.acf_functions import *
+from functions.msd_functions import *
 from functions.compile_data_tracks_function import *
 from functions.PRW_model_functions import *
 from functions.PRWpolaritybias_model_functions import *
@@ -429,4 +430,14 @@ plt.xlabel('time (10 min)')
 plt.ylabel('angle (radians)')
 plt.title(r'$\theta$ vs time for Data {}'.format(region))
 plt.savefig('figures/model/theta_vs_time_data_{}.png'.format(region))
+plt.clf()
+
+#Plot MSD
+plt.plot(calc_MSD(tracks_region, min_track_length), label='{} Data'.format(region))
+plt.plot(calc_MSD_sim(data_PRWPBsim, min_track_length), label='PRW Polarity Bias Sim')
+plt.plot(calc_MSD_sim(data_PRWsim, min_track_length), label='PRW Sim')
+plt.xlabel('lag')
+plt.ylabel('MSD')
+plt.legend()
+plt.savefig('figures/model/MSD_{}.png'.format(region))
 plt.clf()
