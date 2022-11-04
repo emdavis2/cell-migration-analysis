@@ -35,15 +35,15 @@ for df in tracks_geo_region:
 
 #perform grid search
 if model_type == 'PRW':
-    std_dev_theta_vals = np.linspace(0.4, 1.5, 20)
+    std_dev_theta_vals = np.linspace(0.1, 2, 10)
     tot_err, std_dev_theta = perform_gridsearch_1param(poslagaverage_data, std_dev_theta_vals, Nwalkers, dt, time, min_track_length)
     with open(r'hetero_model/model_params_{}_{}.txt'.format(region, model_type), 'w') as f:
         f.write('min_err={}'.format(str(tot_err)))
         f.write('\n')
         f.write('std_dev_theta={}'.format(str(std_dev_theta)))
 elif model_type == 'PRW_PB':
-    std_dev_w_vals = np.linspace(0.2, 0.9, 20)
-    std_dev_theta_vals = np.linspace(0.9, 1.5, 20)
+    std_dev_w_vals = np.linspace(0.1, 2, 10)
+    std_dev_theta_vals = np.linspace(0.1, 2, 10)
     tot_err, std_dev_w, std_dev_theta = perform_gridsearch_2params(poslagaverage_data, std_dev_w_vals, std_dev_theta_vals, Nwalkers, dt, time, min_track_length)
     with open(r'hetero_model/model_params_{}_{}.txt'.format(region, model_type), 'w') as f:
         f.write('min_err={}'.format(str(tot_err)))
