@@ -51,7 +51,7 @@ def run_sim_get_MSD_err(tracks_region, tracks_geo_region, run_sim_fn, min_track_
 
   data_sim = run_sim_fn
 
-  MSD_sim = calc_MSD_sim(data_sim, 30)
+  MSD_sim = calc_MSD_sim(data_sim, min_track_length)
 
   MSD_err = np.sum(np.abs(MSD_data - MSD_sim))
 
