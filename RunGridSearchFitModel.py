@@ -24,10 +24,31 @@ err_fn = str(sys.argv[8]) #vel_acf or MSD
 
 tracks_region, tracks_geo_region, region_cells, region_endpointcells = compile_data_tracks(treatment, min_track_length, region)
 
+
+#autocorrelation velocity for data
+poslagaverage_data = np.zeros(300)
+for df in tracks_geo_region:
+  track=df
+  combined = pd.concat([track[['vx','vy']].reset_index(drop=True), track[['vx','vy']].reset_index(drop=True)], axis = 1 )
+  poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined, min_track_length)
+  #remove nans here
+  poslagsmean[np.isnan(poslagsmean)] = 0
+  poslagaverage_data[0:len(poslagsmean)] += poslagsmean # Nposlags*poslagsmean
+poslagaverage_data /= len(tracks_geo_region) #Nposlagtotal 
+poslagaverage_data = poslagaverage_data[0:min_track_length-4]
+
+#MSD for data
+MSD_data = calc_MSD(tracks_region, min_track_length)
+
+if err_fn == 'vel_acf':
+    data_for_fit = poslagaverage_data
+elif err_fn == 'MSD':
+    data_for_fit = MSD_data
+
 #perform grid search
 if model_type == 'PRW':
     std_dev_theta_vals = np.linspace(0.4, 1.5, 20)
-    min_err, std_dev_theta = perform_gridsearch_1param(tracks_region, tracks_geo_region, err_fn, std_dev_theta_vals, Nwalkers, dt, time, min_track_length)
+    min_err, std_dev_theta = perform_gridsearch_1param(data_for_fit, err_fn, std_dev_theta_vals, Nwalkers, dt, time, min_track_length)
     with open(r'model/model_params_{}_{}_{}.txt'.format(region, model_type, err_fn), 'w') as f:
         f.write('min_err={}'.format(str(min_err)))
         f.write('\n')
@@ -35,7 +56,7 @@ if model_type == 'PRW':
 elif model_type == 'PRW_PB':
     std_dev_w_vals = np.linspace(0.2, 0.9, 20)
     std_dev_theta_vals = np.linspace(0.9, 1.5, 20)
-    min_err, std_dev_w, std_dev_theta = perform_gridsearch_2params(tracks_region, tracks_geo_region, err_fn, std_dev_w_vals, std_dev_theta_vals, Nwalkers, dt, time, min_track_length)
+    min_err, std_dev_w, std_dev_theta = perform_gridsearch_2params(data_for_fit, err_fn, std_dev_w_vals, std_dev_theta_vals, Nwalkers, dt, time, min_track_length)
     with open(r'model/model_params_{}_{}_{}.txt'.format(region, model_type, err_fn), 'w') as f:
         f.write('min_err={}'.format(str(min_err)))
         f.write('\n')
