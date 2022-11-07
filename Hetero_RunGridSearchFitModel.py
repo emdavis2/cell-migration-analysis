@@ -20,6 +20,8 @@ Nwalkers = int(sys.argv[6]) #113
 
 model_type = str(sys.argv[7]) #PRW or PRW_PB
 
+err_fn = str(sys.argv[8]) #run_sim_get_velacf_err or run_sim_get_msd_err
+
 tracks_region, tracks_geo_region, region_cells, region_endpointcells = compile_data_tracks(treatment, min_track_length, region)
 
 #autocorrelation velocity for data
@@ -36,7 +38,7 @@ for df in tracks_geo_region:
 #perform grid search
 if model_type == 'PRW':
     std_dev_theta_vals = np.linspace(0.1, 2, 10)
-    tot_err, std_dev_theta = perform_gridsearch_1param(poslagaverage_data, std_dev_theta_vals, Nwalkers, dt, time, min_track_length)
+    tot_err, std_dev_theta = perform_gridsearch_1param(poslagaverage_data, err_fn, std_dev_theta_vals, Nwalkers, dt, time, min_track_length)
     with open(r'hetero_model/model_params_{}_{}.txt'.format(region, model_type), 'w') as f:
         f.write('min_err={}'.format(str(tot_err)))
         f.write('\n')
@@ -44,7 +46,7 @@ if model_type == 'PRW':
 elif model_type == 'PRW_PB':
     std_dev_w_vals = np.linspace(0.1, 2, 10)
     std_dev_theta_vals = np.linspace(0.1, 2, 10)
-    tot_err, std_dev_w, std_dev_theta = perform_gridsearch_2params(poslagaverage_data, std_dev_w_vals, std_dev_theta_vals, Nwalkers, dt, time, min_track_length)
+    tot_err, std_dev_w, std_dev_theta = perform_gridsearch_2params(poslagaverage_data, err_fn, std_dev_w_vals, std_dev_theta_vals, Nwalkers, dt, time, min_track_length)
     with open(r'hetero_model/model_params_{}_{}.txt'.format(region, model_type), 'w') as f:
         f.write('min_err={}'.format(str(tot_err)))
         f.write('\n')
