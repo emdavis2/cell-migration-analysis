@@ -17,8 +17,10 @@ clean:
 	mkdir -p figures
 	mkdir -p figures/acf_figures
 	mkdir -p figures/histogram_boxplot
-	mkdir -p figures/model
-	mkdir -p figures/hetero_model
+	mkdir -p figures/velacf_model
+	mkdir -p figures/MSD_model
+	mkdir -p figures/velacf_hetero_model
+	mkdir -p figures/MSD_hetero_model
 	touch .created-dirs
 
 # Create the autocorrelation figures for glass data
