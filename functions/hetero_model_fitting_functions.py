@@ -11,8 +11,7 @@ def make_comb_df(vx, vy):
     combined = pd.concat([vel_df[['vx','vy']].reset_index(drop=True), vel_df[['vx','vy']].reset_index(drop=True)], axis = 1 )
     return combined
 
-def run_sim_get_err_onecell(poslagsmean_data, run_sim_fn, min_track_length):
-
+def run_sim_get_velacf_err(poslagsmean_data, run_sim_fn, min_track_length):
     track = run_sim_fn[0]
 
     combined = make_comb_df(track['vx'].to_list()[2:min_track_length-2],track['vy'].to_list()[2:min_track_length-2])
@@ -27,7 +26,7 @@ def run_sim_get_err_onecell(poslagsmean_data, run_sim_fn, min_track_length):
     return acf_vel_err
 
 
-def perform_gridsearch_2params(poslagaverage_data, std_dev_w_vals, std_dev_theta_vals, Nwalkers, dt, time, min_track_length):
+def perform_gridsearch_2params(poslagaverage_data, run_sim_err_fn, std_dev_w_vals, std_dev_theta_vals, Nwalkers, dt, time, min_track_length):
     tot_err = 0
     index_w_allcells = []
     index_theta_allcells = []
@@ -38,7 +37,7 @@ def perform_gridsearch_2params(poslagaverage_data, std_dev_w_vals, std_dev_theta
 
         for ind_w, std_dev_w in enumerate(std_dev_w_vals):
             for ind_t,std_dev_theta in enumerate(std_dev_theta_vals):
-                err = run_sim_get_err_onecell(poslagaverage_data[walker], run_PRWpolaritybias_sim(1, dt, time, std_dev_w, std_dev_theta), min_track_length)
+                err = run_sim_err_fn(poslagaverage_data[walker], run_PRWpolaritybias_sim(1, dt, time, std_dev_w, std_dev_theta), min_track_length)
                 if err < min_err:
                     min_err = err
                     index_w = ind_w
@@ -55,7 +54,7 @@ def perform_gridsearch_2params(poslagaverage_data, std_dev_w_vals, std_dev_theta
     return tot_err, w_list, theta_list
 
 
-def perform_gridsearch_1param(poslagaverage_data, std_dev_theta_vals, Nwalkers, dt, time, min_track_length):
+def perform_gridsearch_1param(poslagaverage_data, run_sim_err_fn, std_dev_theta_vals, Nwalkers, dt, time, min_track_length):
     tot_err = 0
     index_theta_allcells = []
     for walker in range(Nwalkers):
@@ -63,7 +62,7 @@ def perform_gridsearch_1param(poslagaverage_data, std_dev_theta_vals, Nwalkers, 
         index_theta = 0
 
         for ind_t, std_dev_theta in enumerate(std_dev_theta_vals):
-            err = run_sim_get_err_onecell(poslagaverage_data[walker], run_PRW_sim(1, dt, time, std_dev_theta), min_track_length)
+            err = run_sim_err_fn(poslagaverage_data[walker], run_PRW_sim(1, dt, time, std_dev_theta), min_track_length)
             if err < min_err:
                 min_err = err
                 index_theta = ind_t
