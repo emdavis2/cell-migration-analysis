@@ -43,28 +43,28 @@ figures/histogram_boxplot: .created-dirs celltrack_data/gel_data\
 	python3.7 GenerateDataHistogramBoxplot.py 'celltrack_data/glass_data' 'celltrack_data/gel_data' 30 'glass' 'stiff'
 
 #Perform grid search to fit PRW model to glass data 
-model/model_params_glass_PRW.txt: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
+model/PRW_glass: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/model_fitting_functions.py functions/PRW_model_functions.py
 	python3.7 RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW'
 
 #Perform grid search to fit PRW model to gel data 
-model/model_params_gel_PRW.txt: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
+model/PRW_gel: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/model_fitting_functions.py functions/PRW_model_functions.py
 	python3.7 RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'PRW'
 
 #Perform grid search to fit PRW_polaritybias model to glass data 
-model/model_params_glass_PRW_PB.txt: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
+model/PRW_PB_glass: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/model_fitting_functions.py functions/PRWpolaritybias_model_functions.py
 	python3.7 RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW_PB'
 
 #Perform grid search to fit PRW_polaritybias model to gel data 
-model/model_params_gel_PRW_PB.txt: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
+model/PRW_PB_gel: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/model_fitting_functions.py functions/PRWpolaritybias_model_functions.py
