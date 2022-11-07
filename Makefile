@@ -43,32 +43,32 @@ figures/histogram_boxplot: .created-dirs celltrack_data/gel_data\
 	python3.7 GenerateDataHistogramBoxplot.py 'celltrack_data/glass_data' 'celltrack_data/gel_data' 30 'glass' 'stiff'
 
 #Perform grid search to fit PRW model to glass data 
-model/PRW_glass: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
+model/vel_acf_PRW_glass: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/model_fitting_functions.py functions/PRW_model_functions.py
-	python3.7 RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW'
+	python3.7 RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW' 'run_sim_get_velacf_err'
 
 #Perform grid search to fit PRW model to gel data 
-model/PRW_gel: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
+model/vel_acf_PRW_gel: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/model_fitting_functions.py functions/PRW_model_functions.py
-	python3.7 RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'PRW'
+	python3.7 RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'PRW' 'run_sim_get_velacf_err'
 
 #Perform grid search to fit PRW_polaritybias model to glass data 
-model/PRW_PB_glass: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
+model/vel_acf_PRW_PB_glass: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/model_fitting_functions.py functions/PRWpolaritybias_model_functions.py
-	python3.7 RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW_PB'
+	python3.7 RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW_PB' 'run_sim_get_velacf_err'
 
 #Perform grid search to fit PRW_polaritybias model to gel data 
-model/PRW_PB_gel: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
+model/vel_acf_PRW_PB_gel: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/model_fitting_functions.py functions/PRWpolaritybias_model_functions.py
-	python3.7 RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'PRW_PB'
+	python3.7 RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'PRW_PB' 'run_sim_get_velacf_err'
 
 #Make figures compring models with optimal parameters to glass data
 figures/model_glass: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
@@ -98,32 +98,32 @@ writeup.pdf: figures/acf_figures/glass_polarity_vector_acf_avg.png figures/acf_f
 	pdflatex writeup.tex
 
 #Perform grid search to fit heterogeneous PRW model to glass data 
-hetero_model/PRW_glass: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
+hetero_model/vel_acf_PRW_glass: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/hetero_model_fitting_functions.py functions/PRW_model_functions.py
-	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW'
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW' 'run_sim_get_velacf_err'
 
 #Perform grid search to fit heterogeneous PRW model to gel data 
-hetero_model/PRW_gel: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
+hetero_model/vel_acf_PRW_gel: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/hetero_model_fitting_functions.py functions/PRW_model_functions.py
-	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'PRW'
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'PRW' 'run_sim_get_velacf_err'
 
 #Perform grid search to fit heterogeneous PRW_polaritybias model to glass data 
-hetero_model/PRW_PB_glass: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
+hetero_model/vel_acf_PRW_PB_glass: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/hetero_model_fitting_functions.py functions/PRWpolaritybias_model_functions.py
-	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW_PB'
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW_PB' 'run_sim_get_velacf_err'
 
 #Perform grid search to fit heterogeneous PRW_polaritybias model to gel data 
-hetero_model/PRW_PB_gel: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
+hetero_model/vel_acf_PRW_PB_gel: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/hetero_model_fitting_functions.py functions/PRWpolaritybias_model_functions.py
-	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'PRW_PB'
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'PRW_PB' 'run_sim_get_velacf_err'
 
 #Make figures compring heterogeneous models with optimal parameters to glass data
 figures/hetero_model_glass: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
