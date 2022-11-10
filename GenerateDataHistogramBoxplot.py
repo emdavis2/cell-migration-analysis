@@ -231,7 +231,7 @@ sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("abs-skew")
 tstat, pval = ttest_ind(absskew_region1,absskew_region2)
-plt.text(2, 1, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.text(2, 12, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/absskew_boxplot.png')
 plt.clf()
 
