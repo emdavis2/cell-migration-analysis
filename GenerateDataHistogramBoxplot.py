@@ -132,6 +132,29 @@ plt.title('vy {}'.format(region2))
 plt.savefig('figures/histogram_boxplot/vely_hist_{}.png'.format(region2))
 plt.clf()
 
+#Plot histogram for abs-skew
+absskew_region1 = []
+for i in range(len(tracks_geo_region1)):
+  absskew_region1.append(tracks_geo_region1[i]['abs-skew'].dropna().tolist())
+
+absskew_region1 = np.concatenate(absskew_region1).ravel()
+
+plt.hist(absskew_region1,bins=50)
+plt.title('abs-skew {}'.format(region1))
+plt.savefig('figures/histogram_boxplot/absskew_hist_{}.png'.format(region1))
+plt.clf()
+
+absskew_region2 = []
+for i in range(len(tracks_geo_region2)):
+  absskew_region2.append(tracks_geo_region2[i]['abs-skew'].dropna().tolist())
+
+absskew_region2 = np.concatenate(absskew_region2).ravel()
+
+plt.hist(absskew_region2,bins=50)
+plt.title('abs-skew {}'.format(region2))
+plt.savefig('figures/histogram_boxplot/absskew_hist_{}.png'.format(region2))
+plt.clf()
+
 #Plot histogram for dx and dy
 dx_region1 = []
 dy_region1 = []
@@ -200,6 +223,16 @@ plt.ylabel("Velocity y")
 tstat, pval = ttest_ind(vy_region1,vy_region2)
 plt.text(.1, 12, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/velocity_y_boxplot.png')
+plt.clf()
+
+data_bp = {'{}'.format(region1):absskew_region1, '{}'.format(region2):absskew_region2}
+data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
+sns.boxplot(data=data_boxplot)
+plt.xlabel("Source")
+plt.ylabel("abs-skew")
+tstat, pval = ttest_ind(absskew_region1,absskew_region2)
+plt.text(2, 1, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.savefig('figures/histogram_boxplot/absskew_boxplot.png')
 plt.clf()
 
 data_bp = {'{}'.format(region1):dx_region1, '{}'.format(region2):dx_region2}
