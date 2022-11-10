@@ -198,6 +198,73 @@ plt.ylim(-1,1)
 plt.savefig(file_path + 'double_exp_acf_vel_fit_data_{}.png'.format(region))
 plt.clf()
 
+#autocorrelation polarity angle for data
+poslagaverage_data = np.zeros(300)
+all_ac = []
+for df in tracks_geo_region:
+  track=df
+  normvect = pd.DataFrame( {'cospolangle':list(np.cos(track[['polarity_angle']].iloc[:,0])) , 'sinpolangle':list(np.sin(track[['polarity_angle']].iloc[:,0])) })
+  combined = pd.concat([normvect.reset_index(drop=True), normvect.reset_index(drop=True)], axis = 1 )
+  poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined, min_track_length)
+
+  #remove nans here
+  poslagsmean[np.isnan(poslagsmean)] = 0
+  all_ac.append(poslagsmean)
+  poslagaverage_data[0:len(poslagsmean)] += poslagsmean # Nposlags*poslagsmean
+poslagaverage_data /= len(tracks_geo_region) #Nposlagtotal 
+poslagaverage_data = poslagaverage_data[0:min_track_length-4]
+'''
+#autocorrelation polarity angle for PRW model 
+data_PRWsim = run_PRW_sim(Nwalkers, dt, time, PRW_theta_std_dev)
+
+poslagaverage_PRWsim = np.zeros(300)
+all_ac = []
+for df in data_PRWsim:
+    track=df
+    combined = make_comb_df(track['vx'].to_list()[2:min_track_length-2],track['vy'].to_list()[2:min_track_length-2])
+    combined = combined.dropna()
+    poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined, min_track_length)
+
+    #remove nans here
+    poslagsmean[np.isnan(poslagsmean)] = 0
+    all_ac.append(poslagsmean)
+    poslagaverage_PRWsim[0:len(poslagsmean)] += poslagsmean #Nposlags*poslagsmean
+poslagaverage_PRWsim /= len(data_PRWsim) #Nposlagtotal 
+
+poslagaverage_PRWsim = poslagaverage_PRWsim[0:min_track_length-4]
+'''
+#autocorrelation polarity angle for PRW polarity bias model
+data_PRWPBsim = run_PRWpolaritybias_sim(Nwalkers, dt, time, PRWPB_w_std_dev, PRWPB_theta_std_dev)
+
+poslagaverage_PRWPBsim = np.zeros(300)
+all_ac = []
+for df in data_PRWPBsim:
+    track=df
+    combined = make_comb_df(np.cos(track['omega'].to_list()[2:min_track_length-2]),np.sin(track['omega'].to_list()[2:min_track_length-2]))
+    combined = combined.dropna()
+    poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined, min_track_length)
+
+    #remove nans here
+    poslagsmean[np.isnan(poslagsmean)] = 0
+    all_ac.append(poslagsmean)
+    poslagaverage_PRWPBsim[0:len(poslagsmean)] += poslagsmean #Nposlags*poslagsmean
+poslagaverage_PRWPBsim /= len(data_PRWPBsim) #Nposlagtotal 
+
+poslagaverage_PRWPBsim = poslagaverage_PRWPBsim[0:min_track_length-4]
+
+#Compare acf polarity angle plots
+plt.plot(poslagaverage_data,label = "Data")
+plt.plot(poslagaverage_PRWPBsim,label = "PRW Polarity Bias, error={}".format(round(PRWPB_err,3)))
+#plt.plot(poslagaverage_PRWsim,label = "PRW, error={}".format(round(PRW_err,3)))
+plt.hlines(y=0,xmin=0,xmax=min_track_length,color='k')
+plt.xlim(0,min_track_length-2)
+plt.ylim(-1,1)
+plt.xlabel("time lag")
+plt.title(" Autocorrelation polarity angle {}".format(region))
+plt.legend()
+plt.savefig(file_path + 'acf_polang_modelcomaparion_{}'.format(region))
+plt.clf()
+
 #compare dx and dy with cdf
 dx_PRWsim = []
 dy_PRWsim = []
