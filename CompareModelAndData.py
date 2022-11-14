@@ -34,7 +34,8 @@ file_path = str(sys.argv[9])
 PRW_params_open = open(PRW_params, 'r')
 PRW_params_readlines = PRW_params_open.readlines()
 PRW_err = float(PRW_params_readlines[0].split('=')[1])
-PRW_theta_std_dev = float(PRW_params_readlines[1].split('=')[1])
+PRW_S = float(PRW_params_readlines[1].split('=')[1])
+PRW_P = float(PRW_params_readlines[2].split('=')[1])
 
 PRWPB_params_open = open(PRWPB_params, 'r')
 PRWPB_params_readlines = PRWPB_params_open.readlines()
@@ -60,7 +61,7 @@ poslagaverage_data /= len(tracks_geo_region) #Nposlagtotal
 poslagaverage_data = poslagaverage_data[0:min_track_length-4]
 
 #autocorrelation velocity for PRW model 
-data_PRWsim = run_PRW_sim(Nwalkers, dt, time, PRW_theta_std_dev)
+data_PRWsim = run_PRW_langevin_sim(Nwalkers, dt, time, PRW_S, PRW_P)
 
 poslagaverage_PRWsim = np.zeros(300)
 all_ac = []
@@ -320,6 +321,17 @@ pdf_PRWsim = count_PRWsim / sum(count_PRWsim)
 # using numpy np.cumsum to calculate the CDF
 cdf_PRWsim = np.cumsum(pdf_PRWsim)
 
+plt.hist(dx_dy_PRWPBsim,bins=30)
+plt.xlabel('stepsize')
+plt.title('dx dy for PRW polarity bias sim {}'.format(region))
+plt.savefig(file_path + 'dxdy_hist_PRWPBsim_{}.png'.format(region))
+plt.clf()
+
+plt.hist(dx_dy_PRWsim,bins=30)
+plt.xlabel('stepsize')
+plt.title('dx dy for PRW sim {}'.format(region))
+plt.savefig(file_path + 'dxdy_hist_PRWsim_{}.png'.format(region))
+plt.clf()
 
 plt.plot(bins_count_data[1:], cdf_data, label="data")
 plt.plot(bins_count_PRWPBsim[1:], cdf_PRWPBsim, label="PRW polarity bias sim, error={}".format(round(np.sum(np.abs(cdf_data-cdf_PRWPBsim)),3)))
