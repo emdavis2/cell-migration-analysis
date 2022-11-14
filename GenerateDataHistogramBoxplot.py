@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from scipy.stats import ttest_ind
+#from scipy.stats import ttest_ind
+from scipy.stats import f_oneway
 
 treatment1 = str(sys.argv[1])
 
@@ -200,8 +201,9 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("Velocity")
-tstat, pval = ttest_ind(v_region1,v_region2)
-plt.text(.2, 20, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat, pval = ttest_ind(v_region1,v_region2)
+tstat, pval = f_oneway(v_region1,v_region2)
+plt.text(.2, 20, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/velocity_boxplot.png')
 plt.clf()
 
@@ -210,8 +212,9 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("Velocity x")
-tstat, pval = ttest_ind(vx_region1,vx_region2)
-plt.text(.1, 18, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat, pval = ttest_ind(vx_region1,vx_region2)
+tstat, pval = f_oneway(vx_region1,vx_region2)
+plt.text(.1, 18, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/velocity_x_boxplot.png')
 plt.clf()
 
@@ -220,8 +223,9 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("Velocity y")
-tstat, pval = ttest_ind(vy_region1,vy_region2)
-plt.text(.1, 12, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat, pval = ttest_ind(vy_region1,vy_region2)
+tstat, pval = f_oneway(vy_region1,vy_region2)
+plt.text(.1, 12, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/velocity_y_boxplot.png')
 plt.clf()
 
@@ -230,8 +234,9 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("abs-skew")
-tstat, pval = ttest_ind(absskew_region1,absskew_region2)
-plt.text(2, 12, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat, pval = ttest_ind(absskew_region1,absskew_region2)
+tstat, pval = f_oneway(absskew_region1,absskew_region2)
+plt.text(2, 12, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/absskew_boxplot.png')
 plt.clf()
 
@@ -240,8 +245,9 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("dx")
-tstat, pval = ttest_ind(dx_region1,dx_region2)
-plt.text(.1, 12, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat, pval = ttest_ind(dx_region1,dx_region2)
+tstat, pval = f_oneway(dx_region1,dx_region2)
+plt.text(.1, 12, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/dx_boxplot.png')
 plt.clf()
 
@@ -250,8 +256,9 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("dy")
-tstat, pval = ttest_ind(dy_region1,dy_region2)
-plt.text(.1, 12, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat, pval = ttest_ind(dy_region1,dy_region2)
+tstat, pval = f_oneway(dy_region1,dy_region2)
+plt.text(.1, 12, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/dy_boxplot.png')
 plt.clf()
 
@@ -260,8 +267,9 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("Speed")
-tstat, pval = ttest_ind(region1_endpointcells['speed'],region2_endpointcells['speed'])
-plt.text(.1, 15, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat, pval = ttest_ind(region1_endpointcells['speed'],region2_endpointcells['speed'])
+tstat, pval = f_oneway(region1_endpointcells['speed'],region2_endpointcells['speed'])
+plt.text(.1, 15, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/speed_boxplot.png')
 plt.clf()
 
@@ -270,8 +278,9 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("D/T")
-tstat, pval = ttest_ind(region1_endpointcells['DoverT'],region2_endpointcells['DoverT'])
-plt.text(.1, 0.8, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat, pval = ttest_ind(region1_endpointcells['DoverT'],region2_endpointcells['DoverT'])
+tstat, pval = f_oneway(region1_endpointcells['DoverT'],region2_endpointcells['DoverT'])
+plt.text(.1, 0.8, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/DoverT_boxplot.png')
 plt.clf()
 
@@ -280,7 +289,8 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("FMI")
-tstat, pval = ttest_ind(region1_endpointcells['FMI'],region2_endpointcells['FMI'])
-plt.text(.1, 0.7, 'tstatistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat, pval = ttest_ind(region1_endpointcells['FMI'],region2_endpointcells['FMI'])
+tstat, pval = f_oneway(region1_endpointcells['FMI'],region2_endpointcells['FMI'])
+plt.text(.1, 0.7, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/FMI_boxplot.png')
 plt.clf()

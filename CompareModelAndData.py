@@ -9,7 +9,8 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy.stats import ttest_ind
+#from scipy.stats import ttest_ind
+from scipy.stats import f_oneway
 from scipy.optimize import curve_fit
 
 treatment = str(sys.argv[1])
@@ -347,10 +348,12 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("DX DY")
-tstat_PRWPB, pval_PRWPB = ttest_ind(dx_dy_data,dx_dy_PRWPBsim)
+#tstat_PRWPB, pval_PRWPB = ttest_ind(dx_dy_data,dx_dy_PRWPBsim)
+tstat_PRWPB, pval_PRWPB = f_oneway(dx_dy_data,dx_dy_PRWPBsim)
 plt.text(.2, 40, 'tstatistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
-tstat_PRW, pval_PRW = ttest_ind(dx_dy_data,dx_dy_PRWsim)
-plt.text(.2, 30, 'tstatistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat_PRW, pval_PRW = ttest_ind(dx_dy_data,dx_dy_PRWsim)
+tstat_PRW, pval_PRW = f_oneway(dx_dy_data,dx_dy_PRWsim)
+plt.text(.2, 30, 'statistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig(file_path + 'dx_dy_boxplot_{}.png'.format(region))
 plt.clf()
 
@@ -402,10 +405,12 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("VX VY")
-tstat_PRWPB, pval_PRWPB = ttest_ind(vx_vy_data,vx_vy_PRWPBsim)
-plt.text(.2, -16, 'tstatistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
-tstat_PRW, pval_PRW = ttest_ind(vx_vy_data,vx_vy_PRWsim)
-plt.text(.2, -20, 'tstatistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat_PRWPB, pval_PRWPB = ttest_ind(vx_vy_data,vx_vy_PRWPBsim)
+tstat_PRWPB, pval_PRWPB = f_oneway(vx_vy_data,vx_vy_PRWPBsim)
+plt.text(.2, -16, 'statistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat_PRW, pval_PRW = ttest_ind(vx_vy_data,vx_vy_PRWsim)
+tstat_PRW, pval_PRW = f_oneway(vx_vy_data,vx_vy_PRWsim)
+plt.text(.2, -20, 'statistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig(file_path + 'vx_vy_boxplot_{}.png'.format(region))
 plt.clf()
 
@@ -414,10 +419,12 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("Velocity")
-tstat_PRWPB, pval_PRWPB = ttest_ind(v_data,v_PRWPBsim)
-plt.text(.2, 22, 'tstatistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
-tstat_PRW, pval_PRW = ttest_ind(v_data,v_PRWsim)
-plt.text(.2, 20, 'tstatistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat_PRWPB, pval_PRWPB = ttest_ind(v_data,v_PRWPBsim)
+tstat_PRWPB, pval_PRWPB = f_oneway(v_data,v_PRWPBsim)
+plt.text(.2, 22, 'statistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat_PRW, pval_PRW = ttest_ind(v_data,v_PRWsim)
+tstat_PRW, pval_PRW = f_oneway(v_data,v_PRWsim)
+plt.text(.2, 20, 'statistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig(file_path + 'velocity_boxplot_{}.png'.format(region))
 plt.clf()
 
@@ -440,10 +447,12 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("D/T")
-tstat_PRWPB, pval_PRWPB = ttest_ind(DoverT_data,DoverT_PRWPBsim)
-plt.text(.2, 0.8, 'tstatistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
-tstat_PRW, pval_PRW = ttest_ind(DoverT_data,DoverT_PRWsim)
-plt.text(.2, 0.7, 'tstatistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat_PRWPB, pval_PRWPB = ttest_ind(DoverT_data,DoverT_PRWPBsim)
+tstat_PRWPB, pval_PRWPB = f_oneway(DoverT_data,DoverT_PRWPBsim)
+plt.text(.2, 0.8, 'statistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+#tstat_PRW, pval_PRW = ttest_ind(DoverT_data,DoverT_PRWsim)
+tstat_PRW, pval_PRW = f_oneway(DoverT_data,DoverT_PRWsim)
+plt.text(.2, 0.7, 'statistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig(file_path + 'DoverT_boxplot_{}.png'.format(region))
 plt.clf()
 
