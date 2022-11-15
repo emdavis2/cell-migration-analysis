@@ -31,6 +31,8 @@ elif region1 == 'stiff':
   region1_name = 'gel'
   region2_name = region2
 
+sampling_t = 10 #min per frame
+
 #Plot histogram for D/T
 plt.hist(region1_endpointcells['DoverT'],bins=30)
 plt.title('D/T for {}'.format(region1_name))
@@ -47,14 +49,14 @@ plt.savefig('figures/histogram_boxplot/DT_hist_{}.png'.format(region2))
 plt.clf()
 
 #Plot histogram for speed
-plt.hist(region1_endpointcells['speed'],bins=30)
+plt.hist(region1_endpointcells['speed']/sampling_t,bins=30)
 plt.title('speed for {}'.format(region1_name))
 plt.xlabel('speed')
 plt.ylabel('counts')
 plt.savefig('figures/histogram_boxplot/speed_hist_{}.png'.format(region1))
 plt.clf()
 
-plt.hist(region2_endpointcells['speed'],bins=30)
+plt.hist(region2_endpointcells['speed']/sampling_t,bins=30)
 plt.title('speed for {}'.format(region2_name))
 plt.xlabel('speed')
 plt.ylabel('counts')
@@ -82,7 +84,7 @@ v_region1 = []
 for i in range(len(tracks_geo_region1)):
   v_region1.append(tracks_geo_region1[i]['v'].dropna().tolist())
 
-v_region1 = np.concatenate(v_region1).ravel()
+v_region1 = (np.concatenate(v_region1).ravel())/sampling_t
 
 plt.hist(v_region1,bins=50)
 plt.title('velocity {}'.format(region1_name))
@@ -93,7 +95,7 @@ v_region2 = []
 for i in range(len(tracks_geo_region2)):
   v_region2.append(tracks_geo_region2[i]['v'].dropna().tolist())
 
-v_region2 = np.concatenate(v_region2).ravel()
+v_region2 = (np.concatenate(v_region2).ravel())/sampling_t
 
 plt.hist(v_region2,bins=50)
 plt.title('velocity {}'.format(region2_name))
@@ -107,8 +109,8 @@ for i in range(len(tracks_geo_region1)):
   vx_region1.append(tracks_geo_region1[i]['vx'].dropna().tolist())
   vy_region1.append(tracks_geo_region1[i]['vy'].dropna().tolist())
 
-vx_region1 = np.concatenate(vx_region1).ravel()
-vy_region1 = np.concatenate(vy_region1).ravel()
+vx_region1 = (np.concatenate(vx_region1).ravel())/sampling_t
+vy_region1 = (np.concatenate(vy_region1).ravel())/sampling_t
 
 plt.hist(vx_region1,bins=50)
 plt.title('vx {}'.format(region1_name))
@@ -126,8 +128,8 @@ for i in range(len(tracks_geo_region2)):
   vx_region2.append(tracks_geo_region2[i]['vx'].dropna().tolist())
   vy_region2.append(tracks_geo_region2[i]['vy'].dropna().tolist())
 
-vx_region2 = np.concatenate(vx_region2).ravel()
-vy_region2 = np.concatenate(vy_region2).ravel()
+vx_region2 = (np.concatenate(vx_region2).ravel())/sampling_t
+vy_region2 = (np.concatenate(vy_region2).ravel())/sampling_t
 
 plt.hist(vx_region2,bins=50)
 plt.title('vx {}'.format(region2_name))
@@ -169,8 +171,8 @@ for i in range(len(tracks_geo_region1)):
   dx_region1.append(tracks_geo_region1[i]['dx'].dropna())
   dy_region1.append(tracks_geo_region1[i]['dy'].dropna())
 
-dx_region1 = np.concatenate(dx_region1).ravel()
-dy_region1 = np.concatenate(dy_region1).ravel()
+dx_region1 = (np.concatenate(dx_region1).ravel())/sampling_t
+dy_region1 = (np.concatenate(dy_region1).ravel())/sampling_t
 
 dx_dy_region1 = np.concatenate((dx_region1,dy_region1))
 
@@ -195,8 +197,8 @@ for i in range(len(tracks_geo_region2)):
   dx_region2.append(tracks_geo_region2[i]['dx'].dropna())
   dy_region2.append(tracks_geo_region2[i]['dy'].dropna())
 
-dx_region2 = np.concatenate(dx_region2).ravel()
-dy_region2 = np.concatenate(dy_region2).ravel()
+dx_region2 = (np.concatenate(dx_region2).ravel())/sampling_t
+dy_region2 = (np.concatenate(dy_region2).ravel())/sampling_t
 
 dx_dy_region2 = np.concatenate((dx_region2,dy_region2))
 
