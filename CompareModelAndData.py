@@ -48,6 +48,8 @@ tracks_region, tracks_geo_region, region_cells, region_endpointcells = compile_d
 
 if region == 'stiff':
   region_name = 'gel'
+else:
+  region_name = region
 
 #autocorrelation velocity for data
 poslagaverage_data = np.zeros(300)
