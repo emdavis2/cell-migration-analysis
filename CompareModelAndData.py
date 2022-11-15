@@ -35,8 +35,8 @@ file_path = str(sys.argv[9])
 PRW_params_open = open(PRW_params, 'r')
 PRW_params_readlines = PRW_params_open.readlines()
 PRW_err = float(PRW_params_readlines[0].split('=')[1])
-PRW_S = float(PRW_params_readlines[1].split('=')[1])
-PRW_P = float(PRW_params_readlines[2].split('=')[1])
+prw_S = float(PRW_params_readlines[1].split('=')[1])
+prw_P = float(PRW_params_readlines[2].split('=')[1])
 
 PRWPB_params_open = open(PRWPB_params, 'r')
 PRWPB_params_readlines = PRWPB_params_open.readlines()
@@ -45,6 +45,9 @@ PRWPB_w_std_dev = float(PRWPB_params_readlines[1].split('=')[1])
 PRWPB_theta_std_dev = float(PRWPB_params_readlines[2].split('=')[1])
 
 tracks_region, tracks_geo_region, region_cells, region_endpointcells = compile_data_tracks(treatment, min_track_length, region)
+
+if region == 'stiff':
+  region_name = 'gel'
 
 #autocorrelation velocity for data
 poslagaverage_data = np.zeros(300)
@@ -62,7 +65,7 @@ poslagaverage_data /= len(tracks_geo_region) #Nposlagtotal
 poslagaverage_data = poslagaverage_data[0:min_track_length-4]
 
 #autocorrelation velocity for PRW model 
-data_PRWsim = run_PRW_langevin_sim(Nwalkers, dt, time, PRW_S, PRW_P)
+data_PRWsim = run_PRW_langevin_sim(Nwalkers, dt, time, prw_S, prw_P)
 
 poslagaverage_PRWsim = np.zeros(300)
 all_ac = []
@@ -107,7 +110,7 @@ plt.hlines(y=0,xmin=0,xmax=min_track_length,color='k')
 plt.xlim(0,min_track_length-2)
 plt.ylim(-1,1)
 plt.xlabel("time lag")
-plt.title(" Autocorrelation velocity {}".format(region))
+plt.title(" Autocorrelation velocity {}".format(region_name))
 plt.legend()
 plt.savefig(file_path + 'acf_velocity_modelcomaparion_{}'.format(region))
 plt.clf()
@@ -122,7 +125,7 @@ y_fitted = np.exp(-x_fitted*b)
 # Plot
 plt.scatter(np.arange(0,min_track_length-4), poslagaverage_PRWPBsim[0:min_track_length-4], label='Raw data')
 plt.plot(x_fitted, y_fitted, 'k', label='Fitted curve')
-plt.title(r'Single exponential fit for acf velocity PRW Polarity Bias {}'.format(region))
+plt.title(r'Single exponential fit for acf velocity PRW Polarity Bias {}'.format(region_name))
 plt.xlabel(r'time lag $\tau$ (10 min)')
 plt.ylabel(r'acf($\tau$)')
 plt.legend()
@@ -143,7 +146,7 @@ y_fitted = np.exp(-x_fitted*b)
 # Plot
 plt.scatter(np.arange(0,min_track_length-4), poslagaverage_data[0:min_track_length-4], label='Raw data')
 plt.plot(x_fitted, y_fitted, 'k', label='Fitted curve')
-plt.title(r'Single exponential fit for acf velocity {} data'.format(region))
+plt.title(r'Single exponential fit for acf velocity {} data'.format(region_name))
 plt.xlabel(r'time lag $\tau$ (10 min)')
 plt.ylabel(r'acf($\tau$)')
 plt.legend()
@@ -166,7 +169,7 @@ y_fitted = np.exp(-x_fitted*b) + np.exp(-x_fitted*a)
 # Plot
 plt.scatter(np.arange(0,min_track_length-4), poslagaverage_PRWPBsim[0:min_track_length-4], label='Raw data')
 plt.plot(x_fitted, y_fitted, 'k', label='Fitted curve')
-plt.title(r'Double exponential fit for acf velocity PRW Polarity Bias {}'.format(region))
+plt.title(r'Double exponential fit for acf velocity PRW Polarity Bias {}'.format(region_name))
 plt.xlabel(r'time lag $\tau$ (10 min)')
 plt.ylabel(r'acf($\tau$)')
 plt.legend()
@@ -188,7 +191,7 @@ y_fitted = np.exp(-x_fitted*b) + np.exp(-x_fitted*a)
 # Plot
 plt.scatter(np.arange(0,min_track_length-4), poslagaverage_data[0:min_track_length-4], label='Raw data')
 plt.plot(x_fitted, y_fitted, 'k', label='Fitted curve')
-plt.title(r'Double exponential fit for acf velocity data {}'.format(region))
+plt.title(r'Double exponential fit for acf velocity data {}'.format(region_name))
 plt.xlabel(r'time lag $\tau$ (10 min)')
 plt.ylabel(r'acf($\tau$)')
 plt.legend()
@@ -262,7 +265,7 @@ plt.hlines(y=0,xmin=0,xmax=min_track_length,color='k')
 plt.xlim(0,min_track_length-2)
 plt.ylim(-1,1)
 plt.xlabel("time lag")
-plt.title(" Autocorrelation polarity angle {}".format(region))
+plt.title(" Autocorrelation polarity angle {}".format(region_name))
 plt.legend()
 plt.savefig(file_path + 'acf_polang_modelcomaparion_{}'.format(region))
 plt.clf()
@@ -324,26 +327,26 @@ cdf_PRWsim = np.cumsum(pdf_PRWsim)
 
 plt.hist(dx_dy_PRWPBsim,bins=30)
 plt.xlabel('stepsize')
-plt.title('dx dy for PRW polarity bias sim {}'.format(region))
+plt.title('dx dy for PRW polarity bias sim {}'.format(region_name))
 plt.savefig(file_path + 'dxdy_hist_PRWPBsim_{}.png'.format(region))
 plt.clf()
 
 plt.hist(dx_dy_PRWsim,bins=30)
 plt.xlabel('stepsize')
-plt.title('dx dy for PRW sim {}'.format(region))
+plt.title('dx dy for PRW sim {}'.format(region_name))
 plt.savefig(file_path + 'dxdy_hist_PRWsim_{}.png'.format(region))
 plt.clf()
 
 plt.plot(bins_count_data[1:], cdf_data, label="data")
 plt.plot(bins_count_PRWPBsim[1:], cdf_PRWPBsim, label="PRW polarity bias sim, error={}".format(round(np.sum(np.abs(cdf_data-cdf_PRWPBsim)),3)))
 plt.plot(bins_count_PRWsim[1:], cdf_PRWsim, label="PRW sim, error={}".format(round(np.sum(np.abs(cdf_data-cdf_PRWsim)),3)))
-plt.title('CDF for dx and dy {}'.format(region))
+plt.title('CDF for dx and dy {}'.format(region_name))
 plt.legend()
 plt.savefig(file_path + 'dxdy_cdf_modelcomaparion_{}'.format(region))
 plt.clf()
 
 #Compare dx dy with boxplot
-data_bp = {'{} Data'.format(region):dx_dy_data, 'PRW Polarity Bias':dx_dy_PRWPBsim, 'PRW':dx_dy_PRWsim}
+data_bp = {'{} Data'.format(region_name):dx_dy_data, 'PRW Polarity Bias':dx_dy_PRWPBsim, 'PRW':dx_dy_PRWsim}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
@@ -400,7 +403,7 @@ v_data = np.concatenate(v_data).ravel()
 
 vx_vy_data = np.concatenate((vx_data,vy_data))
 
-data_bp = {'{} Data'.format(region):vx_vy_data, 'PRW Polarity Bias':vx_vy_PRWPBsim, 'PRW':vx_vy_PRWsim}
+data_bp = {'{} Data'.format(region_name):vx_vy_data, 'PRW Polarity Bias':vx_vy_PRWPBsim, 'PRW':vx_vy_PRWsim}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
@@ -414,7 +417,7 @@ plt.text(.2, -20, 'statistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),ro
 plt.savefig(file_path + 'vx_vy_boxplot_{}.png'.format(region))
 plt.clf()
 
-data_bp = {'{} Data'.format(region):v_data, 'PRW Polarity Bias':v_PRWPBsim, 'PRW':v_PRWsim}
+data_bp = {'{} Data'.format(region_name):v_data, 'PRW Polarity Bias':v_PRWPBsim, 'PRW':v_PRWsim}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
@@ -442,7 +445,7 @@ DoverT_PRWPBsim = np.concatenate(DoverT_PRWPBsim).ravel()
 
 DoverT_data = region_endpointcells['DoverT']
 
-data_bp = {'{} Data'.format(region):DoverT_data, 'PRW Polarity Bias':DoverT_PRWPBsim, 'PRW':DoverT_PRWsim}
+data_bp = {'{} Data'.format(region_name):DoverT_data, 'PRW Polarity Bias':DoverT_PRWPBsim, 'PRW':DoverT_PRWsim}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
@@ -467,7 +470,7 @@ for df in tracks_region:
     #i += 1
 plt.xlabel(('x position ($\mu$m)'))
 plt.ylabel(('y position ($\mu$m)'))
-plt.title('Trajectories for {} Data'.format(region))
+plt.title('Trajectories for {} Data'.format(region_name))
 plt.savefig(file_path + 'trajectories_data_{}'.format(region))
 plt.clf()
 
@@ -492,7 +495,7 @@ lengths = [len(tracks_geo_region[i]) for i in range(len(tracks_geo_region)) ]
 plt.hist(lengths,bins=30)
 plt.xlabel('track length (number of frames)')
 plt.ylabel('counts')
-plt.title('Track lengths for {} data'.format(region))
+plt.title('Track lengths for {} data'.format(region_name))
 plt.savefig(file_path + 'track_lengths_data_{}.png'.format(region))
 plt.clf()
 
@@ -501,7 +504,7 @@ for i in data_PRWPBsim:
   plt.plot(i['omega']-i['omega'][0])
 plt.xlabel('time (10 min)')
 plt.ylabel('angle (radians)')
-plt.title(r'$\omega$ vs time for PRW Polarity Bias Sim {}'.format(region))
+plt.title(r'$\omega$ vs time for PRW Polarity Bias Sim {}'.format(region_name))
 plt.savefig(file_path + 'omega_vs_time_PRWPB_{}.png'.format(region))
 plt.clf()
 
@@ -509,7 +512,7 @@ for i in data_PRWPBsim:
   plt.plot(i['theta']-i['theta'][0])
 plt.xlabel('time (10 min)')
 plt.ylabel('angle (radians)')
-plt.title(r'$\theta$ vs time for PRW Polarity Bias Sim {}'.format(region))
+plt.title(r'$\theta$ vs time for PRW Polarity Bias Sim {}'.format(region_name))
 plt.savefig(file_path + 'theta_vs_time_PRWPB_{}.png'.format(region))
 plt.clf()
 
@@ -518,12 +521,12 @@ for df in tracks_geo_region:
 plt.xlim(0,min_track_length)
 plt.xlabel('time (10 min)')
 plt.ylabel('angle (radians)')
-plt.title(r'$\theta$ vs time for Data {}'.format(region))
+plt.title(r'$\theta$ vs time for Data {}'.format(region_name))
 plt.savefig(file_path + 'theta_vs_time_data_{}.png'.format(region))
 plt.clf()
 
 #Plot MSD
-plt.plot(calc_MSD(tracks_region, min_track_length), label='{} Data'.format(region))
+plt.plot(calc_MSD(tracks_region, min_track_length), label='{} Data'.format(region_name))
 plt.plot(calc_MSD_sim(data_PRWPBsim, min_track_length), label='PRW Polarity Bias Sim')
 plt.plot(calc_MSD_sim(data_PRWsim, min_track_length), label='PRW Sim')
 plt.xlabel('lag')
