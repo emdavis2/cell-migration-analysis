@@ -51,6 +51,8 @@ if region == 'stiff':
 else:
   region_name = region
 
+sampling_t = 10 #min per frame
+
 #autocorrelation velocity for data
 poslagaverage_data = np.zeros(300)
 all_ac = []
@@ -279,8 +281,8 @@ for i in range(len(data_PRWsim)):
   dx_PRWsim.append(np.diff(np.array(data_PRWsim[i]['x'].dropna().tolist())))
   dy_PRWsim.append(np.diff(np.array(data_PRWsim[i]['y'].dropna().tolist())))
 
-dx_PRWsim = np.concatenate(dx_PRWsim).ravel()
-dy_PRWsim = np.concatenate(dy_PRWsim).ravel()
+dx_PRWsim = (np.concatenate(dx_PRWsim).ravel())/sampling_t
+dy_PRWsim = (np.concatenate(dy_PRWsim).ravel())/sampling_t
 
 dx_dy_PRWsim = np.concatenate((dx_PRWsim,dy_PRWsim))
 
@@ -290,8 +292,8 @@ for i in range(len(data_PRWPBsim)):
   dx_PRWPBsim.append(np.diff(np.array(data_PRWPBsim[i]['x'].dropna().tolist())))
   dy_PRWPBsim.append(np.diff(np.array(data_PRWPBsim[i]['y'].dropna().tolist())))
 
-dx_PRWPBsim = np.concatenate(dx_PRWPBsim).ravel()
-dy_PRWPBsim = np.concatenate(dy_PRWPBsim).ravel()
+dx_PRWPBsim = (np.concatenate(dx_PRWPBsim).ravel())/sampling_t
+dy_PRWPBsim = (np.concatenate(dy_PRWPBsim).ravel())/sampling_t
 
 dx_dy_PRWPBsim = np.concatenate((dx_PRWPBsim,dy_PRWPBsim))
 
@@ -301,8 +303,8 @@ for i in range(len(tracks_geo_region)):
   dx_data.append(np.array(tracks_geo_region[i]['dx'].dropna().tolist()))
   dy_data.append(np.array(tracks_geo_region[i]['dy'].dropna().tolist()))
 
-dx_data = np.concatenate(dx_data).ravel()
-dy_data = np.concatenate(dy_data).ravel()
+dx_data = (np.concatenate(dx_data).ravel())/sampling_t
+dy_data = (np.concatenate(dy_data).ravel())/sampling_t
 
 dx_dy_data = np.concatenate((dx_data,dy_data))
 
@@ -371,9 +373,9 @@ for i in range(len(data_PRWsim)):
   vy_PRWsim.append(np.array(data_PRWsim[i]['vy'].dropna().tolist()))
   v_PRWsim.append(np.array(data_PRWsim[i]['v'].dropna().tolist()))
 
-vx_PRWsim = np.concatenate(vx_PRWsim).ravel()
-vy_PRWsim = np.concatenate(vy_PRWsim).ravel()
-v_PRWsim = np.concatenate(v_PRWsim).ravel()
+vx_PRWsim = (np.concatenate(vx_PRWsim).ravel())/sampling_t
+vy_PRWsim = (np.concatenate(vy_PRWsim).ravel())/sampling_t
+v_PRWsim = (np.concatenate(v_PRWsim).ravel())/sampling_t
 
 vx_vy_PRWsim = np.concatenate((vx_PRWsim,vy_PRWsim))
 
@@ -385,9 +387,9 @@ for i in range(len(data_PRWPBsim)):
   vy_PRWPBsim.append(np.array(data_PRWPBsim[i]['vy'].dropna().tolist()))
   v_PRWPBsim.append(np.array(data_PRWPBsim[i]['v'].dropna().tolist()))
 
-vx_PRWPBsim = np.concatenate(vx_PRWPBsim).ravel()
-vy_PRWPBsim = np.concatenate(vy_PRWPBsim).ravel()
-v_PRWPBsim = np.concatenate(v_PRWPBsim).ravel()
+vx_PRWPBsim = (np.concatenate(vx_PRWPBsim).ravel())/sampling_t
+vy_PRWPBsim = (np.concatenate(vy_PRWPBsim).ravel())/sampling_t
+v_PRWPBsim = (np.concatenate(v_PRWPBsim).ravel())/sampling_t
 
 vx_vy_PRWPBsim = np.concatenate((vx_PRWPBsim,vy_PRWPBsim))
 
@@ -399,9 +401,9 @@ for i in range(len(tracks_geo_region)):
   vy_data.append(np.array(tracks_geo_region[i]['vy'].dropna().tolist()))
   v_data.append(np.array(tracks_geo_region[i]['v'].dropna().tolist()))
 
-vx_data = np.concatenate(vx_data).ravel()
-vy_data = np.concatenate(vy_data).ravel()
-v_data = np.concatenate(v_data).ravel()
+vx_data = (np.concatenate(vx_data).ravel())/sampling_t
+vy_data = (np.concatenate(vy_data).ravel())/sampling_t
+v_data = (np.concatenate(v_data).ravel())/sampling_t
 
 vx_vy_data = np.concatenate((vx_data,vy_data))
 
