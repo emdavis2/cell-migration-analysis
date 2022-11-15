@@ -18,7 +18,7 @@ def calc_vel(arr):
 def PRW_langevin(S, P, dt, time):
     #simplify coefficients
     alpha = 1 - (dt/P)
-    F = np.sqrt((S**2*dt**3)/P)
+    F = np.sqrt(((S**2)*(dt**3))/P)
     #initialize time
     t = 0
 
@@ -31,8 +31,8 @@ def PRW_langevin(S, P, dt, time):
     all_pos_y = [pos_y]
 
     #initialize previous step directions/sizes
-    dx_prev = np.random.uniform()
-    dy_prev = np.random.uniform()
+    dx_prev = np.random.uniform(-1,1)
+    dy_prev = np.random.uniform(-1,1)
 
     #create lists to store cell dx and dy steps and add initial steps
     all_dx = [dx_prev]
@@ -49,6 +49,8 @@ def PRW_langevin(S, P, dt, time):
         pos_x += dx
         pos_y += dy
         theta = np.arctan2(pos_y,pos_x)
+        dx_prev = dx
+        dy_prev = dy
         t += dt
         all_pos_x.append(pos_x)
         all_pos_y.append(pos_y)
