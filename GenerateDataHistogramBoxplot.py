@@ -24,17 +24,23 @@ tracks_region1, tracks_geo_region1, region1_cells, region1_endpointcells = compi
 
 tracks_region2, tracks_geo_region2, region2_cells, region2_endpointcells = compile_data_tracks(treatment2, min_track_length, region2)
 
+if region2 == 'stiff':
+  region2_name = 'gel'
+  region1_name = region1
+elif region1 == 'stiff':
+  region1_name = 'gel'
+  region2_name = region2
 
 #Plot histogram for D/T
 plt.hist(region1_endpointcells['DoverT'],bins=30)
-plt.title('D/T for {}'.format(region1))
+plt.title('D/T for {}'.format(region1_name))
 plt.xlabel('D/T')
 plt.ylabel('counts')
 plt.savefig('figures/histogram_boxplot/DT_hist_{}.png'.format(region1))
 plt.clf()
 
 plt.hist(region2_endpointcells['DoverT'],bins=30)
-plt.title('D/T for {}'.format(region2))
+plt.title('D/T for {}'.format(region2_name))
 plt.xlabel('D/T')
 plt.ylabel('counts')
 plt.savefig('figures/histogram_boxplot/DT_hist_{}.png'.format(region2))
@@ -42,14 +48,14 @@ plt.clf()
 
 #Plot histogram for speed
 plt.hist(region1_endpointcells['speed'],bins=30)
-plt.title('speed for {}'.format(region1))
+plt.title('speed for {}'.format(region1_name))
 plt.xlabel('speed')
 plt.ylabel('counts')
 plt.savefig('figures/histogram_boxplot/speed_hist_{}.png'.format(region1))
 plt.clf()
 
 plt.hist(region2_endpointcells['speed'],bins=30)
-plt.title('speed for {}'.format(region2))
+plt.title('speed for {}'.format(region2_name))
 plt.xlabel('speed')
 plt.ylabel('counts')
 plt.savefig('figures/histogram_boxplot/speed_hist_{}.png'.format(region2))
@@ -57,14 +63,14 @@ plt.clf()
 
 #Plot histogram for FMI
 plt.hist(region1_endpointcells['FMI'],bins=30)
-plt.title('FMI for {}'.format(region1))
+plt.title('FMI for {}'.format(region1_name))
 plt.xlabel('FMI')
 plt.ylabel('counts')
 plt.savefig('figures/histogram_boxplot/FMI_hist_{}.png'.format(region1))
 plt.clf()
 
 plt.hist(region2_endpointcells['FMI'],bins=30)
-plt.title('FMI for {}'.format(region2))
+plt.title('FMI for {}'.format(region2_name))
 plt.xlabel('FMI')
 plt.ylabel('counts')
 plt.savefig('figures/histogram_boxplot/FMI_hist_{}.png'.format(region2))
@@ -79,7 +85,7 @@ for i in range(len(tracks_geo_region1)):
 v_region1 = np.concatenate(v_region1).ravel()
 
 plt.hist(v_region1,bins=50)
-plt.title('velocity {}'.format(region1))
+plt.title('velocity {}'.format(region1_name))
 plt.savefig('figures/histogram_boxplot/vel_hist_{}.png'.format(region1))
 plt.clf()
 
@@ -90,7 +96,7 @@ for i in range(len(tracks_geo_region2)):
 v_region2 = np.concatenate(v_region2).ravel()
 
 plt.hist(v_region2,bins=50)
-plt.title('velocity {}'.format(region2))
+plt.title('velocity {}'.format(region2_name))
 plt.savefig('figures/histogram_boxplot/vel_hist_{}.png'.format(region2))
 plt.clf()
 
@@ -105,12 +111,12 @@ vx_region1 = np.concatenate(vx_region1).ravel()
 vy_region1 = np.concatenate(vy_region1).ravel()
 
 plt.hist(vx_region1,bins=50)
-plt.title('vx {}'.format(region1))
+plt.title('vx {}'.format(region1_name))
 plt.savefig('figures/histogram_boxplot/velx_hist_{}.png'.format(region1))
 plt.clf()
 
 plt.hist(vy_region1,bins=50)
-plt.title('vy {}'.format(region1))
+plt.title('vy {}'.format(region1_name))
 plt.savefig('figures/histogram_boxplot/vely_hist_{}.png'.format(region1))
 plt.clf()
 
@@ -124,12 +130,12 @@ vx_region2 = np.concatenate(vx_region2).ravel()
 vy_region2 = np.concatenate(vy_region2).ravel()
 
 plt.hist(vx_region2,bins=50)
-plt.title('vx {}'.format(region2))
+plt.title('vx {}'.format(region2_name))
 plt.savefig('figures/histogram_boxplot/velx_hist_{}.png'.format(region2))
 plt.clf()
 
 plt.hist(vy_region2,bins=50)
-plt.title('vy {}'.format(region2))
+plt.title('vy {}'.format(region2_name))
 plt.savefig('figures/histogram_boxplot/vely_hist_{}.png'.format(region2))
 plt.clf()
 
@@ -141,7 +147,7 @@ for i in range(len(tracks_geo_region1)):
 absskew_region1 = np.concatenate(absskew_region1).ravel()
 
 plt.hist(absskew_region1,bins=50)
-plt.title('abs-skew {}'.format(region1))
+plt.title('abs-skew {}'.format(region1_name))
 plt.savefig('figures/histogram_boxplot/absskew_hist_{}.png'.format(region1))
 plt.clf()
 
@@ -152,7 +158,7 @@ for i in range(len(tracks_geo_region2)):
 absskew_region2 = np.concatenate(absskew_region2).ravel()
 
 plt.hist(absskew_region2,bins=50)
-plt.title('abs-skew {}'.format(region2))
+plt.title('abs-skew {}'.format(region2_name))
 plt.savefig('figures/histogram_boxplot/absskew_hist_{}.png'.format(region2))
 plt.clf()
 
@@ -166,13 +172,20 @@ for i in range(len(tracks_geo_region1)):
 dx_region1 = np.concatenate(dx_region1).ravel()
 dy_region1 = np.concatenate(dy_region1).ravel()
 
+dx_dy_region1 = np.concatenate((dx_region1,dy_region1))
+
+plt.hist(dx_dy_region1,bins=50)
+plt.title('dx dy {}'.format(region1_name))
+plt.savefig('figures/histogram_boxplot/dxdy_hist_{}.png'.format(region1))
+plt.clf()
+
 plt.hist(dx_region1,bins=50)
-plt.title('dx {}'.format(region1))
+plt.title('dx {}'.format(region1_name))
 plt.savefig('figures/histogram_boxplot/dx_hist_{}.png'.format(region1))
 plt.clf()
 
 plt.hist(dy_region1,bins=50)
-plt.title('dy {}'.format(region1))
+plt.title('dy {}'.format(region1_name))
 plt.savefig('figures/histogram_boxplot/dy_hist_{}.png'.format(region1))
 plt.clf()
 
@@ -185,18 +198,25 @@ for i in range(len(tracks_geo_region2)):
 dx_region2 = np.concatenate(dx_region2).ravel()
 dy_region2 = np.concatenate(dy_region2).ravel()
 
+dx_dy_region2 = np.concatenate((dx_region2,dy_region2))
+
+plt.hist(dx_dy_region2,bins=50)
+plt.title('dx dy {}'.format(region2_name))
+plt.savefig('figures/histogram_boxplot/dxdy_hist_{}.png'.format(region2))
+plt.clf()
+
 plt.hist(dx_region2,bins=50)
-plt.title('dx {}'.format(region2))
+plt.title('dx {}'.format(region2_name))
 plt.savefig('figures/histogram_boxplot/dx_hist_{}.png'.format(region2))
 plt.clf()
 
 plt.hist(dy_region2,bins=50)
-plt.title('dy {}'.format(region2))
+plt.title('dy {}'.format(region2_name))
 plt.savefig('figures/histogram_boxplot/dy_hist_{}.png'.format(region2))
 plt.clf()
 
 #make boxplots
-data_bp = {'{}'.format(region1):v_region1, '{}'.format(region2):v_region2}
+data_bp = {'{}'.format(region1_name):v_region1, '{}'.format(region2_name):v_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
@@ -207,7 +227,7 @@ plt.text(.2, 20, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)),
 plt.savefig('figures/histogram_boxplot/velocity_boxplot.png')
 plt.clf()
 
-data_bp = {'{}'.format(region1):vx_region1, '{}'.format(region2):vx_region2}
+data_bp = {'{}'.format(region1_name):vx_region1, '{}'.format(region2_name):vx_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
@@ -218,7 +238,7 @@ plt.text(.1, 18, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)),
 plt.savefig('figures/histogram_boxplot/velocity_x_boxplot.png')
 plt.clf()
 
-data_bp = {'{}'.format(region1):vy_region1, '{}'.format(region2):vy_region2}
+data_bp = {'{}'.format(region1_name):vy_region1, '{}'.format(region2_name):vy_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
@@ -229,7 +249,7 @@ plt.text(.1, 12, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)),
 plt.savefig('figures/histogram_boxplot/velocity_y_boxplot.png')
 plt.clf()
 
-data_bp = {'{}'.format(region1):absskew_region1, '{}'.format(region2):absskew_region2}
+data_bp = {'{}'.format(region1_name):absskew_region1, '{}'.format(region2_name):absskew_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
@@ -240,7 +260,7 @@ plt.text(2, 12, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), 
 plt.savefig('figures/histogram_boxplot/absskew_boxplot.png')
 plt.clf()
 
-data_bp = {'{}'.format(region1):dx_region1, '{}'.format(region2):dx_region2}
+data_bp = {'{}'.format(region1_name):dx_region1, '{}'.format(region2_name):dx_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
@@ -251,7 +271,7 @@ plt.text(.1, 12, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)),
 plt.savefig('figures/histogram_boxplot/dx_boxplot.png')
 plt.clf()
 
-data_bp = {'{}'.format(region1):dy_region1, '{}'.format(region2):dy_region2}
+data_bp = {'{}'.format(region1_name):dy_region1, '{}'.format(region2_name):dy_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
@@ -262,7 +282,7 @@ plt.text(.1, 12, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)),
 plt.savefig('figures/histogram_boxplot/dy_boxplot.png')
 plt.clf()
 
-data_bp = {'{}'.format(region1):region1_endpointcells['speed'], '{}'.format(region2):region2_endpointcells['speed']}
+data_bp = {'{}'.format(region1_name):region1_endpointcells['speed'], '{}'.format(region2_name):region2_endpointcells['speed']}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
@@ -273,7 +293,7 @@ plt.text(.1, 15, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)),
 plt.savefig('figures/histogram_boxplot/speed_boxplot.png')
 plt.clf()
 
-data_bp = {'{}'.format(region1):region1_endpointcells['DoverT'], '{}'.format(region2):region2_endpointcells['DoverT']}
+data_bp = {'{}'.format(region1_name):region1_endpointcells['DoverT'], '{}'.format(region2_name):region2_endpointcells['DoverT']}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
@@ -284,7 +304,7 @@ plt.text(.1, 0.8, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5))
 plt.savefig('figures/histogram_boxplot/DoverT_boxplot.png')
 plt.clf()
 
-data_bp = {'{}'.format(region1):region1_endpointcells['FMI'], '{}'.format(region2):region2_endpointcells['FMI']}
+data_bp = {'{}'.format(region1_name):region1_endpointcells['FMI'], '{}'.format(region2_name):region2_endpointcells['FMI']}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
