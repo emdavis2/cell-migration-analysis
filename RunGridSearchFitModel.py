@@ -21,7 +21,7 @@ dt = float(sys.argv[5]) #0.1667
 
 Nwalkers = int(sys.argv[6]) #113
 
-model_type = str(sys.argv[7]) #PRW or PRW_PB
+model_type = str(sys.argv[7]) #PRW or PRW_PB or LPRW
 
 err_fn = str(sys.argv[8]) #vel_acf or MSD
 
