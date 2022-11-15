@@ -49,14 +49,14 @@ model/vel_acf_PRW_glass: .created-dirs celltrack_data/glass_data functions/compi
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/model_fitting_functions.py functions/PRW_model_functions.py
-	python3.7 RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'LPRW' 'vel_acf' 'S' 0.1 2 20 'P' 0.1 2 20
+	python3.7 RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'LPRW' 'vel_acf' 'S' 10 50 20 'P' 0.5 5 20
 
 #Perform grid search to fit PRW model to gel data with vel acf
 model/vel_acf_PRW_gel: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/model_fitting_functions.py functions/PRW_model_functions.py
-	python3.7 RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'LPRW' 'vel_acf' 'S' 0.1 2 20 'P' 0.1 2 20
+	python3.7 RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'LPRW' 'vel_acf' 'S' 10 50 20 'P' 0.5 5 20
 
 #Perform grid search to fit PRW_polaritybias model to glass data with vel acf
 model/vel_acf_PRW_PB_glass: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
