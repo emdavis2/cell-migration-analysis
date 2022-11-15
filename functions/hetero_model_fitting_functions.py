@@ -1,5 +1,6 @@
 from functions.PRW_model_functions import *
 from functions.PRWpolaritybias_model_functions import *
+from functions.langevin_PRW_functions import *
 from functions.acf_functions import *
 from functions.msd_functions import *
 
@@ -47,37 +48,39 @@ def run_sim_get_MSD_err(tracks_region, tracks_geo_region, run_sim_fn, min_track_
   return MSD_err
 
 
-def perform_gridsearch_2params(tracks_region, tracks_geo_region, run_sim_err_fn, std_dev_w_vals, std_dev_theta_vals, Nwalkers, dt, time, min_track_length):
-    dispatcher = {'vel_acf': run_sim_get_velacf_err, 'MSD': run_sim_get_MSD_err}
+def perform_gridsearch_2params(tracks_region, tracks_geo_region, run_sim_fn, run_sim_err_fn, param1_vals, param2_vals, Nwalkers, dt, time, min_track_length):
+    dispatcher_err = {'vel_acf': run_sim_get_velacf_err, 'MSD': run_sim_get_MSD_err}
+    dispatcher_sim = {'PRW_PB': run_PRWpolaritybias_sim, 'LPRW': run_PRW_langevin_sim}
     tot_err = 0
-    index_w_allcells = []
-    index_theta_allcells = []
+    index_p1_allcells = []
+    index_p2_allcells = []
     for walker in range(Nwalkers):
         min_err = 100
-        index_w = 0
-        index_theta = 0
+        index_p1 = 0
+        index_p2 = 0
 
-        for ind_w, std_dev_w in enumerate(std_dev_w_vals):
-            for ind_t,std_dev_theta in enumerate(std_dev_theta_vals):
-                err = dispatcher[run_sim_err_fn](tracks_region, tracks_geo_region, run_PRWpolaritybias_sim(1, dt, time, std_dev_w, std_dev_theta), min_track_length, walker)
+        for ind_p1, param1 in enumerate(param1_vals):
+            for ind_p2,param2 in enumerate(param2_vals):
+                err = dispatcher_err[run_sim_err_fn](tracks_region, tracks_geo_region, dispatcher_sim[run_sim_fn](1, dt, time, param1, param2), min_track_length, walker)
                 if err < min_err:
                     min_err = err
-                    index_w = ind_w
-                    index_theta = ind_t
+                    index_p1 = ind_p1
+                    index_p2 = ind_p2
                 else:
                     continue
-        index_w_allcells.append(index_w)
-        index_theta_allcells.append(index_theta)
+        index_p1_allcells.append(index_p1)
+        index_p2_allcells.append(index_p2)
         tot_err += min_err
 
-    w_list = [std_dev_w_vals[i] for i in index_w_allcells]
-    theta_list = [std_dev_theta_vals[i] for i in index_theta_allcells]
+    param1_list = [param1_vals[i] for i in index_p1_allcells]
+    param2_list = [param2_vals[i] for i in index_p2_allcells]
     
-    return tot_err, w_list, theta_list
+    return tot_err, param1_list, param2_list
 
 
-def perform_gridsearch_1param(tracks_region, tracks_geo_region, run_sim_err_fn, std_dev_theta_vals, Nwalkers, dt, time, min_track_length):
-    dispatcher = {'vel_acf': run_sim_get_velacf_err, 'MSD': run_sim_get_MSD_err}
+def perform_gridsearch_1param(tracks_region, tracks_geo_region, run_sim_fn, run_sim_err_fn, std_dev_theta_vals, Nwalkers, dt, time, min_track_length):
+    dispatcher_err = {'vel_acf': run_sim_get_velacf_err, 'MSD': run_sim_get_MSD_err}
+    dispatcher_sim = {'PRW':run_PRW_sim}
     tot_err = 0
     index_theta_allcells = []
     for walker in range(Nwalkers):
@@ -85,7 +88,7 @@ def perform_gridsearch_1param(tracks_region, tracks_geo_region, run_sim_err_fn, 
         index_theta = 0
 
         for ind_t, std_dev_theta in enumerate(std_dev_theta_vals):
-            err = dispatcher[run_sim_err_fn](tracks_region, tracks_geo_region, run_PRW_sim(1, dt, time, std_dev_theta), min_track_length, walker)
+            err = dispatcher_err[run_sim_err_fn](tracks_region, tracks_geo_region, dispatcher_sim[run_sim_fn](1, dt, time, std_dev_theta), min_track_length, walker)
             if err < min_err:
                 min_err = err
                 index_theta = ind_t
