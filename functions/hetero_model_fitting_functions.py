@@ -55,7 +55,7 @@ def perform_gridsearch_2params(tracks_region, tracks_geo_region, run_sim_fn, run
     index_p1_allcells = []
     index_p2_allcells = []
     for walker in range(Nwalkers):
-        min_err = 100
+        min_err = 1000000
         index_p1 = 0
         index_p2 = 0
 
@@ -84,7 +84,7 @@ def perform_gridsearch_1param(tracks_region, tracks_geo_region, run_sim_fn, run_
     tot_err = 0
     index_theta_allcells = []
     for walker in range(Nwalkers):
-        min_err = 100
+        min_err = 1000000
         index_theta = 0
 
         for ind_t, std_dev_theta in enumerate(std_dev_theta_vals):
