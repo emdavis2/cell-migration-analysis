@@ -2,6 +2,7 @@ from functions.acf_functions import *
 from functions.msd_functions import *
 from functions.compile_data_tracks_function import *
 from functions.PRW_model_functions import *
+from functions.langevin_PRW_functions import *
 from functions.PRWpolaritybias_model_functions import *
 from functions.model_fitting_functions import *
 
@@ -357,7 +358,7 @@ plt.xlabel("Source")
 plt.ylabel(r"DX DY ($\mu m$/min)")
 #tstat_PRWPB, pval_PRWPB = ttest_ind(dx_dy_data,dx_dy_PRWPBsim)
 tstat_PRWPB, pval_PRWPB = f_oneway(dx_dy_data,dx_dy_PRWPBsim)
-plt.text(.2, 40, 'tstatistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.text(.2, 40, 'statistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 #tstat_PRW, pval_PRW = ttest_ind(dx_dy_data,dx_dy_PRWsim)
 tstat_PRW, pval_PRW = f_oneway(dx_dy_data,dx_dy_PRWsim)
 plt.text(.2, 30, 'statistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
