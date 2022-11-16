@@ -2,6 +2,7 @@ from functions.acf_functions import *
 from functions.msd_functions import *
 from functions.compile_data_tracks_function import *
 from functions.PRW_model_functions import *
+from functions.langevin_PRW_functions import * 
 from functions.PRWpolaritybias_model_functions import *
 from functions.hetero_model_fitting_functions import *
 
@@ -9,7 +10,8 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy.stats import ttest_ind
+#from scipy.stats import ttest_ind
+from scipy.stats import f_oneway
 from scipy.optimize import curve_fit
 
 treatment = str(sys.argv[1])
@@ -34,7 +36,8 @@ file_path = str(sys.argv[9])
 PRW_params_open = open(PRW_params, 'r')
 PRW_params_readlines = PRW_params_open.readlines()
 PRW_err = float(PRW_params_readlines[0].split('=')[1])
-PRW_theta_std_dev = np.array((PRW_params_readlines[1].split('=')[1]).strip('[ ] \n').split(','),dtype=float)
+prw_S = np.array((PRW_params_readlines[1].split('=')[1]).strip('[ ] \n').split(','),dtype=float)
+prw_P = np.array((PRW_params_readlines[2].split('=')[1]).strip('[ ] \n').split(','),dtype=float)
 
 PRWPB_params_open = open(PRWPB_params, 'r')
 PRWPB_params_readlines = PRWPB_params_open.readlines()
@@ -43,6 +46,13 @@ PRWPB_w_std_dev = np.array((PRWPB_params_readlines[1].split('=')[1]).strip('[ ] 
 PRWPB_theta_std_dev = np.array((PRWPB_params_readlines[2].split('=')[1]).strip('[ ] \n').split(','),dtype=float)
 
 tracks_region, tracks_geo_region, region_cells, region_endpointcells = compile_data_tracks(treatment, min_track_length, region)
+
+if region == 'stiff':
+  region_name = 'gel'
+else:
+  region_name = region
+
+sampling_t = 10 #min per frame
 
 #autocorrelation velocity for data
 poslagaverage_data = np.zeros(300)
@@ -62,7 +72,7 @@ poslagaverage_data = poslagaverage_data[0:min_track_length-4]
 #autocorrelation velocity for PRW model 
 data_PRWsim = []
 for i in range(Nwalkers):
-    df = run_PRW_sim(1, dt, time, PRW_theta_std_dev[i])
+    df = run_PRW_langevin_sim(1, dt, time, prw_S[i], prw_P[i])
     data_PRWsim.append(df[0])
 
 poslagaverage_PRWsim = np.zeros(300)
@@ -111,7 +121,7 @@ plt.hlines(y=0,xmin=0,xmax=min_track_length,color='k')
 plt.xlim(0,min_track_length-2)
 plt.ylim(-1,1)
 plt.xlabel("time lag")
-plt.title(" Autocorrelation velocity {}".format(region))
+plt.title(" Autocorrelation velocity {}".format(region_name))
 plt.legend()
 plt.savefig(file_path + 'acf_velocity_modelcomaparion_{}'.format(region))
 plt.clf()
@@ -126,7 +136,7 @@ y_fitted = np.exp(-x_fitted*b)
 # Plot
 plt.scatter(np.arange(0,min_track_length-4), poslagaverage_PRWPBsim[0:min_track_length-4], label='Raw data')
 plt.plot(x_fitted, y_fitted, 'k', label='Fitted curve')
-plt.title(r'Single exponential fit for acf velocity PRW Polarity Bias {}'.format(region))
+plt.title(r'Single exponential fit for acf velocity PRW Polarity Bias {}'.format(region_name))
 plt.xlabel(r'time lag $\tau$ (10 min)')
 plt.ylabel(r'acf($\tau$)')
 plt.legend()
@@ -147,7 +157,7 @@ y_fitted = np.exp(-x_fitted*b)
 # Plot
 plt.scatter(np.arange(0,min_track_length-4), poslagaverage_data[0:min_track_length-4], label='Raw data')
 plt.plot(x_fitted, y_fitted, 'k', label='Fitted curve')
-plt.title(r'Single exponential fit for acf velocity {} data'.format(region))
+plt.title(r'Single exponential fit for acf velocity {} data'.format(region_name))
 plt.xlabel(r'time lag $\tau$ (10 min)')
 plt.ylabel(r'acf($\tau$)')
 plt.legend()
@@ -170,7 +180,7 @@ y_fitted = np.exp(-x_fitted*b) + np.exp(-x_fitted*a)
 # Plot
 plt.scatter(np.arange(0,min_track_length-4), poslagaverage_PRWPBsim[0:min_track_length-4], label='Raw data')
 plt.plot(x_fitted, y_fitted, 'k', label='Fitted curve')
-plt.title(r'Double exponential fit for acf velocity PRW Polarity Bias {}'.format(region))
+plt.title(r'Double exponential fit for acf velocity PRW Polarity Bias {}'.format(region_name))
 plt.xlabel(r'time lag $\tau$ (10 min)')
 plt.ylabel(r'acf($\tau$)')
 plt.legend()
@@ -192,7 +202,7 @@ y_fitted = np.exp(-x_fitted*b) + np.exp(-x_fitted*a)
 # Plot
 plt.scatter(np.arange(0,min_track_length-4), poslagaverage_data[0:min_track_length-4], label='Raw data')
 plt.plot(x_fitted, y_fitted, 'k', label='Fitted curve')
-plt.title(r'Double exponential fit for acf velocity data {}'.format(region))
+plt.title(r'Double exponential fit for acf velocity data {}'.format(region_name))
 plt.xlabel(r'time lag $\tau$ (10 min)')
 plt.ylabel(r'acf($\tau$)')
 plt.legend()
@@ -211,8 +221,8 @@ for i in range(len(data_PRWsim)):
   dx_PRWsim.append(np.diff(np.array(data_PRWsim[i]['x'].dropna().tolist())))
   dy_PRWsim.append(np.diff(np.array(data_PRWsim[i]['y'].dropna().tolist())))
 
-dx_PRWsim = np.concatenate(dx_PRWsim).ravel()
-dy_PRWsim = np.concatenate(dy_PRWsim).ravel()
+dx_PRWsim = (np.concatenate(dx_PRWsim).ravel())/sampling_t
+dy_PRWsim = (np.concatenate(dy_PRWsim).ravel())/sampling_t
 
 dx_dy_PRWsim = np.concatenate((dx_PRWsim,dy_PRWsim))
 
@@ -222,8 +232,8 @@ for i in range(len(data_PRWPBsim)):
   dx_PRWPBsim.append(np.diff(np.array(data_PRWPBsim[i]['x'].dropna().tolist())))
   dy_PRWPBsim.append(np.diff(np.array(data_PRWPBsim[i]['y'].dropna().tolist())))
 
-dx_PRWPBsim = np.concatenate(dx_PRWPBsim).ravel()
-dy_PRWPBsim = np.concatenate(dy_PRWPBsim).ravel()
+dx_PRWPBsim = (np.concatenate(dx_PRWPBsim).ravel())/sampling_t
+dy_PRWPBsim = (np.concatenate(dy_PRWPBsim).ravel())/sampling_t
 
 dx_dy_PRWPBsim = np.concatenate((dx_PRWPBsim,dy_PRWPBsim))
 
@@ -233,8 +243,8 @@ for i in range(len(tracks_geo_region)):
   dx_data.append(np.array(tracks_geo_region[i]['dx'].dropna().tolist()))
   dy_data.append(np.array(tracks_geo_region[i]['dy'].dropna().tolist()))
 
-dx_data = np.concatenate(dx_data).ravel()
-dy_data = np.concatenate(dy_data).ravel()
+dx_data = (np.concatenate(dx_data).ravel())/sampling_t
+dy_data = (np.concatenate(dy_data).ravel())/sampling_t
 
 dx_dy_data = np.concatenate((dx_data,dy_data))
 
@@ -259,25 +269,37 @@ pdf_PRWsim = count_PRWsim / sum(count_PRWsim)
 # using numpy np.cumsum to calculate the CDF
 cdf_PRWsim = np.cumsum(pdf_PRWsim)
 
+plt.hist(dx_dy_PRWPBsim,bins=30)
+plt.xlabel(r'stepsize ($\mu m$/min)')
+plt.title('dx dy for PRW polarity bias sim {}'.format(region_name))
+plt.savefig(file_path + 'dxdy_hist_PRWPBsim_{}.png'.format(region))
+plt.clf()
+
+plt.hist(dx_dy_PRWsim,bins=30)
+plt.xlabel(r'stepsize ($\mu m$/min)')
+plt.title('dx dy for PRW sim {}'.format(region_name))
+plt.savefig(file_path + 'dxdy_hist_PRWsim_{}.png'.format(region))
+plt.clf()
+
 
 plt.plot(bins_count_data[1:], cdf_data, label="data")
 plt.plot(bins_count_PRWPBsim[1:], cdf_PRWPBsim, label="PRW polarity bias sim, error={}".format(round(np.sum(np.abs(cdf_data-cdf_PRWPBsim)),3)))
 plt.plot(bins_count_PRWsim[1:], cdf_PRWsim, label="PRW sim, error={}".format(round(np.sum(np.abs(cdf_data-cdf_PRWsim)),3)))
-plt.title('CDF for dx and dy {}'.format(region))
+plt.title('CDF for dx and dy {}'.format(region_name))
 plt.legend()
 plt.savefig(file_path + 'dxdy_cdf_modelcomaparion_{}'.format(region))
 plt.clf()
 
 #Compare dx dy with boxplot
-data_bp = {'{} Data'.format(region):dx_dy_data, 'PRW Polarity Bias':dx_dy_PRWPBsim, 'PRW':dx_dy_PRWsim}
+data_bp = {'{} Data'.format(region_name):dx_dy_data, 'PRW Polarity Bias':dx_dy_PRWPBsim, 'PRW':dx_dy_PRWsim}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
-plt.ylabel("DX DY")
-tstat_PRWPB, pval_PRWPB = ttest_ind(dx_dy_data,dx_dy_PRWPBsim)
-plt.text(.2, 40, 'tstatistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
-tstat_PRW, pval_PRW = ttest_ind(dx_dy_data,dx_dy_PRWsim)
-plt.text(.2, 30, 'tstatistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.ylabel(r"DX DY ($\mu m$/min)")
+tstat_PRWPB, pval_PRWPB = f_oneway(dx_dy_data,dx_dy_PRWPBsim)
+plt.text(.2, 40, 'statistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+tstat_PRW, pval_PRW = f_oneway(dx_dy_data,dx_dy_PRWsim)
+plt.text(.2, 30, 'statistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig(file_path + 'dx_dy_boxplot_{}.png'.format(region))
 plt.clf()
 
@@ -290,9 +312,9 @@ for i in range(len(data_PRWsim)):
   vy_PRWsim.append(np.array(data_PRWsim[i]['vy'].dropna().tolist()))
   v_PRWsim.append(np.array(data_PRWsim[i]['v'].dropna().tolist()))
 
-vx_PRWsim = np.concatenate(vx_PRWsim).ravel()
-vy_PRWsim = np.concatenate(vy_PRWsim).ravel()
-v_PRWsim = np.concatenate(v_PRWsim).ravel()
+vx_PRWsim = (np.concatenate(vx_PRWsim).ravel())/sampling_t
+vy_PRWsim = (np.concatenate(vy_PRWsim).ravel())/sampling_t
+v_PRWsim = (np.concatenate(v_PRWsim).ravel())/sampling_t
 
 vx_vy_PRWsim = np.concatenate((vx_PRWsim,vy_PRWsim))
 
@@ -304,9 +326,9 @@ for i in range(len(data_PRWPBsim)):
   vy_PRWPBsim.append(np.array(data_PRWPBsim[i]['vy'].dropna().tolist()))
   v_PRWPBsim.append(np.array(data_PRWPBsim[i]['v'].dropna().tolist()))
 
-vx_PRWPBsim = np.concatenate(vx_PRWPBsim).ravel()
-vy_PRWPBsim = np.concatenate(vy_PRWPBsim).ravel()
-v_PRWPBsim = np.concatenate(v_PRWPBsim).ravel()
+vx_PRWPBsim = (np.concatenate(vx_PRWPBsim).ravel())/sampling_t
+vy_PRWPBsim = (np.concatenate(vy_PRWPBsim).ravel())/sampling_t
+v_PRWPBsim = (np.concatenate(v_PRWPBsim).ravel())/sampling_t
 
 vx_vy_PRWPBsim = np.concatenate((vx_PRWPBsim,vy_PRWPBsim))
 
@@ -318,33 +340,33 @@ for i in range(len(tracks_geo_region)):
   vy_data.append(np.array(tracks_geo_region[i]['vy'].dropna().tolist()))
   v_data.append(np.array(tracks_geo_region[i]['v'].dropna().tolist()))
 
-vx_data = np.concatenate(vx_data).ravel()
-vy_data = np.concatenate(vy_data).ravel()
-v_data = np.concatenate(v_data).ravel()
+vx_data = (np.concatenate(vx_data).ravel())/sampling_t
+vy_data = (np.concatenate(vy_data).ravel())/sampling_t
+v_data = (np.concatenate(v_data).ravel())/sampling_t
 
 vx_vy_data = np.concatenate((vx_data,vy_data))
 
-data_bp = {'{} Data'.format(region):vx_vy_data, 'PRW Polarity Bias':vx_vy_PRWPBsim, 'PRW':vx_vy_PRWsim}
+data_bp = {'{} Data'.format(region_name):vx_vy_data, 'PRW Polarity Bias':vx_vy_PRWPBsim, 'PRW':vx_vy_PRWsim}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
-plt.ylabel("VX VY")
-tstat_PRWPB, pval_PRWPB = ttest_ind(vx_vy_data,vx_vy_PRWPBsim)
-plt.text(.2, -16, 'tstatistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
-tstat_PRW, pval_PRW = ttest_ind(vx_vy_data,vx_vy_PRWsim)
-plt.text(.2, -20, 'tstatistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.ylabel(r"VX VY ($\mu m$/min)")
+tstat_PRWPB, pval_PRWPB = f_oneway(vx_vy_data,vx_vy_PRWPBsim)
+plt.text(.2, -16, 'statistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+tstat_PRW, pval_PRW = f_oneway(vx_vy_data,vx_vy_PRWsim)
+plt.text(.2, -20, 'statistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig(file_path + 'vx_vy_boxplot_{}.png'.format(region))
 plt.clf()
 
-data_bp = {'{} Data'.format(region):v_data, 'PRW Polarity Bias':v_PRWPBsim, 'PRW':v_PRWsim}
+data_bp = {'{} Data'.format(region_name):v_data, 'PRW Polarity Bias':v_PRWPBsim, 'PRW':v_PRWsim}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
-plt.ylabel("Velocity")
-tstat_PRWPB, pval_PRWPB = ttest_ind(v_data,v_PRWPBsim)
-plt.text(.2, 22, 'tstatistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
-tstat_PRW, pval_PRW = ttest_ind(v_data,v_PRWsim)
-plt.text(.2, 20, 'tstatistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.ylabel(r"Velocity ($\mu m$/min)")
+tstat_PRWPB, pval_PRWPB = f_oneway(v_data,v_PRWPBsim)
+plt.text(.2, 22, 'statistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+tstat_PRW, pval_PRW = f_oneway(v_data,v_PRWsim)
+plt.text(.2, 20, 'statistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig(file_path + 'velocity_boxplot_{}.png'.format(region))
 plt.clf()
 
@@ -362,15 +384,15 @@ DoverT_PRWPBsim = np.concatenate(DoverT_PRWPBsim).ravel()
 
 DoverT_data = region_endpointcells['DoverT']
 
-data_bp = {'{} Data'.format(region):DoverT_data, 'PRW Polarity Bias':DoverT_PRWPBsim, 'PRW':DoverT_PRWsim}
+data_bp = {'{} Data'.format(region_name):DoverT_data, 'PRW Polarity Bias':DoverT_PRWPBsim, 'PRW':DoverT_PRWsim}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("D/T")
-tstat_PRWPB, pval_PRWPB = ttest_ind(DoverT_data,DoverT_PRWPBsim)
-plt.text(.2, 0.8, 'tstatistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
-tstat_PRW, pval_PRW = ttest_ind(DoverT_data,DoverT_PRWsim)
-plt.text(.2, 0.7, 'tstatistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+tstat_PRWPB, pval_PRWPB = f_oneway(DoverT_data,DoverT_PRWPBsim)
+plt.text(.2, 0.8, 'statistic PRW PB={}, pvalue PRW PB={}'.format(round(tstat_PRWPB,3),round(pval_PRWPB,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+tstat_PRW, pval_PRW = f_oneway(DoverT_data,DoverT_PRWsim)
+plt.text(.2, 0.7, 'statistic PRW={}, pvalue PRW={}'.format(round(tstat_PRW,3),round(pval_PRW,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig(file_path + 'DoverT_boxplot_{}.png'.format(region))
 plt.clf()
 
@@ -385,7 +407,7 @@ for df in tracks_region:
     #i += 1
 plt.xlabel(('x position ($\mu$m)'))
 plt.ylabel(('y position ($\mu$m)'))
-plt.title('Trajectories for {} Data'.format(region))
+plt.title('Trajectories for {} Data'.format(region_name))
 plt.savefig(file_path + 'trajectories_data_{}'.format(region))
 plt.clf()
 
@@ -410,7 +432,7 @@ lengths = [len(tracks_geo_region[i]) for i in range(len(tracks_geo_region)) ]
 plt.hist(lengths,bins=30)
 plt.xlabel('track length (number of frames)')
 plt.ylabel('counts')
-plt.title('Track lengths for {} data'.format(region))
+plt.title('Track lengths for {} data'.format(region_name))
 plt.savefig(file_path + 'track_lengths_data_{}.png'.format(region))
 plt.clf()
 
@@ -419,7 +441,7 @@ for i in data_PRWPBsim:
   plt.plot(i['omega']-i['omega'][0])
 plt.xlabel('time (10 min)')
 plt.ylabel('angle (radians)')
-plt.title(r'$\omega$ vs time for PRW Polarity Bias Sim {}'.format(region))
+plt.title(r'$\omega$ vs time for PRW Polarity Bias Sim {}'.format(region_name))
 plt.savefig(file_path + 'omega_vs_time_PRWPB_{}.png'.format(region))
 plt.clf()
 
@@ -427,7 +449,7 @@ for i in data_PRWPBsim:
   plt.plot(i['theta']-i['theta'][0])
 plt.xlabel('time (10 min)')
 plt.ylabel('angle (radians)')
-plt.title(r'$\theta$ vs time for PRW Polarity Bias Sim {}'.format(region))
+plt.title(r'$\theta$ vs time for PRW Polarity Bias Sim {}'.format(region_name))
 plt.savefig(file_path + 'theta_vs_time_PRWPB_{}.png'.format(region))
 plt.clf()
 
@@ -436,16 +458,16 @@ for df in tracks_geo_region:
 plt.xlim(0,min_track_length)
 plt.xlabel('time (10 min)')
 plt.ylabel('angle (radians)')
-plt.title(r'$\theta$ vs time for Data {}'.format(region))
+plt.title(r'$\theta$ vs time for Data {}'.format(region_name))
 plt.savefig(file_path + 'theta_vs_time_data_{}.png'.format(region))
 plt.clf()
 
 #Plot MSD
-plt.plot(calc_MSD(tracks_region, min_track_length), label='{} Data'.format(region))
+plt.plot(calc_MSD(tracks_region, min_track_length), label='{} Data'.format(region_name))
 plt.plot(calc_MSD_sim(data_PRWPBsim, min_track_length), label='PRW Polarity Bias Sim')
 plt.plot(calc_MSD_sim(data_PRWsim, min_track_length), label='PRW Sim')
-plt.xlabel('lag')
-plt.ylabel('MSD')
+plt.xlabel('lag (10 min)')
+plt.ylabel(r'MSD ($\mu m^{2}$)')
 plt.legend()
 plt.savefig(file_path + 'MSD_{}.png'.format(region))
 plt.clf()
