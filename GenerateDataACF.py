@@ -265,6 +265,6 @@ plt.savefig('figures/acf_figures/{}_speed_y_acf_avg.png'.format(region))
 plt.clf()
 file_lines.append('figures/acf_figures/{}_speed_y_acf_avg.png \n'.format(region))
 
-#write lines to text file
+#write lines to text file 
 acf_fig_region.writelines(file_lines)
 acf_fig_region.close() 
