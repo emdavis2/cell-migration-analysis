@@ -33,6 +33,12 @@ elif region1 == 'stiff':
 
 sampling_t = 10 #min per frame
 
+#clears out sentinel file if it exists
+open('sentinels/histogram_boxplot.txt','w').close()
+#create new sentinel file to write to
+hist_boxplot_figs = open('sentinels/histogram_boxplot.txt','w')
+file_lines = []
+
 #Plot histogram for D/T
 plt.hist(region1_endpointcells['DoverT'],bins=30)
 plt.title('D/T for {}'.format(region1_name))
@@ -40,6 +46,7 @@ plt.xlabel('D/T')
 plt.ylabel('counts')
 plt.savefig('figures/histogram_boxplot/DT_hist_{}.png'.format(region1))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/DT_hist_{}.png \n'.format(region1))
 
 plt.hist(region2_endpointcells['DoverT'],bins=30)
 plt.title('D/T for {}'.format(region2_name))
@@ -47,6 +54,7 @@ plt.xlabel('D/T')
 plt.ylabel('counts')
 plt.savefig('figures/histogram_boxplot/DT_hist_{}.png'.format(region2))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/DT_hist_{}.png \n'.format(region2))
 
 #Plot histogram for speed
 plt.hist(region1_endpointcells['speed']/sampling_t,bins=30)
@@ -55,6 +63,7 @@ plt.xlabel(r'speed ($\mu m$/min)')
 plt.ylabel('counts')
 plt.savefig('figures/histogram_boxplot/speed_hist_{}.png'.format(region1))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/speed_hist_{}.png \n'.format(region1))
 
 plt.hist(region2_endpointcells['speed']/sampling_t,bins=30)
 plt.title('speed for {}'.format(region2_name))
@@ -62,6 +71,7 @@ plt.xlabel(r'speed ($\mu m$/min)')
 plt.ylabel('counts')
 plt.savefig('figures/histogram_boxplot/speed_hist_{}.png'.format(region2))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/speed_hist_{}.png \n'.format(region2))
 
 #Plot histogram for FMI
 plt.hist(region1_endpointcells['FMI'],bins=30)
@@ -70,6 +80,7 @@ plt.xlabel('FMI')
 plt.ylabel('counts')
 plt.savefig('figures/histogram_boxplot/FMI_hist_{}.png'.format(region1))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/FMI_hist_{}.png \n'.format(region1))
 
 plt.hist(region2_endpointcells['FMI'],bins=30)
 plt.title('FMI for {}'.format(region2_name))
@@ -77,6 +88,7 @@ plt.xlabel('FMI')
 plt.ylabel('counts')
 plt.savefig('figures/histogram_boxplot/FMI_hist_{}.png'.format(region2))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/FMI_hist_{}.png \n'.format(region2))
 
 
 #Plot histogram for velocity
@@ -90,6 +102,7 @@ plt.hist(v_region1,bins=50)
 plt.title(r'velocity ($\mu m$/min) {}'.format(region1_name))
 plt.savefig('figures/histogram_boxplot/vel_hist_{}.png'.format(region1))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/vel_hist_{}.png \n'.format(region1))
 
 v_region2 = []
 for i in range(len(tracks_geo_region2)):
@@ -101,6 +114,7 @@ plt.hist(v_region2,bins=50)
 plt.title(r'velocity ($\mu m$/min) {}'.format(region2_name))
 plt.savefig('figures/histogram_boxplot/vel_hist_{}.png'.format(region2))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/vel_hist_{}.png \n'.format(region2))
 
 #Plot histogram for vx and vy
 vx_region1 = []
@@ -116,11 +130,13 @@ plt.hist(vx_region1,bins=50)
 plt.title(r'vx ($\mu m$/min) {}'.format(region1_name))
 plt.savefig('figures/histogram_boxplot/velx_hist_{}.png'.format(region1))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/velx_hist_{}.png \n'.format(region1))
 
 plt.hist(vy_region1,bins=50)
 plt.title(r'vy ($\mu m$/min) {}'.format(region1_name))
 plt.savefig('figures/histogram_boxplot/vely_hist_{}.png'.format(region1))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/vely_hist_{}.png \n'.format(region1))
 
 vx_region2 = []
 vy_region2 = []
@@ -135,11 +151,13 @@ plt.hist(vx_region2,bins=50)
 plt.title(r'vx ($\mu m$/min) {}'.format(region2_name))
 plt.savefig('figures/histogram_boxplot/velx_hist_{}.png'.format(region2))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/velx_hist_{}.png \n'.format(region2))
 
 plt.hist(vy_region2,bins=50)
 plt.title(r'vy ($\mu m$/min) {}'.format(region2_name))
 plt.savefig('figures/histogram_boxplot/vely_hist_{}.png'.format(region2))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/vely_hist_{}.png \n'.format(region2))
 
 #Plot histogram for abs-skew
 absskew_region1 = []
@@ -152,6 +170,7 @@ plt.hist(absskew_region1,bins=50)
 plt.title('abs-skew {}'.format(region1_name))
 plt.savefig('figures/histogram_boxplot/absskew_hist_{}.png'.format(region1))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/absskew_hist_{}.png \n'.format(region1))
 
 absskew_region2 = []
 for i in range(len(tracks_geo_region2)):
@@ -163,6 +182,7 @@ plt.hist(absskew_region2,bins=50)
 plt.title('abs-skew {}'.format(region2_name))
 plt.savefig('figures/histogram_boxplot/absskew_hist_{}.png'.format(region2))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/absskew_hist_{}.png \n'.format(region2))
 
 #Plot histogram for dx and dy
 dx_region1 = []
@@ -180,16 +200,19 @@ plt.hist(dx_dy_region1,bins=50)
 plt.title(r'dx dy ($\mu m$/min) {}'.format(region1_name))
 plt.savefig('figures/histogram_boxplot/dxdy_hist_{}.png'.format(region1))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/dxdy_hist_{}.png \n'.format(region1))
 
 plt.hist(dx_region1,bins=50)
 plt.title(r'dx ($\mu m$/min) {}'.format(region1_name))
 plt.savefig('figures/histogram_boxplot/dx_hist_{}.png'.format(region1))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/dx_hist_{}.png \n'.format(region1))
 
 plt.hist(dy_region1,bins=50)
 plt.title(r'dy ($\mu m$/min) {}'.format(region1_name))
 plt.savefig('figures/histogram_boxplot/dy_hist_{}.png'.format(region1))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/dy_hist_{}.png \n'.format(region1))
 
 dx_region2 = []
 dy_region2 = []
@@ -206,16 +229,19 @@ plt.hist(dx_dy_region2,bins=50)
 plt.title(r'dx dy ($\mu m$/min) {}'.format(region2_name))
 plt.savefig('figures/histogram_boxplot/dxdy_hist_{}.png'.format(region2))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/dxdy_hist_{}.png \n'.format(region2))
 
 plt.hist(dx_region2,bins=50)
 plt.title(r'dx ($\mu m$/min) {}'.format(region2_name))
 plt.savefig('figures/histogram_boxplot/dx_hist_{}.png'.format(region2))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/dx_hist_{}.png \n'.format(region2))
 
 plt.hist(dy_region2,bins=50)
 plt.title(r'dy ($\mu m$/min) {}'.format(region2_name))
 plt.savefig('figures/histogram_boxplot/dy_hist_{}.png'.format(region2))
 plt.clf()
+file_lines.append('figures/histogram_boxplot/dy_hist_{}.png \n'.format(region2))
 
 #make boxplots
 data_bp = {'{}'.format(region1_name):v_region1, '{}'.format(region2_name):v_region2}
@@ -228,6 +254,7 @@ tstat, pval = f_oneway(v_region1,v_region2)
 plt.text(.2, 2, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/velocity_boxplot.png')
 plt.clf()
+file_lines.append('figures/histogram_boxplot/velocity_boxplot.png \n')
 
 data_bp = {'{}'.format(region1_name):vx_region1, '{}'.format(region2_name):vx_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -239,6 +266,7 @@ tstat, pval = f_oneway(vx_region1,vx_region2)
 plt.text(.1, 18/10, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/velocity_x_boxplot.png')
 plt.clf()
+file_lines.append('figures/histogram_boxplot/velocity_x_boxplot.png \n')
 
 data_bp = {'{}'.format(region1_name):vy_region1, '{}'.format(region2_name):vy_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -250,6 +278,7 @@ tstat, pval = f_oneway(vy_region1,vy_region2)
 plt.text(.1, 12/10, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/velocity_y_boxplot.png')
 plt.clf()
+file_lines.append('figures/histogram_boxplot/velocity_y_boxplot.png \n')
 
 data_bp = {'{}'.format(region1_name):absskew_region1, '{}'.format(region2_name):absskew_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -261,6 +290,7 @@ tstat, pval = f_oneway(absskew_region1,absskew_region2)
 plt.text(.2, 2, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/absskew_boxplot.png')
 plt.clf()
+file_lines.append('figures/histogram_boxplot/absskew_boxplot.png \n')
 
 data_bp = {'{}'.format(region1_name):dx_region1, '{}'.format(region2_name):dx_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -272,6 +302,7 @@ tstat, pval = f_oneway(dx_region1,dx_region2)
 plt.text(.1, 12/10, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/dx_boxplot.png')
 plt.clf()
+file_lines.append('figures/histogram_boxplot/dx_boxplot.png \n')
 
 data_bp = {'{}'.format(region1_name):dy_region1, '{}'.format(region2_name):dy_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -283,6 +314,7 @@ tstat, pval = f_oneway(dy_region1,dy_region2)
 plt.text(.1, 12/10, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/dy_boxplot.png')
 plt.clf()
+file_lines.append('figures/histogram_boxplot/dy_boxplot.png \n')
 
 data_bp = {'{}'.format(region1_name):region1_endpointcells['speed']/sampling_t, '{}'.format(region2_name):region2_endpointcells['speed']/sampling_t}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -294,6 +326,7 @@ tstat, pval = f_oneway(region1_endpointcells['speed'],region2_endpointcells['spe
 plt.text(.1, 15/10, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/speed_boxplot.png')
 plt.clf()
+file_lines.append('figures/histogram_boxplot/speed_boxplot.png \n')
 
 data_bp = {'{}'.format(region1_name):region1_endpointcells['DoverT'], '{}'.format(region2_name):region2_endpointcells['DoverT']}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -305,6 +338,7 @@ tstat, pval = f_oneway(region1_endpointcells['DoverT'],region2_endpointcells['Do
 plt.text(.1, 0.8, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/DoverT_boxplot.png')
 plt.clf()
+file_lines.append('figures/histogram_boxplot/DoverT_boxplot.png \n')
 
 data_bp = {'{}'.format(region1_name):region1_endpointcells['FMI'], '{}'.format(region2_name):region2_endpointcells['FMI']}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
@@ -316,3 +350,8 @@ tstat, pval = f_oneway(region1_endpointcells['FMI'],region2_endpointcells['FMI']
 plt.text(.1, 0.7, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/FMI_boxplot.png')
 plt.clf()
+file_lines.append('figures/histogram_boxplot/FMI_boxplot.png \n')
+
+#write lines to text file 
+hist_boxplot_figs.writelines(file_lines)
+hist_boxplot_figs.close() 
