@@ -1,11 +1,13 @@
 .PHONY: clean
 .PHONY: d3-vis
 .PHONY: visualization
+.PHONY: 
 
 clean:
 	rm -rf model
 	rm -rf hetero_model
 	rm -rf figures
+	rm -rf sentinels
 	rm -rf .created-dirs
 	rm -f writeup.aux
 	rm -f writeup.log
@@ -21,17 +23,18 @@ clean:
 	mkdir -p figures/MSD_model
 	mkdir -p figures/velacf_hetero_model
 	mkdir -p figures/MSD_hetero_model
+	mkdir -p sentinels
 	touch .created-dirs
 
 # Create the autocorrelation figures for glass data
-figures/acf_figures_glass: .created-dirs celltrack_data/glass_data\
+sentinels/ACF_figures_glass.txt: .created-dirs celltrack_data/glass_data\
  functions/acf_functions.py functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
 	python3.7 GenerateDataACF.py 'celltrack_data/glass_data' 30 'glass'
 
 # Create the autocorrelation figures for gel data
-figures/acf_figures_gel: .created-dirs celltrack_data/gel_data\
+sentinels/ACF_figures_stiff.txt: .created-dirs celltrack_data/gel_data\
  functions/acf_functions.py functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
@@ -140,7 +143,9 @@ writeup.pdf: figures/acf_figures/glass_polarity_vector_acf_avg.png figures/acf_f
  figures/acf_figures/glass_velocity_acf_avg.png figures/acf_figures/stiff_velocity_acf_avg.png\
  figures/acf_figures/glass_speed_acf_avg.png figures/acf_figures/stiff_speed_acf_avg.png\
  figures/acf_figures/glass_speed_x_acf_avg.png figures/acf_figures/stiff_speed_acf_avg.png\
- figures/acf_figures/glass_speed_y_acf_avg.png figures/acf_figures/stiff_speed_y_acf_avg.png
+ figures/acf_figures/glass_speed_y_acf_avg.png figures/acf_figures/stiff_speed_y_acf_avg.png\
+ figures/acf_figures_glass figures/acf_figures_gel figures/model_gel_MSD\
+ figures/model_glass_MSD figures/model_gel_velacf figures/model_glass_velacf
 	pdflatex writeup.tex
 
 #Perform grid search to fit heterogeneous PRW model to glass data with vel acf
