@@ -19,6 +19,12 @@ if region == 'stiff':
 else:
   region_name = region
 
+#clears out sentinel file if it exists
+open('sentinels/ACF_figures_{}.txt'.format(region),'w').close()
+#create new sentinel file to write to
+acf_fig_region = open('sentinels/ACF_figures_{}.txt'.format(region),'w')
+file_lines = []
+
 #autocorrelation polarity vector
 poslagaverage = np.zeros(300)
 Nposlagtotal = np.zeros(300)
@@ -48,6 +54,7 @@ plt.xlabel("time lag")
 plt.title("Autocorrelaton polarity_vector {}".format(region_name))
 plt.savefig('figures/acf_figures/{}_polarity_vector_acf_avg.png'.format(region))
 plt.clf()
+file_lines.append('figures/acf_figures/{}_polarity_vector_acf_avg.png \n'.format(region))
 
 #autocorrelation polarity angle
 poslagaverage = np.zeros(300)
@@ -76,6 +83,7 @@ plt.xlabel("time lag")
 plt.title("Autocorrelaton polarity_angle {}".format(region_name))
 plt.savefig('figures/acf_figures/{}_polarity_angle_acf_avg.png'.format(region))
 plt.clf()
+file_lines.append('figures/acf_figures/{}_polarity_angle_acf_avg.png \n'.format(region))
 
 #Autocorrelation abs-skew
 poslagaverage = np.zeros(300)
@@ -106,6 +114,7 @@ plt.xlabel("time lag")
 plt.title("Autocorrelation abs-skew {}".format(region_name))
 plt.savefig('figures/acf_figures/{}_abs_skew_acf_avg.png'.format(region))
 plt.clf()
+file_lines.append('figures/acf_figures/{}_abs_skew_acf_avg.png \n'.format(region))
 
 #autocorrelation velocity angle
 poslagaverage = np.zeros(300)
@@ -134,6 +143,7 @@ plt.xlabel("time lag")
 plt.title("Autocorrelaton velocity_angle {}".format(region_name))
 plt.savefig('figures/acf_figures/{}_velocity_angle_acf_avg.png'.format(region))
 plt.clf()
+file_lines.append('figures/acf_figures/{}_velocity_angle_acf_avg.png \n'.format(region))
 
 #autocorrelation velocity 
 poslagaverage = np.zeros(300)
@@ -162,6 +172,7 @@ plt.xlabel("time lag")
 plt.title("Autocorrelaton velocity {}".format(region_name))
 plt.savefig('figures/acf_figures/{}_velocity_acf_avg.png'.format(region))
 plt.clf()
+file_lines.append('figures/acf_figures/{}_velocity_acf_avg.png \n'.format(region))
 
 #Autocorrelation speed
 poslagaverage = np.zeros(300)
@@ -191,6 +202,7 @@ plt.xlabel("time lag")
 plt.title("Autocorrelation speed {}".format(region_name))
 plt.savefig('figures/acf_figures/{}_speed_acf_avg.png'.format(region))
 plt.clf()
+file_lines.append('figures/acf_figures/{}_speed_acf_avg.png \n'.format(region))
 
 
 #Autocorrelation speed_x
@@ -221,6 +233,7 @@ plt.xlabel("time lag")
 plt.title(" Autocorrelation speed_x {}".format(region_name))
 plt.savefig('figures/acf_figures/{}_speed_x_acf_avg.png'.format(region))
 plt.clf()
+file_lines.append('figures/acf_figures/{}_speed_x_acf_avg.png \n'.format(region))
 
 #Autocorrelation speed_y
 poslagaverage = np.zeros(300)
@@ -250,3 +263,8 @@ plt.xlabel("time lag")
 plt.title(" Autocorrelation speed_y {}".format(region_name))
 plt.savefig('figures/acf_figures/{}_speed_y_acf_avg.png'.format(region))
 plt.clf()
+file_lines.append('figures/acf_figures/{}_speed_y_acf_avg.png \n'.format(region))
+
+#write lines to text file
+acf_fig_region.writelines(file_lines)
+acf_fig_region.close() 
