@@ -55,9 +55,9 @@ else:
 sampling_t = 10 #min per frame
 
 #clears out sentinel file if it exists
-open('sentinels/figs_{}_{}.txt'.format(ntpath.basename(file_path), region),'w').close()
+open('sentinels/figs_{}_{}.txt'.format(file_path[8:-1], region),'w').close()
 #create new sentinel file to write to
-model_data_figs = open('sentinels/figs_{}_{}.txt'.format(file_path[8:-2], region),'w')
+model_data_figs = open('sentinels/figs_{}_{}.txt'.format(file_path[8:-1], region),'w')
 file_lines = []
 
 #autocorrelation velocity for data
