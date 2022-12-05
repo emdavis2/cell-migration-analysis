@@ -5,6 +5,7 @@ functions/__pycache__
 functions/libraries/__pycache__
 model
 hetero_model
+sentinels
 x.log
 figures
 *.aux
