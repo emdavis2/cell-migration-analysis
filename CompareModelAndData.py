@@ -7,7 +7,6 @@ from functions.PRWpolaritybias_model_functions import *
 from functions.model_fitting_functions import *
 
 import sys
-import ntpath
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -58,7 +57,7 @@ sampling_t = 10 #min per frame
 #clears out sentinel file if it exists
 open('sentinels/figs_{}_{}.txt'.format(ntpath.basename(file_path), region),'w').close()
 #create new sentinel file to write to
-model_data_figs = open('sentinels/figs_{}_{}.txt'.format(ntpath.basename(file_path), region),'w')
+model_data_figs = open('sentinels/figs_{}_{}.txt'.format(file_path[8:-2], region),'w')
 file_lines = []
 
 #autocorrelation velocity for data
