@@ -86,7 +86,7 @@ def weighted_PRW(w_prev, theta_prev, dt, time, v, weight, kappa_w, kappa_theta):
 #and kappa omega, kappa theta, and weight 
 #returns a list of dataframes, where each cell has its own dataframe that contains x and y positions, x and y internal polarity
 #positions, x and y components of velocity, and omega and theta
-def run_PRWpolaritybias_sim(Nwalkers, dt, time, weight, kappa_w, kappa_theta):
+def run_weighted_PRW_sim(Nwalkers, dt, time, weight, kappa_w, kappa_theta):
     #initialize list to store dataframes for each cell
     data_sim = []
     #loop through each cell and run simulation
