@@ -1,5 +1,6 @@
 from functions.PRW_model_functions import *
 from functions.PRWpolaritybias_model_functions import *
+from functions.weighted_PRW_model_functions import *
 from functions.langevin_PRW_functions import *
 from functions.acf_functions import *
 from functions.msd_functions import *
@@ -42,6 +43,27 @@ def run_sim_get_MSD_err(MSD_data, run_sim_fn, min_track_length):
 
   return MSD_err
 
+def perform_gridsearch_3params(data_for_fit, run_sim_fn, run_sim_err_fn, param1_vals, param2_vals, param3_vals, Nwalkers, dt, time, min_track_length):
+    dispatcher_err = {'vel_acf': run_sim_get_velacf_err, 'MSD': run_sim_get_MSD_err}
+    dispatcher_sim = {'weighted_PRW': run_PRWpolaritybias_sim}
+    min_err = 1000000
+    index_p1 = 0
+    index_p2 = 0
+    index_p3 = 0
+
+    for ind_p1, param1 in enumerate(param1_vals):
+        for ind_p2, param2 in enumerate(param2_vals):
+            for ind_p3, param3 in enumerate(param3_vals):
+                err = dispatcher_err[run_sim_err_fn](data_for_fit, dispatcher_sim[run_sim_fn](Nwalkers, dt, time, param1, param2, param3), min_track_length)
+                if err < min_err:
+                    min_err = err
+                    index_p1 = ind_p1
+                    index_p2 = ind_p2
+                    index_p3 = ind_p3
+                else:
+                    continue
+    
+    return min_err, param1_vals[index_p1], param2_vals[index_p2], param3_vals[index_p3]
 
 def perform_gridsearch_2params(data_for_fit, run_sim_fn, run_sim_err_fn, param1_vals, param2_vals, Nwalkers, dt, time, min_track_length):
     dispatcher_err = {'vel_acf': run_sim_get_velacf_err, 'MSD': run_sim_get_MSD_err}
