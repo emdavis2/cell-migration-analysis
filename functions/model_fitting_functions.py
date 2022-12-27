@@ -45,7 +45,7 @@ def run_sim_get_MSD_err(MSD_data, run_sim_fn, min_track_length):
 
 def perform_gridsearch_3params(data_for_fit, run_sim_fn, run_sim_err_fn, param1_vals, param2_vals, param3_vals, Nwalkers, dt, time, min_track_length):
     dispatcher_err = {'vel_acf': run_sim_get_velacf_err, 'MSD': run_sim_get_MSD_err}
-    dispatcher_sim = {'weighted_PRW': run_PRWpolaritybias_sim}
+    dispatcher_sim = {'weighted_PRW': run_weighted_PRW_sim}
     min_err = 1000000
     index_p1 = 0
     index_p2 = 0
