@@ -136,7 +136,7 @@ sentinels/figs_velacf_model_glass.txt: .created-dirs celltrack_data/glass_data f
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/msd_functions.py functions/PRWpolaritybias_model_functions.py functions/PRW_model_functions.py\
- functions/model_fitting_functions.py model/model_params_glass_LPRW_vel_acf.txt model/model_params_glass_PRW_PB_vel_acf.txt
+ functions/model_fitting_functions.py model/model_params_glass_LPRW_vel_acf.txt model/model_params_glass_PRW_PB_vel_acf.txt model/model_params_glass_weighted_PRW_vel_acf.txt
 	python3.7 CompareModelAndData.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'model/model_params_glass_LPRW_vel_acf.txt' 'model/model_params_glass_PRW_PB_vel_acf.txt' 'model/model_params_glass_weighted_PRW_vel_acf.txt' 'figures/velacf_model/'
 
 #Make figures comparing models with optimal parameters to gel data using vel_acf fitting metric
@@ -144,7 +144,7 @@ sentinels/figs_velacf_model_stiff.txt: .created-dirs celltrack_data/gel_data fun
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/msd_functions.py functions/PRWpolaritybias_model_functions.py functions/PRW_model_functions.py\
- functions/model_fitting_functions.py model/model_params_stiff_LPRW_vel_acf.txt model/model_params_stiff_PRW_PB_vel_acf.txt
+ functions/model_fitting_functions.py model/model_params_stiff_LPRW_vel_acf.txt model/model_params_stiff_PRW_PB_vel_acf.txt model/model_params_stiff_weighted_PRW_vel_acf.txt
 	python3.7 CompareModelAndData.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'model/model_params_stiff_LPRW_vel_acf.txt' 'model/model_params_stiff_PRW_PB_vel_acf.txt' 'model/model_params_stiff_weighted_PRW_vel_acf.txt' 'figures/velacf_model/'
 
 #Make figures comparing models with optimal parameters to glass data using MSD fitting metric
@@ -152,7 +152,7 @@ sentinels/figs_MSD_model_glass.txt: .created-dirs celltrack_data/glass_data func
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/msd_functions.py functions/PRWpolaritybias_model_functions.py functions/PRW_model_functions.py\
- functions/model_fitting_functions.py model/model_params_glass_LPRW_MSD.txt model/model_params_glass_PRW_PB_MSD.txt
+ functions/model_fitting_functions.py model/model_params_glass_LPRW_MSD.txt model/model_params_glass_PRW_PB_MSD.txt model/model_params_glass_weighted_PRW_MSD.txt
 	python3.7 CompareModelAndData.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'model/model_params_glass_LPRW_MSD.txt' 'model/model_params_glass_PRW_PB_MSD.txt' 'model/model_params_glass_weighted_PRW_MSD.txt' 'figures/MSD_model/'
 
 #Make figures comparing models with optimal parameters to gel data using MSD fitting metric
@@ -160,7 +160,7 @@ sentinels/figs_MSD_model_stiff.txt: .created-dirs celltrack_data/gel_data functi
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/msd_functions.py functions/PRWpolaritybias_model_functions.py functions/PRW_model_functions.py\
- functions/model_fitting_functions.py model/model_params_stiff_LPRW_MSD.txt model/model_params_stiff_PRW_PB_MSD.txt
+ functions/model_fitting_functions.py model/model_params_stiff_LPRW_MSD.txt model/model_params_stiff_PRW_PB_MSD.txt model/model_params_stiff_weighted_PRW_MSD.txt
 	python3.7 CompareModelAndData.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'model/model_params_stiff_LPRW_MSD.txt' 'model/model_params_stiff_PRW_PB_MSD.txt' 'model/model_params_stiff_weighted_PRW_MSD.txt' 'figures/MSD_model/'
 
 #Perform grid search to fit heterogeneous PRW model to glass data with vel acf
