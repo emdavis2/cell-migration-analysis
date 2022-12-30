@@ -18,7 +18,7 @@ dt = float(sys.argv[5]) #0.1667
 
 Nwalkers = int(sys.argv[6]) #113
 
-model_type = str(sys.argv[7]) #PRW or PRW_PB or LPRW
+model_type = str(sys.argv[7]) #PRW or PRW_PB or LPRW or weighted_PRW
 
 err_fn = str(sys.argv[8]) #vel_acf or MSD
 
@@ -38,6 +38,14 @@ param2_stop = float(sys.argv[15])
 
 param2_num = int(sys.argv[16])
 
+param3_name = str(sys.argv[17])
+
+param3_start = float(sys.argv[18])
+
+param3_stop = float(sys.argv[19])
+
+param3_num = int(sys.argv[20])
+
 tracks_region, tracks_geo_region, region_cells, region_endpointcells = compile_data_tracks(treatment, min_track_length, region)
 
 #perform grid search
@@ -48,7 +56,7 @@ if model_type == 'PRW':
         f.write('min_err={}'.format(str(tot_err)))
         f.write('\n')
         f.write('std_dev_theta={}'.format(str(std_dev_theta)))
-elif model_type == 'PRW_PB' or 'LPRW':
+elif model_type == 'PRW_PB' or model_type == 'LPRW':
     #std_dev_w_vals = np.linspace(0.1, 2, 10)
     #std_dev_theta_vals = np.linspace(0.1, 2, 10)
     param1_vals = np.linspace(param1_start,param1_stop,param1_num)
@@ -61,3 +69,18 @@ elif model_type == 'PRW_PB' or 'LPRW':
         f.write('\n')
         f.write('{}={}'.format(str(param2_name), str(param2)))
 
+elif model_type == 'weighted_PRW':
+    #std_dev_w_vals = np.linspace(0.1, 2, 10)
+    #std_dev_theta_vals = np.linspace(0.1, 2, 10)
+    param1_vals = np.linspace(param1_start,param1_stop,param1_num)
+    param2_vals = np.linspace(param2_start,param2_stop,param2_num)
+    param3_vals = np.linspace(param3_start,param3_stop,param3_num)
+    tot_err, param1, param2, param3 = perform_gridsearch_3params(tracks_region, tracks_geo_region, model_type, err_fn, param1_vals, param2_vals, param3_vals, Nwalkers, dt, time, min_track_length)
+    with open(r'hetero_model/model_params_{}_{}_{}.txt'.format(region, model_type, err_fn), 'w') as f:
+        f.write('min_err={}'.format(str(tot_err)))
+        f.write('\n')
+        f.write('{}={}'.format(str(param1_name), str(param1)))
+        f.write('\n')
+        f.write('{}={}'.format(str(param2_name), str(param2)))
+        f.write('\n')
+        f.write('{}={}'.format(str(param3_name), str(param3)))
