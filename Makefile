@@ -168,56 +168,84 @@ hetero_model/model_params_glass_LPRW_vel_acf.txt: .created-dirs celltrack_data/g
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/hetero_model_fitting_functions.py functions/langevin_PRW_functions.py
-	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'LPRW' 'vel_acf' 'S' 10 50 10 'P' 0.5 5 10
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'LPRW' 'vel_acf' 'S' 10 50 10 'P' 0.5 5 10 0 0 0 0
 
 #Perform grid search to fit heterogeneous PRW model to gel data with vel acf
 hetero_model/model_params_stiff_LPRW_vel_acf.txt: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/hetero_model_fitting_functions.py functions/langevin_PRW_functions.py
-	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'LPRW' 'vel_acf' 'S' 10 50 10 'P' 0.5 5 10
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'LPRW' 'vel_acf' 'S' 10 50 10 'P' 0.5 5 10 0 0 0 0
 
 #Perform grid search to fit heterogeneous PRW_polaritybias model to glass data with vel acf
 hetero_model/model_params_glass_PRW_PB_vel_acf.txt: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/hetero_model_fitting_functions.py functions/PRWpolaritybias_model_functions.py
-	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW_PB' 'vel_acf' 'std_dev_w' 0.1 2 10 'std_dev_theta' 0.1 2 10
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW_PB' 'vel_acf' 'std_dev_w' 0.1 2 10 'std_dev_theta' 0.1 2 10 0 0 0 0
 
 #Perform grid search to fit heterogeneous PRW_polaritybias model to gel data with vel acf
 hetero_model/model_params_stiff_PRW_PB_vel_acf.txt: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/hetero_model_fitting_functions.py functions/PRWpolaritybias_model_functions.py
-	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'PRW_PB' 'vel_acf' 'std_dev_w' 0.1 2 10 'std_dev_theta' 0.1 2 10
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'PRW_PB' 'vel_acf' 'std_dev_w' 0.1 2 10 'std_dev_theta' 0.1 2 10 0 0 0 0
+
+#Perform grid search to fit heterogeneous weighted_PRW model to glass data with vel acf
+hetero_model/model_params_glass_weighted_PRW_vel_acf.txt: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
+ functions/acf_functions.py functions/hetero_model_fitting_functions.py functions/weighted_PRW_model_functions.py
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'weighted_PRW' 'vel_acf' 'weight' 0 2 10 'kappa_w' 0 8 10 'kappa_theta' 0 8 10
+
+#Perform grid search to fit heterogeneous weighted_PRW model to gel data with vel acf
+hetero_model/model_params_stiff_weighted_PRW_vel_acf.txt: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
+ functions/acf_functions.py functions/hetero_model_fitting_functions.py functions/weighted_PRW_model_functions.py
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'weighted_PRW' 'vel_acf' 'weight' 0 2 10 'kappa_w' 0 8 10 'kappa_theta' 0 8 10
 
 #Perform grid search to fit heterogeneous PRW model to glass data with MSD
 hetero_model/model_params_glass_LPRW_MSD.txt: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/msd_functions.py functions/hetero_model_fitting_functions.py functions/langevin_PRW_functions.py
-	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'LPRW' 'MSD' 'S' 10 50 10 'P' 0.5 5 10
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'LPRW' 'MSD' 'S' 10 50 10 'P' 0.5 5 10 0 0 0 0
 
 #Perform grid search to fit heterogeneous PRW model to gel data with MSD
 hetero_model/model_params_stiff_LPRW_MSD.txt: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/msd_functions.py functions/hetero_model_fitting_functions.py functions/langevin_PRW_functions.py
-	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'LPRW' 'MSD' 'S' 10 50 10 'P' 0.5 5 10
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'LPRW' 'MSD' 'S' 10 50 10 'P' 0.5 5 10 0 0 0 0
 
 #Perform grid search to fit heterogeneous PRW_polaritybias model to glass data with MSD
 hetero_model/model_params_glass_PRW_PB_MSD.txt: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/msd_functions.py functions/hetero_model_fitting_functions.py functions/PRWpolaritybias_model_functions.py
-	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW_PB' 'MSD' 'std_dev_w' 0.1 2 10 'std_dev_theta' 0.1 2 10
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW_PB' 'MSD' 'std_dev_w' 0.1 2 10 'std_dev_theta' 0.1 2 10 0 0 0 0
 
 #Perform grid search to fit heterogeneous PRW_polaritybias model to gel data with MSD
 hetero_model/model_params_stiff_PRW_PB_MSD.txt: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/msd_functions.py functions/hetero_model_fitting_functions.py functions/PRWpolaritybias_model_functions.py
-	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'PRW_PB' 'MSD' 'std_dev_w' 0.1 2 10 'std_dev_theta' 0.1 2 10
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'PRW_PB' 'MSD' 'std_dev_w' 0.1 2 10 'std_dev_theta' 0.1 2 10 0 0 0 0
+
+#Perform grid search to fit heterogeneous weighted_PRW model to glass data with MSD
+hetero_model/model_params_glass_weighted_PRW_MSD.txt: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
+ functions/msd_functions.py functions/hetero_model_fitting_functions.py functions/weighted_PRW_model_functions.py
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'weighted_PRW' 'MSD' 'weight' 0 2 10 'kappa_w' 0 8 10 'kappa_theta' 0 8 10
+
+#Perform grid search to fit heterogeneous weighted_PRW model to gel data with MSD
+hetero_model/model_params_stiff_weighted_PRW_MSD.txt: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
+ functions/msd_functions.py functions/hetero_model_fitting_functions.py functions/weighted_PRW_model_functions.py
+	python3.7 Hetero_RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'weighted_PRW' 'MSD' 'weight' 0 2 10 'kappa_w' 0 8 10 'kappa_theta' 0 8 10
 
 #Make figures comparing heterogeneous models with optimal parameters to glass data using vel_acf fitting metric
 sentinels/figs_velacf_hetero_model_glass.txt: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
