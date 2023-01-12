@@ -12,7 +12,8 @@ def calc_MSD(data,track_length):
       poslags =  (x[lag:] - x[0:length-lag])**2 + (y[lag:] - y[0:length-lag])**2
       msd_onecell.append(np.average(poslags))
     msd_allcells.append(msd_onecell[0:track_length])
-  return np.average(msd_allcells,axis=0)
+  std_err = np.std(msd_allcells,axis=0,ddof=1)/np.sqrt(np.shape(msd_allcells)[0])
+  return np.average(msd_allcells,axis=0), std_err
 
 
 def calc_MSD_sim(data,track_length):
@@ -27,7 +28,8 @@ def calc_MSD_sim(data,track_length):
       poslags =  (x[lag:] - x[0:length-lag])**2 + (y[lag:] - y[0:length-lag])**2
       msd_onecell.append(np.average(poslags))
     msd_allcells.append(msd_onecell[0:track_length])
-  return np.average(msd_allcells,axis=0)
+  std_err = np.std(msd_allcells,axis=0,ddof=1)/np.sqrt(np.shape(msd_allcells)[0])
+  return np.average(msd_allcells,axis=0), std_err
 
 def calc_MSD_onecell(data,track_length):
   length = len(data)
