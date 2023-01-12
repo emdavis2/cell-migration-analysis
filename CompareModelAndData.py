@@ -329,6 +329,8 @@ for i in range(len(data_PRWsim)):
 dx_PRWsim = (np.concatenate(dx_PRWsim).ravel())/sampling_t
 dy_PRWsim = (np.concatenate(dy_PRWsim).ravel())/sampling_t
 
+dtheta_PRWsim = np.arctan2(dy_PRWsim, dx_PRWsim) * 180 / np.pi
+
 dx_dy_PRWsim = np.concatenate((dx_PRWsim,dy_PRWsim))
 
 dx_PRWPBsim = []
@@ -339,6 +341,8 @@ for i in range(len(data_PRWPBsim)):
 
 dx_PRWPBsim = (np.concatenate(dx_PRWPBsim).ravel())/sampling_t
 dy_PRWPBsim = (np.concatenate(dy_PRWPBsim).ravel())/sampling_t
+
+dtheta_PRWPBsim = np.arctan2(dy_PRWPBsim, dx_PRWPBsim) * 180 / np.pi
 
 dx_dy_PRWPBsim = np.concatenate((dx_PRWPBsim,dy_PRWPBsim))
 
@@ -361,6 +365,8 @@ for i in range(len(tracks_geo_region)):
 
 dx_data = (np.concatenate(dx_data).ravel())/sampling_t
 dy_data = (np.concatenate(dy_data).ravel())/sampling_t
+
+dtheta_data = np.arctan2(dy_data, dx_data) * 180 / np.pi
 
 dx_dy_data = np.concatenate((dx_data,dy_data))
 
@@ -399,6 +405,13 @@ plt.savefig(file_path + 'dxdy_hist_PRWPBsim_{}.png'.format(region))
 plt.clf()
 file_lines.append(file_path + 'dxdy_hist_PRWPBsim_{}.png \n'.format(region))
 
+plt.hist(dtheta_PRWPBsim,bins=30)
+plt.xlabel(r'angle (degrees)')
+plt.title(r'd$\theta$ for PRW polarity bias sim {}'.format(region_name))
+plt.savefig(file_path + 'dtheta_hist_PRWPBsim_{}.png'.format(region))
+plt.clf()
+file_lines.append(file_path + 'dtheta_hist_PRWPBsim_{}.png \n'.format(region))
+
 # plt.hist(dx_dy_PRW_wt_sim,bins=30)
 # plt.xlabel(r'stepsize ($\mu m$/min)')
 # plt.title('dx dy for weighted PRW sim {}'.format(region_name))
@@ -412,6 +425,20 @@ plt.title('dx dy for PRW sim {}'.format(region_name))
 plt.savefig(file_path + 'dxdy_hist_PRWsim_{}.png'.format(region))
 plt.clf()
 file_lines.append(file_path + 'dxdy_hist_PRWsim_{}.png \n'.format(region))
+
+plt.hist(dtheta_PRWsim,bins=30)
+plt.xlabel(r'angle (degrees)')
+plt.title(r'd$\theta$ for PRW sim {}'.format(region_name))
+plt.savefig(file_path + 'dtheta_hist_PRWsim_{}.png'.format(region))
+plt.clf()
+file_lines.append(file_path + 'dtheta_hist_PRWsim_{}.png \n'.format(region))
+
+plt.hist(dtheta_data,bins=30)
+plt.xlabel(r'angle (degrees)')
+plt.title(r'd$\theta$ for data {}'.format(region_name))
+plt.savefig(file_path + 'dtheta_hist_data_{}.png'.format(region))
+plt.clf()
+file_lines.append(file_path + 'dtheta_hist_data_{}.png \n'.format(region))
 
 plt.plot(bins_count_data[1:], cdf_data, label="data")
 plt.plot(bins_count_PRWPBsim[1:], cdf_PRWPBsim, label="PRW polarity bias sim, error={}".format(round(np.sum(np.abs(cdf_data-cdf_PRWPBsim)),3)))
