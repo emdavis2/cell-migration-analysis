@@ -1,3 +1,4 @@
+
 from functions.compile_data_tracks_function import *
 
 import ntpath
@@ -243,7 +244,31 @@ plt.savefig('figures/histogram_boxplot/dy_hist_{}.png'.format(region2))
 plt.clf()
 file_lines.append('figures/histogram_boxplot/dy_hist_{}.png \n'.format(region2))
 
+#Get solidity
+solidity_region1 = []
+for i in range(len(tracks_geo_region1)):
+  solidity_region1.append(tracks_geo_region1[i]['solidity'].tolist())
+
+solidity_region1 = np.concatenate(solidity_region1).ravel()
+
+solidity_region2 = []
+for i in range(len(tracks_geo_region2)):
+  solidity_region2.append(tracks_geo_region2[i]['solidity'].tolist())
+
+solidity_region2 = np.concatenate(solidity_region2).ravel()
+
 #make boxplots
+data_bp = {'{}'.format(region1_name):solidity_region1, '{}'.format(region2_name):solidity_region2}
+data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
+sns.boxplot(data=data_boxplot)
+plt.xlabel("Source")
+plt.ylabel("Solidity")
+tstat, pval = f_oneway(solidity_region1,solidity_region2)
+plt.text(0.1, 0.8, 'pvalue={}'.format(pval), fontsize = 12, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.savefig('figures/histogram_boxplot/solidity_boxplot.png')
+plt.clf()
+file_lines.append('figures/histogram_boxplot/solidity_boxplot.png \n')
+
 data_bp = {'{}'.format(region1_name):v_region1, '{}'.format(region2_name):v_region2}
 data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.items() })
 sns.boxplot(data=data_boxplot)
@@ -323,7 +348,7 @@ plt.xlabel("Source")
 plt.ylabel(r"Speed ($\mu m$/min)")
 #tstat, pval = ttest_ind(region1_endpointcells['speed'],region2_endpointcells['speed'])
 tstat, pval = f_oneway(region1_endpointcells['speed'],region2_endpointcells['speed'])
-plt.text(.1, 15/10, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.text(.1, 15/10, 'pvalue={}'.format(pval), fontsize = 12, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/speed_boxplot.png')
 plt.clf()
 file_lines.append('figures/histogram_boxplot/speed_boxplot.png \n')
@@ -335,7 +360,7 @@ plt.xlabel("Source")
 plt.ylabel("D/T")
 #tstat, pval = ttest_ind(region1_endpointcells['DoverT'],region2_endpointcells['DoverT'])
 tstat, pval = f_oneway(region1_endpointcells['DoverT'],region2_endpointcells['DoverT'])
-plt.text(.1, 0.8, 'statistic={}, pvalue={}'.format(round(tstat,3),round(pval,5)), fontsize = 8, bbox = dict(facecolor = 'red', alpha = 0.1))
+plt.text(.1, 0.8, 'pvalue={}'.format(pval), fontsize = 12, bbox = dict(facecolor = 'red', alpha = 0.1))
 plt.savefig('figures/histogram_boxplot/DoverT_boxplot.png')
 plt.clf()
 file_lines.append('figures/histogram_boxplot/DoverT_boxplot.png \n')
