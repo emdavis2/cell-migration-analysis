@@ -278,10 +278,3 @@ sentinels/figs_MSD_hetero_model_stiff.txt: .created-dirs celltrack_data/gel_data
  functions/acf_functions.py functions/msd_functions.py functions/PRWpolaritybias_model_functions.py functions/weighted_PRW_model_functions.py functions/PRW_model_functions.py functions/langevin_PRW_functions.py\
  functions/model_fitting_functions.py hetero_model/model_params_stiff_LPRW_MSD.txt hetero_model/model_params_stiff_PRW_PB_MSD.txt hetero_model/model_params_stiff_weighted_PRW_MSD.txt
 	python3.7 Hetero_CompareModelAndData.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'hetero_model/model_params_stiff_LPRW_MSD.txt' 'hetero_model/model_params_stiff_PRW_PB_MSD.txt' 'hetero_model/model_params_stiff_weighted_PRW_MSD.txt' 'figures/MSD_hetero_model/'
-
-# Build the final report for the project.
-writeup.pdf: .created-dirs sentinels/ACF_figures_glass.txt sentinels/ACF_figures_stiff.txt sentinels/histogram_boxplot.txt\
- sentinels/figs_velacf_model_glass.txt sentinels/figs_velacf_model_stiff.txt sentinels/figs_MSD_model_glass.txt sentinels/figs_MSD_model_stiff.txt\
- sentinels/figs_velacf_hetero_model_glass.txt sentinels/figs_velacf_hetero_model_stiff.txt sentinels/figs_MSD_hetero_model_glass.txt\
- sentinels/figs_MSD_hetero_model_stiff.txt
-	pdflatex writeup.tex
