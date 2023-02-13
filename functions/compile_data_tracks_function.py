@@ -10,11 +10,11 @@ from functions.libraries.track_functions import *
 # region is a string of region of interest (stiff or glass)
 
 #returns ind_track_regions (indicies of tracks of interest), tracks_region (list of x,y cell coordinates for each track), tracks_geo_region (list of dataframes for each track for region of interest with track parameters)
-def compile_data_tracks(treatment, min_track_length, region):
+def compile_data_tracks(treatment, min_track_length, region, pixel_size):
 
     #Parameters to compute motion metrics
     center='approximate-medoid'
-    pixel_size=2*0.645 #um. factor of 2 because image was rescaled
+    #pixel_size=2*0.645 #um. factor of 2 because image was rescaled
     sampling_t=1 #sampling time (10min)
 
     #COMPILE TREATMENT TRACKS
