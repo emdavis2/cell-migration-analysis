@@ -114,7 +114,7 @@ def basic_stats(tracks,pixel_size,sampling_t):
     for k in range(maxkturn):
         kturns.append(np.empty(0))
 
-    siz=200
+    siz=20000
     sum_pathlengths=np.zeros(siz)
     sum_squared_pathlengths=np.zeros(siz)
     sum_fmis=np.zeros(siz)
