@@ -46,7 +46,9 @@ param3_stop = float(sys.argv[19])
 
 param3_num = int(sys.argv[20])
 
-tracks_region, tracks_geo_region, region_cells, region_endpointcells = compile_data_tracks(treatment, min_track_length, region)
+pixel_size = 1.54
+
+tracks_region, tracks_geo_region, region_cells, region_endpointcells = compile_data_tracks(treatment, min_track_length, region, pixel_size)
 
 #perform grid search
 if model_type == 'PRW':

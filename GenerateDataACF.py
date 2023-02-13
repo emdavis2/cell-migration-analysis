@@ -12,7 +12,9 @@ min_track_length = int(sys.argv[2])
 
 region = str(sys.argv[3])
 
-tracks_region, tracks_geo_region, region_cells, region_endpointcells = compile_data_tracks(treatment, min_track_length, region)
+pixel_size = 1.54
+
+tracks_region, tracks_geo_region, region_cells, region_endpointcells = compile_data_tracks(treatment, min_track_length, region, pixel_size)
 
 if region == 'stiff':
   region_name = 'gel'

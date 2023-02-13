@@ -21,9 +21,11 @@ region1 = str(sys.argv[4])
 
 region2 = str(sys.argv[5])
 
-tracks_region1, tracks_geo_region1, region1_cells, region1_endpointcells = compile_data_tracks(treatment1, min_track_length, region1)
+pixel_size = 1.54
 
-tracks_region2, tracks_geo_region2, region2_cells, region2_endpointcells = compile_data_tracks(treatment2, min_track_length, region2)
+tracks_region1, tracks_geo_region1, region1_cells, region1_endpointcells = compile_data_tracks(treatment1, min_track_length, region1, pixel_size)
+
+tracks_region2, tracks_geo_region2, region2_cells, region2_endpointcells = compile_data_tracks(treatment2, min_track_length, region2, pixel_size)
 
 if region2 == 'stiff':
   region2_name = 'gel'

@@ -35,6 +35,8 @@ PRW_wt_params = str(sys.argv[9])
 
 file_path = str(sys.argv[10])
 
+pixel_size = 1.54
+
 #get params from model fitting
 PRW_params_open = open(PRW_params, 'r')
 PRW_params_readlines = PRW_params_open.readlines()
@@ -55,7 +57,7 @@ PRWPB_theta_std_dev = float(PRWPB_params_readlines[2].split('=')[1])
 # PRW_wt_w_kappa = float(PRW_wt_params_readlines[2].split('=')[1])
 # PRW_wt_theta_kappa = float(PRW_wt_params_readlines[3].split('=')[1])
 
-tracks_region, tracks_geo_region, region_cells, region_endpointcells = compile_data_tracks(treatment, min_track_length, region)
+tracks_region, tracks_geo_region, region_cells, region_endpointcells = compile_data_tracks(treatment, min_track_length, region, pixel_size)
 
 if region == 'stiff':
   region_name = 'gel'
