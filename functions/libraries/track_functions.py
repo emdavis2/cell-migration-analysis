@@ -60,14 +60,15 @@ def read_tracks_aut(files,pixel_size,center):
         with open(filename, 'rb') as handle:
             tracksfile = pickle.load(handle, encoding='latin1')
         #print('number of tracks',len(tracksfile))
-        for i in range(len(tracksfile)):
-            #print('track length',len(tracksfile[i]))
-            #print(tracksfile[i])
-            coord=np.vstack((tracksfile[i][center+'x'],tracksfile[i][center+'y']))
-            #tracksgeo.append(np.asarray(tracksfile[i]['area']))
-            tracksgeo.append(tracksfile[i])
-            #coor shape 2,ntimes
-            tracks.append(np.transpose(coord)*pixel_size)
+        for movie in tracksfile:
+            for track in tracksfile[movie]:
+                #print('track length',len(tracksfile[i]))
+                #print(tracksfile[i])
+                coord=np.vstack((tracksfile[movie][track][center+'x'],tracksfile[movie][track][center+'y']))
+                #tracksgeo.append(np.asarray(tracksfile[i]['area']))
+                tracksgeo.append(tracksfile[movie][track])
+                #coor shape 2,ntimes
+                tracks.append(np.transpose(coord)*pixel_size)
     #print (str(len(tracks))+' tracks')
 
     #set initial point at the origin and convert to np.array
