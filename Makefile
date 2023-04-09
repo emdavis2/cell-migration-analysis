@@ -27,25 +27,32 @@ clean:
 	touch .created-dirs
 
 # Create the autocorrelation figures for glass data
-sentinels/ACF_figures_glass.txt: .created-dirs celltrack_data/glass_data\
+sentinels/ACF_figures_glass.txt: .created-dirs 2023_03_30_Data/glass_data\
  functions/acf_functions.py functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
-	python3.7 GenerateDataACF.py 'celltrack_data/glass_data' 30 'glass'
+	python3.7 GenerateDataACF.py '2023_03_30_Data/glass_data' 30 'glass'
 
-# Create the autocorrelation figures for gel data
-sentinels/ACF_figures_stiff.txt: .created-dirs celltrack_data/gel_data\
+# Create the autocorrelation figures for soft gel data
+sentinels/ACF_figures_soft_gel.txt: .created-dirs 2023_03_30_Data/soft_gel_data\
  functions/acf_functions.py functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
-	python3.7 GenerateDataACF.py 'celltrack_data/gel_data' 30 'stiff'
+	python3.7 GenerateDataACF.py '2023_03_30_Data/soft_gel_data' 30 'soft_gel'
+
+# Create the autocorrelation figures for stiff gel data
+sentinels/ACF_figures_stiff_gel.txt: .created-dirs 2023_03_30_Data/stiff_gel_data\
+ functions/acf_functions.py functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3.7 GenerateDataACF.py '2023_03_30_Data/stiff_gel_data' 30 'stiff_gel'
 
 # Create the boxplot and histogram figures for both glass and gel data
-sentinels/histogram_boxplot.txt: .created-dirs celltrack_data/gel_data\
- celltrack_data/glass_data functions/compile_data_tracks_function.py\
+sentinels/histogram_boxplot.txt: .created-dirs 2023_03_30_Data/glass_data\
+ 2023_03_30_Data/soft_gel_data 2023_03_30_Data/stiff_gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
-	python3.7 GenerateDataHistogramBoxplot.py 'celltrack_data/glass_data' 'celltrack_data/gel_data' 30 'glass' 'stiff'
+	python3.7 GenerateDataHistogramBoxplot.py '2023_03_30_Data/glass_data' '2023_03_30_Data/soft_gel_data' '2023_03_30_Data/stiff_gel_data' 60 'glass' 'soft_gel' 'stiff_gel'
 
 #Perform grid search to fit PRW model to glass data with vel acf
 model/model_params_glass_LPRW_vel_acf.txt: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
