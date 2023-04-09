@@ -114,12 +114,12 @@ def compile_data_tracks(treatment, min_track_length, region, pixel_size):
         tracks_geo[i] = pd.concat([tracks_geo[i].reset_index(drop=True), displmetrics.reset_index(drop=True)], axis = 1 )
 
     #keep only tracks a particular region
-    ind_tracks_region = [i for i in range(len(tracks_geo)) if tracks_geo[i]["gel-region"][0] == region ]
+    ind_tracks_region = [i for i in range(len(tracks_geo)) if tracks_geo[i]["region"][0] == region ]
     tracks_region = [tracks[i] for i in ind_tracks_region ]
     tracks_geo_region = [tracks_geo[i] for i in ind_tracks_region ]
 
     # Cell averaged metrics
-    exclude_cols = pd.Series(['movie','frame','label','gel-region'])
+    exclude_cols = pd.Series(['movie','frame','label','region'])
     colindices= ~tracks_geo[0].columns.isin(exclude_cols)
 
     #GET MEAN/STD GEOMETRY (for now pixel units)
@@ -134,7 +134,7 @@ def compile_data_tracks(treatment, min_track_length, region, pixel_size):
         colindices= ~tracks_geo[i].columns.isin(exclude_cols)
         means = tracks_geo[i].loc[:,colindices].mean().T
         #add gel-region
-        means['gel-region'] =tracks_geo[i]['gel-region'].iloc[0]
+        means['region'] =tracks_geo[i]['region'].iloc[0]
 
         cellsshape = cellsshape.append(means, ignore_index=True)
         
@@ -156,7 +156,7 @@ def compile_data_tracks(treatment, min_track_length, region, pixel_size):
     mean_retr_norm_radii=[]
 
     for i in range(len(tracks_geo)):
-        gelregion.append( tracks_geo[i]["gel-region"].iloc[0])
+        gelregion.append( tracks_geo[i]["region"].iloc[0])
         experiment.append(tracks_geo[i]["experiment"].iloc[0])
         trackid.append(tracks_geo[i]["track_id"].iloc[0])
         absskew.append(tracks_geo[i]["abs-skew"].mean())
@@ -164,7 +164,7 @@ def compile_data_tracks(treatment, min_track_length, region, pixel_size):
 
     #GET TRACKS MOTION METRICS AND ADD GEL-REGION AND EXPERIMENT
     stepsizes,turns,meancoskturn,stderrcoskturn, tseries_stats, endpointcells = basic_stats(tracks,pixel_size,sampling_t)
-    endpointcells['gel-region']=gelregion
+    endpointcells['region']=gelregion
     endpointcells['experiment']=experiment
     endpointcells['track_id']=trackid
     endpointcells['abs-skew']=absskew
