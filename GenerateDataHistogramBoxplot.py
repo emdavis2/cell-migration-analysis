@@ -544,7 +544,7 @@ file_lines.append('figures/histogram_boxplot/FMI_boxplot.png \n')
 #track lengths of data
 lengths = [len(tracks_geo_region1[i]) for i in range(len(tracks_geo_region1)) ]
 num_tracks = len(tracks_geo_region1)
-plt.hist(lengths,bins=30)
+plt.hist(lengths)
 plt.xlabel('track length (number of frames)')
 plt.ylabel('counts')
 plt.title('Track lengths for {} data ({} tracks)'.format(region1_name, num_tracks))
@@ -555,7 +555,7 @@ file_lines.append('figures/histogram_boxplot/track_lengths_data_{}.png \n'.forma
 #track lengths of data
 lengths = [len(tracks_geo_region2[i]) for i in range(len(tracks_geo_region2)) ]
 num_tracks = len(tracks_geo_region2)
-plt.hist(lengths,bins=30)
+plt.hist(lengths)
 plt.xlabel('track length (number of frames)')
 plt.ylabel('counts')
 plt.title('Track lengths for {} data ({} tracks)'.format(region2_name, num_tracks))
@@ -566,7 +566,7 @@ file_lines.append('figures/histogram_boxplot/track_lengths_data_{}.png \n'.forma
 #track lengths of data
 lengths = [len(tracks_geo_region3[i]) for i in range(len(tracks_geo_region3)) ]
 num_tracks = len(tracks_geo_region3)
-plt.hist(lengths,bins=30)
+plt.hist(lengths)
 plt.xlabel('track length (number of frames)')
 plt.ylabel('counts')
 plt.title('Track lengths for {} data ({} tracks)'.format(region3_name, num_tracks))
