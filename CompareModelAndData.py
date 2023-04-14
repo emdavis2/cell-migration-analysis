@@ -31,9 +31,7 @@ PRW_params = str(sys.argv[7])
 
 PRWPB_params = str(sys.argv[8])
 
-PRW_wt_params = str(sys.argv[9])
-
-file_path = str(sys.argv[10])
+file_path = str(sys.argv[9])
 
 pixel_size = 1.54
 
@@ -59,10 +57,8 @@ PRWPB_theta_std_dev = float(PRWPB_params_readlines[2].split('=')[1])
 
 tracks_region, tracks_geo_region, region_cells, region_endpointcells = compile_data_tracks(treatment, min_track_length, region, pixel_size)
 
-if region == 'stiff':
-  region_name = 'gel'
-else:
-  region_name = region
+
+region_name = region
 
 sampling_t = 10 #min per frame
 
