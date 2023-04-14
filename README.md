@@ -12,13 +12,13 @@ Cell migration is characterized by an elongation with a leading edge of the cell
 Clone this repository and navigate to the folder of this repository on your computer (where the Docker file is located) and build the docker container by running:
 
 ```
-docker build -t python_latex .
+docker build -t python_docker .
 ```
 
 Now, run this container with the following: 
 
 ```
-docker run -v $(pwd):/home/ -it python_latex bash
+docker run -v $(pwd):/home/ -it python_docker bash
 ```
 
 Now your terminal should be interactive with the docker container we have just built. We can use the Makefile to make the figures and fit the model to our data. To generate the autocorrelation figures for the cells migrating on glass, use:
