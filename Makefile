@@ -32,21 +32,21 @@ sentinels/ACF_figures_glass.txt: .created-dirs 2023_03_30_Data/glass_data\
  functions/acf_functions.py functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
-	python3 GenerateDataACF.py '2023_03_30_Data/glass_data' 60 'glass'
+	python3 GenerateDataACF.py '2023_03_30_Data/glass_data' 30 'glass'
 
 # Create the autocorrelation figures for soft gel data
 sentinels/ACF_figures_soft_gel.txt: .created-dirs 2023_03_30_Data/soft_gel_data\
  functions/acf_functions.py functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
-	python3 GenerateDataACF.py '2023_03_30_Data/soft_gel_data' 60 'soft_gel'
+	python3 GenerateDataACF.py '2023_03_30_Data/soft_gel_data' 30 'soft_gel'
 
 # Create the autocorrelation figures for stiff gel data
 sentinels/ACF_figures_stiff_gel.txt: .created-dirs 2023_03_30_Data/stiff_gel_data\
  functions/acf_functions.py functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
-	python3 GenerateDataACF.py '2023_03_30_Data/stiff_gel_data' 60 'stiff_gel'
+	python3 GenerateDataACF.py '2023_03_30_Data/stiff_gel_data' 30 'stiff_gel'
 
 # Create the boxplot and histogram figures for both glass and gel data
 sentinels/histogram_boxplot.txt: .created-dirs 2023_03_30_Data/glass_data\
@@ -63,32 +63,46 @@ sentinels/cellshape_histogram.txt: .created-dirs 2023_03_30_Data/glass_data\
 	python3 CellShapeOverTrack.py '2023_03_30_Data/glass_data' '2023_03_30_Data/soft_gel_data' '2023_03_30_Data/stiff_gel_data' 60 'glass' 'soft_gel' 'stiff_gel'
 
 #Perform grid search to fit PRW model to glass data with vel acf
-model/model_params_glass_LPRW_vel_acf.txt: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
+model/model_params_glass_LPRW_vel_acf.txt: .created-dirs 2023_03_30_Data/glass_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/model_fitting_functions.py functions/langevin_PRW_functions.py
-	python3 RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'LPRW' 'vel_acf' 'S' 10 50 20 'P' 0.5 5 20 0 0 0 0
+	python3 RunGridSearchFitModel.py '2023_03_30_Data/glass_data' 30 'glass' 5 0.1667 4 'LPRW' 'vel_acf' 'S' 10 50 20 'P' 0.5 5 20 0 0 0 0
 
 #Perform grid search to fit PRW model to gel data with vel acf
-model/model_params_stiff_LPRW_vel_acf.txt: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
+model/model_params_soft_gel_LPRW_vel_acf.txt: .created-dirs 2023_03_30_Data/soft_gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/model_fitting_functions.py functions/langevin_PRW_functions.py
-	python3 RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'LPRW' 'vel_acf' 'S' 10 50 20 'P' 0.5 5 20 0 0 0 0
+	python3 RunGridSearchFitModel.py '2023_03_30_Data/soft_gel_data' 30 'soft_gel' 5 0.1667 12 'LPRW' 'vel_acf' 'S' 10 50 20 'P' 0.5 5 20 0 0 0 0
+
+#Perform grid search to fit PRW model to gel data with vel acf
+model/model_params_stiff_gel_LPRW_vel_acf.txt: .created-dirs 2023_03_30_Data/stiff_gel_data functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
+ functions/acf_functions.py functions/model_fitting_functions.py functions/langevin_PRW_functions.py
+	python3 RunGridSearchFitModel.py '2023_03_30_Data/stiff_gel_data' 30 'stiff_gel' 5 0.1667 5 'LPRW' 'vel_acf' 'S' 10 50 20 'P' 0.5 5 20 0 0 0 0
 
 #Perform grid search to fit PRW_polaritybias model to glass data with vel acf
-model/model_params_glass_PRW_PB_vel_acf.txt: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
+model/model_params_glass_PRW_PB_vel_acf.txt: .created-dirs 2023_03_30_Data/glass_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/model_fitting_functions.py functions/PRWpolaritybias_model_functions.py
-	python3 RunGridSearchFitModel.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'PRW_PB' 'vel_acf' 'std_dev_w' 0.2 0.9 10 'std_dev_theta' 0.9 1.5 10 0 0 0 0
+	python3 RunGridSearchFitModel.py '2023_03_30_Data/glass_data' 30 'glass' 5 0.1667 4 'PRW_PB' 'vel_acf' 'std_dev_w' 0.2 0.9 10 'std_dev_theta' 0.9 1.5 10 0 0 0 0
 
 #Perform grid search to fit PRW_polaritybias model to gel data with vel acf
-model/model_params_stiff_PRW_PB_vel_acf.txt: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
+model/model_params_soft_gel_PRW_PB_vel_acf.txt: .created-dirs 2023_03_30_Data/soft_gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/model_fitting_functions.py functions/PRWpolaritybias_model_functions.py
-	python3 RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'PRW_PB' 'vel_acf' 'std_dev_w' 0.2 0.9 10 'std_dev_theta' 0.9 1.5 10 0 0 0 0
+	python3 RunGridSearchFitModel.py '2023_03_30_Data/soft_gel_data' 30 'soft_gel' 5 0.1667 12 'PRW_PB' 'vel_acf' 'std_dev_w' 0.2 0.9 10 'std_dev_theta' 0.9 1.5 10 0 0 0 0
+
+#Perform grid search to fit PRW_polaritybias model to gel data with vel acf
+model/model_params_stiff_gel_PRW_PB_vel_acf.txt: .created-dirs 2023_03_30_Data/stiff_gel_data functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
+ functions/acf_functions.py functions/model_fitting_functions.py functions/PRWpolaritybias_model_functions.py
+	python3 RunGridSearchFitModel.py '2023_03_30_Data/stiff_gel_data' 30 'stiff_gel' 5 0.1667 5 'PRW_PB' 'vel_acf' 'std_dev_w' 0.2 0.9 10 'std_dev_theta' 0.9 1.5 10 0 0 0 0
 
 #Perform grid search to fit weighted_PRW model to glass data with vel acf
 model/model_params_glass_weighted_PRW_vel_acf.txt: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
@@ -147,20 +161,28 @@ model/model_params_stiff_weighted_PRW_MSD.txt: .created-dirs celltrack_data/gel_
 	python3 RunGridSearchFitModel.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'weighted_PRW' 'MSD' 'weight' 0 2 10 'kappa_w' 0 8 10 'kappa_theta' 0 8 10
 
 #Make figures comparing models with optimal parameters to glass data using vel_acf fitting metric
-sentinels/figs_velacf_model_glass.txt: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
+sentinels/figs_velacf_model_glass.txt: .created-dirs 2023_03_30_Data/glass_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/msd_functions.py functions/PRWpolaritybias_model_functions.py functions/weighted_PRW_model_functions.py functions/PRW_model_functions.py functions/langevin_PRW_functions.py\
- functions/model_fitting_functions.py model/model_params_glass_LPRW_vel_acf.txt model/model_params_glass_PRW_PB_vel_acf.txt model/model_params_glass_weighted_PRW_vel_acf.txt
-	python3 CompareModelAndData.py 'celltrack_data/glass_data' 30 'glass' 5 0.1667 113 'model/model_params_glass_LPRW_vel_acf.txt' 'model/model_params_glass_PRW_PB_vel_acf.txt' 'model/model_params_glass_weighted_PRW_vel_acf.txt' 'figures/velacf_model/'
+ functions/model_fitting_functions.py model/model_params_glass_LPRW_vel_acf.txt model/model_params_glass_PRW_PB_vel_acf.txt 
+	python3 CompareModelAndData.py '2023_03_30_Data/glass_data' 30 'glass' 5 0.1667 4 'model/model_params_glass_LPRW_vel_acf.txt' 'model/model_params_glass_PRW_PB_vel_acf.txt' 'figures/velacf_model/'
 
 #Make figures comparing models with optimal parameters to gel data using vel_acf fitting metric
-sentinels/figs_velacf_model_stiff.txt: .created-dirs celltrack_data/gel_data functions/compile_data_tracks_function.py\
+sentinels/figs_velacf_model_soft_gel.txt: .created-dirs 2023_03_30_Data/soft_gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
  functions/acf_functions.py functions/msd_functions.py functions/PRWpolaritybias_model_functions.py functions/weighted_PRW_model_functions.py functions/PRW_model_functions.py functions/langevin_PRW_functions.py\
- functions/model_fitting_functions.py model/model_params_stiff_LPRW_vel_acf.txt model/model_params_stiff_PRW_PB_vel_acf.txt model/model_params_stiff_weighted_PRW_vel_acf.txt
-	python3 CompareModelAndData.py 'celltrack_data/gel_data' 30 'stiff' 5 0.1667 119 'model/model_params_stiff_LPRW_vel_acf.txt' 'model/model_params_stiff_PRW_PB_vel_acf.txt' 'model/model_params_stiff_weighted_PRW_vel_acf.txt' 'figures/velacf_model/'
+ functions/model_fitting_functions.py model/model_params_soft_gel_LPRW_vel_acf.txt model/model_params_soft_gel_PRW_PB_vel_acf.txt 
+	python3 CompareModelAndData.py '2023_03_30_Data/soft_gel_data' 30 'soft_gel' 5 0.1667 12 'model/model_params_soft_gel_LPRW_vel_acf.txt' 'model/model_params_soft_gel_PRW_PB_vel_acf.txt' 'figures/velacf_model/'
+
+#Make figures comparing models with optimal parameters to gel data using vel_acf fitting metric
+sentinels/figs_velacf_model_stiff_gel.txt: .created-dirs 2023_03_30_Data/stiff_gel_data functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py\
+ functions/acf_functions.py functions/msd_functions.py functions/PRWpolaritybias_model_functions.py functions/weighted_PRW_model_functions.py functions/PRW_model_functions.py functions/langevin_PRW_functions.py\
+ functions/model_fitting_functions.py model/model_params_stiff_gel_LPRW_vel_acf.txt model/model_params_stiff_gel_PRW_PB_vel_acf.txt
+	python3 CompareModelAndData.py '2023_03_30_Data/stiff_gel_data' 30 'stiff_gel' 5 0.1667 5 'model/model_params_stiff_gel_LPRW_vel_acf.txt' 'model/model_params_stiff_gel_PRW_PB_vel_acf.txt' 'figures/velacf_model/'
 
 #Make figures comparing models with optimal parameters to glass data using MSD fitting metric
 sentinels/figs_MSD_model_glass.txt: .created-dirs celltrack_data/glass_data functions/compile_data_tracks_function.py\
