@@ -18,7 +18,9 @@ clean:
 	mkdir -p hetero_model
 	mkdir -p figures
 	mkdir -p figures/acf_figures
+	mkdir -p figures/filtered_acf_figures
 	mkdir -p figures/histogram_boxplot
+	mkdir -p figures/filtered_histogram_boxplot
 	mkdir -p figures/velacf_model
 	mkdir -p figures/MSD_model
 	mkdir -p figures/velacf_hetero_model
@@ -28,21 +30,21 @@ clean:
 	touch .created-dirs
 
 # Create the autocorrelation figures for glass data
-sentinels/ACF_figures_glass.txt: .created-dirs 2023_03_30_Data/glass_data\
+sentinels/ACF_figures_glass.txt: .created-dirs data/glass\
  functions/acf_functions.py functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
 	python3 GenerateDataACF.py 'data/glass' 30 'glass'
 
 # Create the autocorrelation figures for soft gel data
-sentinels/ACF_figures_soft_gel.txt: .created-dirs 2023_03_30_Data/soft_gel_data\
+sentinels/ACF_figures_soft_gel.txt: .created-dirs data/soft_gel\
  functions/acf_functions.py functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
 	python3 GenerateDataACF.py 'data/soft_gel' 30 'soft_gel'
 
 # Create the autocorrelation figures for stiff gel data
-sentinels/ACF_figures_stiff_gel.txt: .created-dirs 2023_03_30_Data/stiff_gel_data\
+sentinels/ACF_figures_stiff_gel.txt: .created-dirs data/stiff_gel\
  functions/acf_functions.py functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
@@ -53,14 +55,42 @@ sentinels/histogram_boxplot.txt: .created-dirs 2023_03_30_Data/glass_data\
  2023_03_30_Data/soft_gel_data 2023_03_30_Data/stiff_gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
-	python3 GenerateDataHistogramBoxplot.py 'data/glass' 'data/soft_gel' 'data/stiff_gel' 60 'glass' 'soft_gel' 'stiff_gel'
+	python3 GenerateDataHistogramBoxplot.py 'data/glass' 'data/soft_gel' 'data/stiff_gel' 30 'glass' 'soft_gel' 'stiff_gel'
+
+# Create the autocorrelation figures for glass data
+sentinels/filtered_ACF_figures_glass.txt: .created-dirs data/glass\
+ functions/acf_functions.py functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3 Filtered_GenerateDataACF.py 'data/glass' 30 'glass'
+
+# Create the autocorrelation figures for soft gel data
+sentinels/filtered_ACF_figures_soft_gel.txt: .created-dirs data/soft_gel\
+ functions/acf_functions.py functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3 Filtered_GenerateDataACF.py 'data/soft_gel' 30 'soft_gel'
+
+# Create the autocorrelation figures for stiff gel data
+sentinels/filtered_ACF_figures_stiff_gel.txt: .created-dirs data/stiff_gel\
+ functions/acf_functions.py functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3 Filtered_GenerateDataACF.py 'data/stiff_gel' 30 'stiff_gel'
+
+# Create the boxplot and histogram figures for both glass and gel data with filtered persistence
+sentinels/filtered_histogram_boxplot.txt: .created-dirs 2023_03_30_Data/glass_data\
+ 2023_03_30_Data/soft_gel_data 2023_03_30_Data/stiff_gel_data functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3 Filtered_GenerateDataHistogramBoxplot.py 'data/glass' 'data/soft_gel' 'data/stiff_gel' 30 'glass' 'soft_gel' 'stiff_gel'
 
 # Create the boxplot and histogram figures for both glass and gel data
 sentinels/cellshape_histogram.txt: .created-dirs 2023_03_30_Data/glass_data\
  2023_03_30_Data/soft_gel_data 2023_03_30_Data/stiff_gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
-	python3 CellShapeOverTrack.py 'data/glass' 'data/soft_gel' 'data/stiff_gel' 60 'glass' 'soft_gel' 'stiff_gel'
+	python3 CellShapeOverTrack.py 'data/glass' 'data/soft_gel' 'data/stiff_gel' 30 'glass' 'soft_gel' 'stiff_gel'
 
 #Perform grid search to fit PRW model to glass data with vel acf
 model/model_params_glass_LPRW_vel_acf.txt: .created-dirs 2023_03_30_Data/glass_data functions/compile_data_tracks_function.py\
