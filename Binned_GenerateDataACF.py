@@ -170,11 +170,11 @@ all_ac_pos = []
 all_ac_neg = []
 for df in tracks_geo_region_A:
   track=df
-  cospol = list( track[['abs-skew']].iloc[:,0] * np.cos(track[['polarity_angle']].iloc[:,0]) )
-  sinpol = list( track[['abs-skew']].iloc[:,0] * np.sin(track[['polarity_angle']].iloc[:,0]) ) 
+  cospol = list( np.cos(track[['polarity_angle']].iloc[:,0]) )
+  sinpol = list( np.sin(track[['polarity_angle']].iloc[:,0]) ) 
   normvect = pd.DataFrame( {'cospol': cospol , 'sinpol':sinpol })
   combined = pd.concat([track[['vx','vy']].reset_index(drop=True), normvect.reset_index(drop=True)], axis = 1 )
-  poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined, min_track_length)
+  poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_direction(combined, min_track_length)
 
   #remove nans here
   poslagsmean[np.isnan(poslagsmean)] = 0
@@ -197,6 +197,7 @@ plt.xlim(0,min_track_length-4)
 plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err_pos,label='pos lag')
 plt.errorbar(np.arange(0,min_track_length-4),neglagaverage[0:min_track_length-4],yerr=std_err_neg,label='neg lag')
 plt.xlabel('lag (10 min)')
+plt.legend()
 plt.title("Cross correlation velocity and polarity vectors {} for D/T {} - {}".format(region_name, np.round(bins[2],3), np.round(bins[3],3)))
 plt.savefig('figures/binned_acf_figures/{}_vel_pol_crosscorr_avg_{}.png'.format(region, 'A'))
 plt.clf()
@@ -210,11 +211,11 @@ all_ac_pos = []
 all_ac_neg = []
 for df in tracks_geo_region_B:
   track=df
-  cospol = list( track[['abs-skew']].iloc[:,0] * np.cos(track[['polarity_angle']].iloc[:,0]) )
-  sinpol = list( track[['abs-skew']].iloc[:,0] * np.sin(track[['polarity_angle']].iloc[:,0]) ) 
+  cospol = list( np.cos(track[['polarity_angle']].iloc[:,0]) )
+  sinpol = list( np.sin(track[['polarity_angle']].iloc[:,0]) ) 
   normvect = pd.DataFrame( {'cospol': cospol , 'sinpol':sinpol })
   combined = pd.concat([track[['vx','vy']].reset_index(drop=True), normvect.reset_index(drop=True)], axis = 1 )
-  poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined, min_track_length)
+  poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_direction(combined, min_track_length)
 
   #remove nans here
   poslagsmean[np.isnan(poslagsmean)] = 0
@@ -237,6 +238,7 @@ plt.xlim(0,min_track_length-4)
 plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err_pos,label='pos lag')
 plt.errorbar(np.arange(0,min_track_length-4),neglagaverage[0:min_track_length-4],yerr=std_err_neg,label='neg lag')
 plt.xlabel('lag (10 min)')
+plt.legend()
 plt.title("Cross correlation velocity and polarity vectors {} for D/T {} - {}".format(region_name, np.round(bins[1],3), np.round(bins[2],3)))
 plt.savefig('figures/binned_acf_figures/{}_vel_pol_crosscorr_avg_{}.png'.format(region, 'B'))
 plt.clf()
@@ -250,11 +252,11 @@ all_ac_pos = []
 all_ac_neg = []
 for df in tracks_geo_region_C:
   track=df
-  cospol = list( track[['abs-skew']].iloc[:,0] * np.cos(track[['polarity_angle']].iloc[:,0]) )
-  sinpol = list( track[['abs-skew']].iloc[:,0] * np.sin(track[['polarity_angle']].iloc[:,0]) ) 
+  cospol = list( np.cos(track[['polarity_angle']].iloc[:,0]) )
+  sinpol = list( np.sin(track[['polarity_angle']].iloc[:,0]) ) 
   normvect = pd.DataFrame( {'cospol': cospol , 'sinpol':sinpol })
   combined = pd.concat([track[['vx','vy']].reset_index(drop=True), normvect.reset_index(drop=True)], axis = 1 )
-  poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined, min_track_length)
+  poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_direction(combined, min_track_length)
 
   #remove nans here
   poslagsmean[np.isnan(poslagsmean)] = 0
@@ -277,6 +279,7 @@ plt.xlim(0,min_track_length-4)
 plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err_pos,label='pos lag')
 plt.errorbar(np.arange(0,min_track_length-4),neglagaverage[0:min_track_length-4],yerr=std_err_neg,label='neg lag')
 plt.xlabel('lag (10 min)')
+plt.legend()
 plt.title("Cross correlation velocity and polarity vectors {} for D/T {} - {}".format(region_name, np.round(bins[0],3), np.round(bins[1],3)))
 plt.savefig('figures/binned_acf_figures/{}_vel_pol_crosscorr_avg_{}.png'.format(region, 'C'))
 plt.clf()
