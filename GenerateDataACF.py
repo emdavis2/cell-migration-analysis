@@ -273,74 +273,74 @@ file_lines.append('figures/acf_figures/{}_speed_y_acf_avg.png \n'.format(region)
 acf_fig_region.writelines(file_lines)
 acf_fig_region.close() 
 
-# #cross correlation velocity vector and polarity vector
-# poslagaverage = np.zeros(300)
-# neglagaverage = np.zeros(300)
-# #Nposlagtotal = np.zeros(300)
-# all_ac_pos = []
-# all_ac_neg = []
-# for df in tracks_geo_region:
-#   track=df
-#   cospol = list( track[['abs-skew']].iloc[:,0] * np.cos(track[['polarity_angle']].iloc[:,0]) )
-#   sinpol = list( track[['abs-skew']].iloc[:,0] * np.sin(track[['polarity_angle']].iloc[:,0]) ) 
-#   normvect = pd.DataFrame( {'cospol': cospol , 'sinpol':sinpol })
-#   combined = pd.concat([track[['vx','vy']].reset_index(drop=True), normvect.reset_index(drop=True)], axis = 1 )
-#   poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined, min_track_length)
+#cross correlation velocity vector and polarity vector
+poslagaverage = np.zeros(300)
+neglagaverage = np.zeros(300)
+#Nposlagtotal = np.zeros(300)
+all_ac_pos = []
+all_ac_neg = []
+for df in tracks_geo_region:
+  track=df
+  cospol = list( track[['abs-skew']].iloc[:,0] * np.cos(track[['polarity_angle']].iloc[:,0]) )
+  sinpol = list( track[['abs-skew']].iloc[:,0] * np.sin(track[['polarity_angle']].iloc[:,0]) ) 
+  normvect = pd.DataFrame( {'cospol': cospol , 'sinpol':sinpol })
+  combined = pd.concat([track[['vx','vy']].reset_index(drop=True), normvect.reset_index(drop=True)], axis = 1 )
+  poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined, min_track_length)
 
-#   #remove nans here
-#   poslagsmean[np.isnan(poslagsmean)] = 0
-#   neglagsmean[np.isnan(neglagsmean)] = 0
-#   all_ac_pos.append(poslagsmean)
-#   all_ac_neg.append(neglagsmean)
-#   poslagaverage[0:len(poslagsmean)] += poslagsmean # Nposlags*poslagsmean
-#   neglagaverage[0:len(neglagsmean)] += neglagsmean
-#   #Nposlagtotal[0:len(Nposlags)] += Nposlags
-# poslagaverage /= len(tracks_geo_region) #Nposlagtotal 
-# neglagaverage /= len(tracks_geo_region)
+  #remove nans here
+  poslagsmean[np.isnan(poslagsmean)] = 0
+  neglagsmean[np.isnan(neglagsmean)] = 0
+  all_ac_pos.append(poslagsmean)
+  all_ac_neg.append(neglagsmean)
+  poslagaverage[0:len(poslagsmean)] += poslagsmean # Nposlags*poslagsmean
+  neglagaverage[0:len(neglagsmean)] += neglagsmean
+  #Nposlagtotal[0:len(Nposlags)] += Nposlags
+poslagaverage /= len(tracks_geo_region) #Nposlagtotal 
+neglagaverage /= len(tracks_geo_region)
 
-# std_err_pos = np.std(all_ac_pos,axis=0,ddof=1)/np.sqrt(np.shape(all_ac_pos)[0])
-# std_err_neg = np.std(all_ac_neg,axis=0,ddof=1)/np.sqrt(np.shape(all_ac_neg)[0])
+std_err_pos = np.std(all_ac_pos,axis=0,ddof=1)/np.sqrt(np.shape(all_ac_pos)[0])
+std_err_neg = np.std(all_ac_neg,axis=0,ddof=1)/np.sqrt(np.shape(all_ac_neg)[0])
 
-# #plt.plot(poslagaverage,label = "positive lag")
-# plt.hlines(y=0,xmin=0,xmax=100,color='k')
-# plt.xlim(0,min_track_length-4)
-# #plt.ylim(-0.5,1)
-# plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err_pos,label='pos lag')
-# plt.errorbar(np.arange(0,min_track_length-4),neglagaverage[0:min_track_length-4],yerr=std_err_neg,label='neg lag')
-# plt.xlabel('lag (10 min)')
-# plt.title("Cross correlation velocity and polarity vectors {}".format(region_name))
-# plt.savefig('figures/acf_figures/{}_vel_pol_crosscorr_avg.png'.format(region))
-# plt.clf()
-# file_lines.append('figures/acf_figures/{}_vel_pol_crosscorr_avg.png \n'.format(region))
+#plt.plot(poslagaverage,label = "positive lag")
+plt.hlines(y=0,xmin=0,xmax=100,color='k')
+plt.xlim(0,min_track_length-4)
+#plt.ylim(-0.5,1)
+plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err_pos,label='pos lag')
+plt.errorbar(np.arange(0,min_track_length-4),neglagaverage[0:min_track_length-4],yerr=std_err_neg,label='neg lag')
+plt.xlabel('lag (10 min)')
+plt.title("Cross correlation velocity and polarity vectors {}".format(region_name))
+plt.savefig('figures/acf_figures/{}_vel_pol_crosscorr_avg.png'.format(region))
+plt.clf()
+file_lines.append('figures/acf_figures/{}_vel_pol_crosscorr_avg.png \n'.format(region))
 
-# #cross correlation polarity vector and velocity vector
-# poslagaverage = np.zeros(300)
-# Nposlagtotal = np.zeros(300)
-# all_ac = []
-# for df in tracks_geo_region:
-#   track=df
-#   cospol = list( track[['abs-skew']].iloc[:,0] * np.cos(track[['polarity_angle']].iloc[:,0]) )
-#   sinpol = list( track[['abs-skew']].iloc[:,0] * np.sin(track[['polarity_angle']].iloc[:,0]) ) 
-#   normvect = pd.DataFrame( {'cospol': cospol , 'sinpol':sinpol })
-#   combined = pd.concat([normvect.reset_index(drop=True),track[['vx','vy']].reset_index(drop=True)], axis = 1 )
-#   poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined, min_track_length)
+#cross correlation polarity vector and velocity vector
+poslagaverage = np.zeros(300)
+Nposlagtotal = np.zeros(300)
+all_ac = []
+for df in tracks_geo_region:
+  track=df
+  cospol = list( track[['abs-skew']].iloc[:,0] * np.cos(track[['polarity_angle']].iloc[:,0]) )
+  sinpol = list( track[['abs-skew']].iloc[:,0] * np.sin(track[['polarity_angle']].iloc[:,0]) ) 
+  normvect = pd.DataFrame( {'cospol': cospol , 'sinpol':sinpol })
+  combined = pd.concat([normvect.reset_index(drop=True),track[['vx','vy']].reset_index(drop=True)], axis = 1 )
+  poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined, min_track_length)
 
-#   #remove nans here
-#   poslagsmean[np.isnan(poslagsmean)] = 0
-#   all_ac.append(poslagsmean)
-#   poslagaverage[0:len(poslagsmean)] += poslagsmean # Nposlags*poslagsmean
-#   #Nposlagtotal[0:len(Nposlags)] += Nposlags
-# poslagaverage /= len(tracks_geo_region) #Nposlagtotal 
+  #remove nans here
+  poslagsmean[np.isnan(poslagsmean)] = 0
+  all_ac.append(poslagsmean)
+  poslagaverage[0:len(poslagsmean)] += poslagsmean # Nposlags*poslagsmean
+  #Nposlagtotal[0:len(Nposlags)] += Nposlags
+poslagaverage /= len(tracks_geo_region) #Nposlagtotal 
 
-# std_err = np.std(all_ac,axis=0,ddof=1)/np.sqrt(np.shape(all_ac)[0])
+std_err = np.std(all_ac,axis=0,ddof=1)/np.sqrt(np.shape(all_ac)[0])
 
-# #plt.plot(poslagaverage,label = "positive lag")
-# plt.hlines(y=0,xmin=0,xmax=100,color='k')
-# plt.xlim(0,min_track_length-4)
-# #plt.ylim(-0.5,1)
-# plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err)
-# plt.xlabel('lag (10 min)')
-# plt.title("Cross correlation polarity and velocity vectors {}".format(region_name))
-# plt.savefig('figures/acf_figures/{}_pol_vel_crosscorr_avg.png'.format(region))
-# plt.clf()
-# file_lines.append('figures/acf_figures/{}_pol_vel_crosscorr_avg.png \n'.format(region))
+#plt.plot(poslagaverage,label = "positive lag")
+plt.hlines(y=0,xmin=0,xmax=100,color='k')
+plt.xlim(0,min_track_length-4)
+#plt.ylim(-0.5,1)
+plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err)
+plt.xlabel('lag (10 min)')
+plt.title("Cross correlation polarity and velocity vectors {}".format(region_name))
+plt.savefig('figures/acf_figures/{}_pol_vel_crosscorr_avg.png'.format(region))
+plt.clf()
+file_lines.append('figures/acf_figures/{}_pol_vel_crosscorr_avg.png \n'.format(region))
