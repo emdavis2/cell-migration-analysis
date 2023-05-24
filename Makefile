@@ -21,6 +21,7 @@ clean:
 	mkdir -p figures/filtered_acf_figures
 	mkdir -p figures/histogram_boxplot
 	mkdir -p figures/filtered_histogram_boxplot
+	mkdir -p figures/binned_histogram_boxplot
 	mkdir -p figures/velacf_model
 	mkdir -p figures/MSD_model
 	mkdir -p figures/velacf_hetero_model
@@ -79,11 +80,32 @@ sentinels/filtered_ACF_figures_stiff_gel.txt: .created-dirs data/stiff_gel\
 	python3 Filtered_GenerateDataACF.py 'data/stiff_gel' 30 'stiff_gel'
 
 # Create the boxplot and histogram figures for both glass and gel data with filtered persistence
-sentinels/filtered_histogram_boxplot.txt: .created-dirs 2023_03_30_Data/glass_data\
- 2023_03_30_Data/soft_gel_data 2023_03_30_Data/stiff_gel_data functions/compile_data_tracks_function.py\
+sentinels/filtered_histogram_boxplot.txt: .created-dirs data/glass\
+ data/soft_gel data/stiff_gel functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
 	python3 Filtered_GenerateDataHistogramBoxplot.py 'data/glass' 'data/soft_gel' 'data/stiff_gel' 30 'glass' 'soft_gel' 'stiff_gel'
+
+# Create the D/T binned boxplot and histogram figures for glass data
+sentinels/binned_histogram_boxplot_glass.txt: .created-dirs data/glass\
+ functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3 Binned_GenerateDataHistBoxplot.py 'data/glass' 30 'glass' 
+
+# Create the D/T binned boxplot and histogram figures for soft gel data
+sentinels/binned_histogram_boxplot_soft_gel.txt: .created-dirs data/soft_gel\
+ functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3 Binned_GenerateDataHistBoxplot.py 'data/soft_gel' 30 'soft_gel' 
+
+# Create the D/T binned boxplot and histogram figures for stiff gel data
+sentinels/binned_histogram_boxplot_stiff_gel.txt: .created-dirs data/stiff_gel\
+ functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3 Binned_GenerateDataHistBoxplot.py 'data/stiff_gel' 30 'stiff_gel' 
 
 # Create the boxplot and histogram figures for both glass and gel data
 sentinels/cellshape_histogram.txt: .created-dirs 2023_03_30_Data/glass_data\
