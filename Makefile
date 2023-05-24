@@ -19,6 +19,7 @@ clean:
 	mkdir -p figures
 	mkdir -p figures/acf_figures
 	mkdir -p figures/filtered_acf_figures
+	mkdir -p figures/binned_acf_figures
 	mkdir -p figures/histogram_boxplot
 	mkdir -p figures/filtered_histogram_boxplot
 	mkdir -p figures/binned_histogram_boxplot
@@ -57,6 +58,27 @@ sentinels/histogram_boxplot.txt: .created-dirs 2023_03_30_Data/glass_data\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
 	python3 GenerateDataHistogramBoxplot.py 'data/glass' 'data/soft_gel' 'data/stiff_gel' 30 'glass' 'soft_gel' 'stiff_gel'
+
+# Create the autocorrelation figures for glass data
+sentinels/binned_ACF_figures_glass.txt: .created-dirs data/glass\
+ functions/acf_functions.py functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3 Binned_GenerateDataACF.py 'data/glass' 30 'glass'
+
+# Create the autocorrelation figures for soft gel data
+sentinels/binned_ACF_figures_soft_gel.txt: .created-dirs data/soft_gel\
+ functions/acf_functions.py functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3 Binned_GenerateDataACF.py 'data/soft_gel' 30 'soft_gel'
+
+# Create the autocorrelation figures for stiff gel data
+sentinels/binned_ACF_figures_stiff_gel.txt: .created-dirs data/stiff_gel\
+ functions/acf_functions.py functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3 Binned_GenerateDataACF.py 'data/stiff_gel' 30 'stiff_gel'
 
 # Create the autocorrelation figures for glass data
 sentinels/filtered_ACF_figures_glass.txt: .created-dirs data/glass\
