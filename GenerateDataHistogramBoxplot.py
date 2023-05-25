@@ -370,19 +370,19 @@ file_lines.append('figures/histogram_boxplot/dy_hist_{}.png \n'.format(region3))
 #Get solidity
 solidity_region1 = []
 for i in range(len(tracks_geo_region1)):
-  solidity_region1.append(tracks_geo_region1[i]['solidity'].tolist())
+  solidity_region1.append(tracks_geo_region1[i]['solidity'].dropna().tolist())
 
 solidity_region1 = np.concatenate(solidity_region1).ravel()
 
 solidity_region2 = []
 for i in range(len(tracks_geo_region2)):
-  solidity_region2.append(tracks_geo_region2[i]['solidity'].tolist())
+  solidity_region2.append(tracks_geo_region2[i]['solidity'].dropna().tolist())
 
 solidity_region2 = np.concatenate(solidity_region2).ravel()
 
 solidity_region3 = []
 for i in range(len(tracks_geo_region3)):
-  solidity_region3.append(tracks_geo_region3[i]['solidity'].tolist())
+  solidity_region3.append(tracks_geo_region3[i]['solidity'].dropna().tolist())
 
 solidity_region3 = np.concatenate(solidity_region3).ravel()
 
