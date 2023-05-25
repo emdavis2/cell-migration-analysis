@@ -57,7 +57,7 @@ sentinels/histogram_boxplot.txt: .created-dirs 2023_03_30_Data/glass_data\
  2023_03_30_Data/soft_gel_data 2023_03_30_Data/stiff_gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
-	python3 GenerateDataHistogramBoxplot.py 'data/glass' 'data/soft_gel' 'data/stiff_gel' 30 'glass' 'soft_gel' 'stiff_gel'
+	python3 GenerateDataHistogramBoxplot.py 'data/glass' 'data/stiff_gel' 'data/soft_gel' 30 'glass' 'stiff_gel' 'soft_gel'
 
 # Create the autocorrelation figures for glass data
 sentinels/binned_ACF_figures_glass.txt: .created-dirs data/glass\
@@ -106,7 +106,7 @@ sentinels/filtered_histogram_boxplot.txt: .created-dirs data/glass\
  data/soft_gel data/stiff_gel functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
-	python3 Filtered_GenerateDataHistogramBoxplot.py 'data/glass' 'data/soft_gel' 'data/stiff_gel' 30 'glass' 'soft_gel' 'stiff_gel'
+	python3 Filtered_GenerateDataHistogramBoxplot.py 'data/glass' 'data/stiff_gel' 'data/soft_gel' 30 'glass' 'stiff_gel' 'soft_gel'
 
 # Create the D/T binned boxplot and histogram figures for glass data
 sentinels/binned_histogram_boxplot_glass.txt: .created-dirs data/glass\
