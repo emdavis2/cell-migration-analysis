@@ -33,6 +33,12 @@ open('sentinels/binned_histogram_boxplot_{}.txt'.format(region),'w').close()
 hist_boxplot_figs = open('sentinels/binned_histogram_boxplot_{}.txt'.format(region),'w')
 file_lines = []
 
+#clears out txt file if it exists
+open('figures/binned_histogram_boxplot/pvals_and_tvals_{}.txt'.format(region),'w').close()
+#create new txt file to write to
+pval_tval_txt = open('figures/binned_histogram_boxplot/pvals_and_tvals_{}.txt'.format(region),'w')
+pval_file_lines = []
+
 #bin based on D/T and add column to region_endpointcells dataframe that has label associated with bin
 values, bins = np.histogram(region_endpointcells['DoverT'],bins=3)
 labels = ['C', 'B', 'A']
@@ -132,19 +138,19 @@ file_lines.append('figures/binned_histogram_boxplot/dxdy_hist_{}_{}.png \n'.form
 #Get solidity
 solidity_region_A = []
 for i in range(len(tracks_geo_region_A)):
-  solidity_region_A.append(tracks_geo_region_A[i]['solidity'].tolist())
+  solidity_region_A.append(tracks_geo_region_A[i]['solidity'].dropna().tolist())
 
 solidity_region_A = np.concatenate(solidity_region_A).ravel()
 
 solidity_region_B = []
 for i in range(len(tracks_geo_region_B)):
-  solidity_region_B.append(tracks_geo_region_B[i]['solidity'].tolist())
+  solidity_region_B.append(tracks_geo_region_B[i]['solidity'].dropna().tolist())
 
 solidity_region_B = np.concatenate(solidity_region_B).ravel()
 
 solidity_region_C = []
 for i in range(len(tracks_geo_region_C)):
-  solidity_region_C.append(tracks_geo_region_C[i]['solidity'].tolist())
+  solidity_region_C.append(tracks_geo_region_C[i]['solidity'].dropna().tolist())
 
 solidity_region_C = np.concatenate(solidity_region_C).ravel()
 
@@ -155,9 +161,13 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("Solidity on {}".format(region))
-tstat12, pval12 = f_oneway(solidity_region_A,solidity_region_B)
-tstat13, pval13 = f_oneway(solidity_region_A,solidity_region_C)
-tstat23, pval23 = f_oneway(solidity_region_B,solidity_region_C)
+tstatAB, pvalAB = f_oneway(solidity_region_A,solidity_region_B)
+tstatAC, pvalAC = f_oneway(solidity_region_A,solidity_region_C)
+tstatBC, pvalBC = f_oneway(solidity_region_B,solidity_region_C)
+pval_file_lines.append('\n Solidity \n')
+pval_file_lines.append('{} and {}: {} \n'.format('A', 'B', pvalAB))
+pval_file_lines.append('{} and {}: {} \n'.format('A', 'C', pvalAC))
+pval_file_lines.append('{} and {}: {} \n'.format('B', 'C', pvalBC))
 # plt.text(0.1, 0.8, 'pvalue_12={}'.format(pval12), fontsize = 12, bbox = dict(facecolor = 'red', alpha = 0.1))
 # plt.text(0.1, 0.7, 'pvalue_13={}'.format(pval13), fontsize = 12, bbox = dict(facecolor = 'red', alpha = 0.1))
 # plt.text(0.1, 0.6, 'pvalue_23={}'.format(pval23), fontsize = 12, bbox = dict(facecolor = 'red', alpha = 0.1))
@@ -170,9 +180,13 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel(r"Speed ($\mu m$/min) on {}".format(region))
-# tstat12, pval12 = f_oneway(region_endpointcells_A['speed'],region_endpointcells_B['speed'])
-# tstat13, pval13 = f_oneway(region1_endpointcells['speed'],region3_endpointcells['speed'])
-# tstat23, pval23 = f_oneway(region2_endpointcells['speed'],region3_endpointcells['speed'])
+tstatAB, pvalAB = f_oneway(region_endpointcells_A['speed'],region_endpointcells_B['speed'])
+tstatAC, pvalAC = f_oneway(region_endpointcells_A['speed'],region_endpointcells_C['speed'])
+tstatBC, pvalBC = f_oneway(region_endpointcells_B['speed'],region_endpointcells_C['speed'])
+pval_file_lines.append('\n Speed \n')
+pval_file_lines.append('{} and {}: {} \n'.format('A', 'B', pvalAB))
+pval_file_lines.append('{} and {}: {} \n'.format('A', 'C', pvalAC))
+pval_file_lines.append('{} and {}: {} \n'.format('B', 'C', pvalBC))
 # plt.text(.1, 1.5, 'pvalue_12={}'.format(pval12), fontsize = 12, bbox = dict(facecolor = 'red', alpha = 0.1))
 # plt.text(.1, 1.2, 'pvalue_13={}'.format(pval13), fontsize = 12, bbox = dict(facecolor = 'red', alpha = 0.1))
 # plt.text(.1, 1, 'pvalue_23={}'.format(pval23), fontsize = 12, bbox = dict(facecolor = 'red', alpha = 0.1))
@@ -185,9 +199,13 @@ data_boxplot = pd.DataFrame({ key:pd.Series(value) for key, value in data_bp.ite
 sns.boxplot(data=data_boxplot)
 plt.xlabel("Source")
 plt.ylabel("D/T on {}".format(region))
-# tstat12, pval12 = f_oneway(region1_endpointcells['DoverT'],region2_endpointcells['DoverT'])
-# tstat13, pval13 = f_oneway(region1_endpointcells['DoverT'],region3_endpointcells['DoverT'])
-# tstat23, pval23 = f_oneway(region2_endpointcells['DoverT'],region3_endpointcells['DoverT'])
+tstatAB, pvalAB = f_oneway(region_endpointcells_A['DoverT'],region_endpointcells_B['DoverT'])
+tstatAC, pvalAC = f_oneway(region_endpointcells_A['DoverT'],region_endpointcells_C['DoverT'])
+tstatBC, pvalBC = f_oneway(region_endpointcells_B['DoverT'],region_endpointcells_C['DoverT'])
+pval_file_lines.append('\n D/T \n')
+pval_file_lines.append('{} and {}: {} \n'.format('A', 'B', pvalAB))
+pval_file_lines.append('{} and {}: {} \n'.format('A', 'C', pvalAC))
+pval_file_lines.append('{} and {}: {} \n'.format('B', 'C', pvalBC))
 # plt.text(.1, 0.4, 'pvalue_12={}'.format(pval12), fontsize = 12, bbox = dict(facecolor = 'red', alpha = 0.1))
 # plt.text(.1, 0.3, 'pvalue_13={}'.format(pval13), fontsize = 12, bbox = dict(facecolor = 'red', alpha = 0.1))
 # plt.text(.1, 0.2, 'pvalue_23={}'.format(pval23), fontsize = 12, bbox = dict(facecolor = 'red', alpha = 0.1))
@@ -271,3 +289,7 @@ file_lines.append('figures/binned_histogram_boxplot/trajectories_data_{}.png \n'
 #write lines to text file 
 hist_boxplot_figs.writelines(file_lines)
 hist_boxplot_figs.close() 
+
+#write lines to text file 
+pval_tval_txt.writelines(pval_file_lines)
+pval_tval_txt.close() 
