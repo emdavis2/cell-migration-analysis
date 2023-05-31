@@ -24,7 +24,7 @@ Nwalkers = int(sys.argv[6]) #113
 
 model_type = str(sys.argv[7]) #PRW or PRW_PB or LPRW or weighted_PRW
 
-err_fn = str(sys.argv[8]) #vel_acf or MSD
+err_fn = str(sys.argv[8]) #vel_acf or MSD or vel_acf_MSD
 
 param1_name = str(sys.argv[9])
 
@@ -74,6 +74,8 @@ if err_fn == 'vel_acf':
     data_for_fit = poslagaverage_data
 elif err_fn == 'MSD':
     data_for_fit = MSD_data
+elif err_fn == 'vel_acf_MSD':
+    data_for_fit = [poslagaverage_data, MSD_data]
 
 #perform grid search
 if model_type == 'PRW':

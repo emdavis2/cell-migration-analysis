@@ -43,10 +43,38 @@ def run_sim_get_MSD_err(MSD_data, run_sim_fn, min_track_length):
 
   return MSD_err
 
+def run_sim_get_ACF_MSD_err(data_list, run_sim_fn, min_track_length):
+    poslagaverage_data = data_list[0]
+
+    MSD_data = data_list[1]
+
+    data_sim = run_sim_fn
+
+    poslagaverage = np.zeros(300)
+    for df in data_sim:
+        track=df
+        combined = make_comb_df(track['vx'].to_list()[2:min_track_length-2],track['vy'].to_list()[2:min_track_length-2])
+        combined = combined.dropna()
+        poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr_vector(combined, min_track_length)
+
+        #remove nans here
+        poslagsmean[np.isnan(poslagsmean)] = 0
+        poslagaverage[0:len(poslagsmean)] += poslagsmean #Nposlags*poslagsmean
+    poslagaverage /= len(data_sim) #Nposlagtotal 
+    poslagaverage_sim = poslagaverage[0:min_track_length-4]
+
+    acf_vel_err = np.sum(np.abs(poslagaverage_data - poslagaverage_sim))
+
+    MSD_sim = calc_MSD_sim(data_sim, min_track_length)
+
+    MSD_err = np.sum(np.abs(np.array(MSD_data) - np.array(MSD_sim)))
+
+    return acf_vel_err + MSD_err
+
 def perform_gridsearch_3params(data_for_fit, run_sim_fn, run_sim_err_fn, param1_vals, param2_vals, param3_vals, Nwalkers, dt, time, min_track_length):
-    dispatcher_err = {'vel_acf': run_sim_get_velacf_err, 'MSD': run_sim_get_MSD_err}
+    dispatcher_err = {'vel_acf': run_sim_get_velacf_err, 'MSD': run_sim_get_MSD_err, 'vel_acf_MSD': run_sim_get_ACF_MSD_err}
     dispatcher_sim = {'weighted_PRW': run_weighted_PRW_sim}
-    min_err = 1000000
+    min_err = 100000000
     index_p1 = 0
     index_p2 = 0
     index_p3 = 0
@@ -66,9 +94,9 @@ def perform_gridsearch_3params(data_for_fit, run_sim_fn, run_sim_err_fn, param1_
     return min_err, param1_vals[index_p1], param2_vals[index_p2], param3_vals[index_p3]
 
 def perform_gridsearch_2params(data_for_fit, run_sim_fn, run_sim_err_fn, param1_vals, param2_vals, Nwalkers, dt, time, min_track_length):
-    dispatcher_err = {'vel_acf': run_sim_get_velacf_err, 'MSD': run_sim_get_MSD_err}
+    dispatcher_err = {'vel_acf': run_sim_get_velacf_err, 'MSD': run_sim_get_MSD_err, 'vel_acf_MSD': run_sim_get_ACF_MSD_err}
     dispatcher_sim = {'PRW_PB': run_PRWpolaritybias_sim, 'LPRW': run_PRW_langevin_sim}
-    min_err = 1000000
+    min_err = 1000000000
     index_p1 = 0
     index_p2 = 0
 
@@ -86,9 +114,9 @@ def perform_gridsearch_2params(data_for_fit, run_sim_fn, run_sim_err_fn, param1_
 
 
 def perform_gridsearch_1param(data_for_fit, run_sim_fn, run_sim_err_fn, std_dev_theta_vals, Nwalkers, dt, time, min_track_length):
-    dispatcher_err = {'vel_acf': run_sim_get_velacf_err, 'MSD': run_sim_get_MSD_err}
+    dispatcher_err = {'vel_acf': run_sim_get_velacf_err, 'MSD': run_sim_get_MSD_err, 'vel_acf_MSD': run_sim_get_ACF_MSD_err}
     dispatcher_sim = {'PRW':run_PRW_sim}
-    min_err = 1000000
+    min_err = 100000000
     index_theta = 0
 
     for ind_t, std_dev_theta in enumerate(std_dev_theta_vals):
