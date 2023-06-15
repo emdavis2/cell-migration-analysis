@@ -25,15 +25,19 @@ region2 = str(sys.argv[6])
 
 region3 = str(sys.argv[7])
 
+save_path = str(sys.argv[8])
+
 pixel_size = 1.54
+
+sampling_t = 5 #min per frame
 
 #Compile dictionaries of data paths indexed by corresponding region name
 data_paths={}
-if treatment1:
+if treatment1 != 'False':
   data_paths[region1] = treatment1
-if treatment2:
+if treatment2 != 'False':
   data_paths[region2] = treatment2
-if treatment3:
+if treatment3 != 'False':
   data_paths[region3] = treatment3
 
 #Compile dictionaries for motion metrics calculated from compile_data_tracks function
@@ -45,9 +49,9 @@ for region in data_paths:
   region_data_path = data_paths[region]
   tracks_region[region], tracks_geo_region[region], region_cells[region], region_endpointcells[region] = compile_data_tracks(region_data_path, min_track_length, region, pixel_size)
 
-
-
-sampling_t = 5 #min per frame
+#check to see if the path exists, if not make the directory
+if not os.path.exists('sentinels'):
+  os.mkdir('sentinels')
 
 #clears out sentinel file if it exists
 open('sentinels/histogram_boxplot.txt','w').close()
@@ -61,19 +65,30 @@ open('figures/histogram_boxplot/pvals_and_tvals.txt','w').close()
 pval_tval_txt = open('figures/histogram_boxplot/pvals_and_tvals.txt','w')
 pval_file_lines = []
 
+#check to see if the path exists, if not make the directory
+if not os.path.exists(save_path):
+  os.mkdir(save_path)
+
+#where acf figures are saved
+figure_path = save_path + '/histogram_boxplot'
+
+#check to see if the path exists, if not make the directory
+if not os.path.exists(figure_path):
+  os.mkdir(figure_path)
+
 #Plot histogram for D/T
 for region in region_endpointcells:
-  HistogramPlot(region_endpointcells[region]['DoverT'], region, 'DoverT', 30, 'figures/histogram_boxplot', file_lines)
+  HistogramPlot(region_endpointcells[region]['DoverT'], region, 'DoverT', 30, figure_path, file_lines)
 
 
 #Plot histogram for speed
 for region in region_endpointcells:
-  HistogramPlot(region_endpointcells[region]['speed'], region, 'speed', 30, 'figures/histogram_boxplot', file_lines)
+  HistogramPlot(region_endpointcells[region]['speed'], region, 'speed', 30, figure_path, file_lines)
 
 
 #Plot histogram for FMI
 for region in region_endpointcells:
-  HistogramPlot(region_endpointcells[region]['FMI'], region, 'FMI', 30, 'figures/histogram_boxplot', file_lines)
+  HistogramPlot(region_endpointcells[region]['FMI'], region, 'FMI', 30, figure_path, file_lines)
 
 #Compile a dictionary of velocities indexed by region
 velocities = {}
@@ -84,13 +99,13 @@ for region in tracks_geo_region:
 
 #Plot histogram for velocity
 for region in velocities:
-  HistogramPlot(velocities[region], region, 'velocity', 50, 'figures/histogram_boxplot', file_lines)
+  HistogramPlot(velocities[region], region, 'velocity', 50, figure_path, file_lines)
 
 
 #Plot histogram for vx and vy
 for region in x_velocities:
-  HistogramPlot(x_velocities[region], region, 'x_velocity', 50, 'figures/histogram_boxplot', file_lines)
-  HistogramPlot(y_velocities[region], region, 'y_velocity', 50, 'figures/histogram_boxplot', file_lines)
+  HistogramPlot(x_velocities[region], region, 'x_velocity', 50, figure_path, file_lines)
+  HistogramPlot(y_velocities[region], region, 'y_velocity', 50, figure_path, file_lines)
 
 
 #Compile a dictionary of abs-skew and solidity indexed by region
@@ -101,8 +116,8 @@ for region in tracks_geo_region:
 
 #Plot histograms for abs-skew and solidity
 for region in absskews:
-  HistogramPlot(absskews[region], region, 'absskew', 50, 'figures/histogram_boxplot', file_lines)
-  HistogramPlot(solidities[region], region, 'solidity', 50, 'figures/histogram_boxplot', file_lines)
+  HistogramPlot(absskews[region], region, 'absskew', 50, figure_path, file_lines)
+  HistogramPlot(solidities[region], region, 'solidity', 50, figure_path, file_lines)
 
 
 #Compile a dictionary of dx and dy indexed by regions
@@ -121,52 +136,52 @@ for region in tracks_geo_region:
 
 # Plot histogram for dx and dy
 for region in dx:
-  HistogramPlot(dx[region], region, 'dx', 50, 'figures/histogram_boxplot', file_lines)
-  HistogramPlot(dy[region], region, 'dy', 50, 'figures/histogram_boxplot', file_lines)
-  HistogramPlot(dx_dy[region], region, 'dxdy', 50, 'figures/histogram_boxplot', file_lines)
+  HistogramPlot(dx[region], region, 'dx', 50, figure_path, file_lines)
+  HistogramPlot(dy[region], region, 'dy', 50, figure_path, file_lines)
+  HistogramPlot(dx_dy[region], region, 'dxdy', 50, figure_path, file_lines)
 
 #make boxplots
 region_list = list(tracks_geo_region.keys())
 
-BoxplotPlot(region_list, solidities, 'solidity', 'figures/histogram_boxplot', file_lines, pval_file_lines)
+BoxplotPlot(region_list, solidities, 'solidity', figure_path, file_lines, pval_file_lines)
 
-BoxplotPlot(region_list, velocities, 'velocity', 'figures/histogram_boxplot', file_lines, pval_file_lines)
+BoxplotPlot(region_list, velocities, 'velocity', figure_path, file_lines, pval_file_lines)
 
-BoxplotPlot(region_list, x_velocities, 'x_velocity', 'figures/histogram_boxplot', file_lines, pval_file_lines)
+BoxplotPlot(region_list, x_velocities, 'x_velocity', figure_path, file_lines, pval_file_lines)
 
-BoxplotPlot(region_list, y_velocities, 'y_velocity', 'figures/histogram_boxplot', file_lines, pval_file_lines)
+BoxplotPlot(region_list, y_velocities, 'y_velocity', figure_path, file_lines, pval_file_lines)
 
-BoxplotPlot(region_list, absskews, 'absskew', 'figures/histogram_boxplot', file_lines, pval_file_lines)
+BoxplotPlot(region_list, absskews, 'absskew', figure_path, file_lines, pval_file_lines)
 
-BoxplotPlot(region_list, dx, 'dx', 'figures/histogram_boxplot', file_lines, pval_file_lines)
+BoxplotPlot(region_list, dx, 'dx', figure_path, file_lines, pval_file_lines)
 
-BoxplotPlot(region_list, dy, 'dy', 'figures/histogram_boxplot', file_lines, pval_file_lines)
+BoxplotPlot(region_list, dy, 'dy', figure_path, file_lines, pval_file_lines)
 
 speeds = {}
 for region in region_endpointcells:
   speeds[region] = region_endpointcells[region]['speed']/sampling_t
 
-BoxplotPlot(region_list, speeds, 'speed', 'figures/histogram_boxplot', file_lines, pval_file_lines)
+BoxplotPlot(region_list, speeds, 'speed', figure_path, file_lines, pval_file_lines)
 
 DoverT = {}
 for region in region_endpointcells:
   DoverT[region] = region_endpointcells[region]['DoverT']
 
-BoxplotPlot(region_list, DoverT, 'DoverT', 'figures/histogram_boxplot', file_lines, pval_file_lines)
+BoxplotPlot(region_list, DoverT, 'DoverT', figure_path, file_lines, pval_file_lines)
 
 FMI = {}
 for region in region_endpointcells:
   FMI[region] = region_endpointcells[region]['FMI']
 
-BoxplotPlot(region_list, FMI, 'FMI', 'figures/histogram_boxplot', file_lines, pval_file_lines)
+BoxplotPlot(region_list, FMI, 'FMI', figure_path, file_lines, pval_file_lines)
 
 
 #track lengths of data
-PlotTrackLengthHist(tracks_geo_region, 'figures/histogram_boxplot', file_lines)
+PlotTrackLengthHist(tracks_geo_region, figure_path, file_lines)
 
 
 #Trajectories
-PlotTrajectories(tracks_region, 'figures/histogram_boxplot', file_lines)
+PlotTrajectories(tracks_region, figure_path, file_lines)
 
 
 #write lines to text file 
