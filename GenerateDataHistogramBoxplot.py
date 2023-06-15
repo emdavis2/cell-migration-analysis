@@ -59,12 +59,6 @@ open('sentinels/histogram_boxplot.txt','w').close()
 hist_boxplot_figs = open('sentinels/histogram_boxplot.txt','w')
 file_lines = []
 
-#clears out txt file if it exists
-open('figures/histogram_boxplot/pvals_and_tvals.txt','w').close()
-#create new txt file to write to
-pval_tval_txt = open('figures/histogram_boxplot/pvals_and_tvals.txt','w')
-pval_file_lines = []
-
 #check to see if the path exists, if not make the directory
 if not os.path.exists(save_path):
   os.mkdir(save_path)
@@ -75,6 +69,12 @@ figure_path = save_path + '/histogram_boxplot'
 #check to see if the path exists, if not make the directory
 if not os.path.exists(figure_path):
   os.mkdir(figure_path)
+
+#clears out txt file if it exists
+open('{}/pvals_and_tvals.txt'.format(figure_path),'w').close()
+#create new txt file to write to
+pval_tval_txt = open('{}/pvals_and_tvals.txt'.format(figure_path),'w')
+pval_file_lines = []
 
 #Plot histogram for D/T
 for region in region_endpointcells:
