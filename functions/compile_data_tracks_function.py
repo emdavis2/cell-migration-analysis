@@ -22,11 +22,12 @@ def compile_data_tracks(treatment, min_track_length, region, pixel_size):
     tracks_geo =[]
 
     for file in os.listdir(treatment):
-        tracksp,tracksgeop = read_tracks_aut([treatment+'/'+ file] ,pixel_size,center)
-        if len(tracksp)==0: print("number of tracks read is 0")
+        if file.endswith('.pkl'):
+            tracksp,tracksgeop = read_tracks_aut([treatment+'/'+ file] ,pixel_size,center)
+            if len(tracksp)==0: print("number of tracks read is 0")
 
-        tracks += tracksp
-        tracks_geo += tracksgeop
+            tracks += tracksp
+            tracks_geo += tracksgeop
 
     lengths = [len(tracks_geo[i]) for i in range(len(tracks_geo)) ]
     print("number of tracks before filtering = ", len(tracks_geo))
