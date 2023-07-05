@@ -64,7 +64,7 @@ file_lines = []
 if not os.path.exists(save_path):
   os.mkdir(save_path)
 
-#where acf figures are saved
+#where figures are saved
 figure_path = save_path + '/histogram_boxplot'
 
 #check to see if the path exists, if not make the directory
