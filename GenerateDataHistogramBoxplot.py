@@ -11,34 +11,27 @@ import seaborn as sns
 #from scipy.stats import ttest_ind
 from scipy.stats import f_oneway
 
-treatment1 = str(sys.argv[1])
+treatment_input = sys.argv[1]
 
-treatment2 = str(sys.argv[2])
+min_track_length = int(sys.argv[2])
 
-treatment3 = str(sys.argv[3])
+region_input = sys.argv[3]
 
-min_track_length = int(sys.argv[4])
-
-region1 = str(sys.argv[5])
-
-region2 = str(sys.argv[6])
-
-region3 = str(sys.argv[7])
-
-save_path = str(sys.argv[8])
+save_path = str(sys.argv[4])
 
 pixel_size = 1.54
 
 sampling_t = 5 #min per frame
 
+#turn treatment and region into lists of strings
+treatment_list = list(map(str, treatment_input.strip('[]').split(',')))
+region_list = list(map(str, region_input.strip('[]').split(',')))
+
 #Compile dictionaries of data paths indexed by corresponding region name
 data_paths={}
-if treatment1 != 'False':
-  data_paths[region1] = treatment1
-if treatment2 != 'False':
-  data_paths[region2] = treatment2
-if treatment3 != 'False':
-  data_paths[region3] = treatment3
+for ind,treatment in enumerate(treatment_list):
+  if treatment != 'False':
+    data_paths[region_list[ind]] = treatment
 
 #Compile dictionaries for motion metrics calculated from compile_data_tracks function
 tracks_region = {}
