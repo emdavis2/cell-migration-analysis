@@ -11,6 +11,9 @@ import seaborn as sns
 #from scipy.stats import ttest_ind
 from scipy.stats import f_oneway
 
+### Treatment input is the list of paths to the data-the data should be structured such that the pkl files are organized as:
+### gel_region > treatment_type/day > pkl files
+
 treatment_input = sys.argv[1]
 
 min_track_length = int(sys.argv[2])
@@ -27,20 +30,25 @@ sampling_t = 5 #min per frame
 treatment_list = list(map(str, treatment_input.strip('[]').split(',')))
 region_list = list(map(str, region_input.strip('[]').split(',')))
 
+#Get list of unique defining names for each data path
+treatment_names =[]
+for ind,path in enumerate(treatment_list):
+  treatment_names.append(region_list[ind]+'_'+ntpath.basename(path))
+
 #Compile dictionaries of data paths indexed by corresponding region name
 data_paths={}
 for ind,treatment in enumerate(treatment_list):
   if treatment != 'False':
-    data_paths[region_list[ind]] = treatment
+    data_paths[treatment_names[ind]] = treatment
 
 #Compile dictionaries for motion metrics calculated from compile_data_tracks function
 tracks_region = {}
 tracks_geo_region = {}
 region_cells = {}
 region_endpointcells = {}
-for region in data_paths:
-  region_data_path = data_paths[region]
-  tracks_region[region], tracks_geo_region[region], region_cells[region], region_endpointcells[region] = compile_data_tracks(region_data_path, min_track_length, region, pixel_size)
+for ind,treat_name in enumerate(data_paths):
+  region_data_path = data_paths[treat_name]
+  tracks_region[treat_name], tracks_geo_region[treat_name], region_cells[treat_name], region_endpointcells[treat_name] = compile_data_tracks(region_data_path, min_track_length, region_list[ind], pixel_size)
 
 #check to see if the path exists, if not make the directory
 if not os.path.exists('sentinels'):
@@ -134,39 +142,38 @@ for region in dx:
   HistogramPlot(dx_dy[region], region, 'dxdy', 50, figure_path, file_lines)
 
 #make boxplots
-region_list = list(tracks_geo_region.keys())
 
-BoxplotPlot(region_list, solidities, 'solidity', figure_path, file_lines, pval_file_lines)
+BoxplotPlot(treatment_names, solidities, 'solidity', figure_path, file_lines, pval_file_lines)
 
-BoxplotPlot(region_list, velocities, 'velocity', figure_path, file_lines, pval_file_lines)
+BoxplotPlot(treatment_names, velocities, 'velocity', figure_path, file_lines, pval_file_lines)
 
-BoxplotPlot(region_list, x_velocities, 'x_velocity', figure_path, file_lines, pval_file_lines)
+BoxplotPlot(treatment_names, x_velocities, 'x_velocity', figure_path, file_lines, pval_file_lines)
 
-BoxplotPlot(region_list, y_velocities, 'y_velocity', figure_path, file_lines, pval_file_lines)
+BoxplotPlot(treatment_names, y_velocities, 'y_velocity', figure_path, file_lines, pval_file_lines)
 
-BoxplotPlot(region_list, absskews, 'absskew', figure_path, file_lines, pval_file_lines)
+BoxplotPlot(treatment_names, absskews, 'absskew', figure_path, file_lines, pval_file_lines)
 
-BoxplotPlot(region_list, dx, 'dx', figure_path, file_lines, pval_file_lines)
+BoxplotPlot(treatment_names, dx, 'dx', figure_path, file_lines, pval_file_lines)
 
-BoxplotPlot(region_list, dy, 'dy', figure_path, file_lines, pval_file_lines)
+BoxplotPlot(treatment_names, dy, 'dy', figure_path, file_lines, pval_file_lines)
 
 speeds = {}
 for region in region_endpointcells:
   speeds[region] = region_endpointcells[region]['speed']/sampling_t
 
-BoxplotPlot(region_list, speeds, 'speed', figure_path, file_lines, pval_file_lines)
+BoxplotPlot(treatment_names, speeds, 'speed', figure_path, file_lines, pval_file_lines)
 
 DoverT = {}
 for region in region_endpointcells:
   DoverT[region] = region_endpointcells[region]['DoverT']
 
-BoxplotPlot(region_list, DoverT, 'DoverT', figure_path, file_lines, pval_file_lines)
+BoxplotPlot(treatment_names, DoverT, 'DoverT', figure_path, file_lines, pval_file_lines)
 
 FMI = {}
 for region in region_endpointcells:
   FMI[region] = region_endpointcells[region]['FMI']
 
-BoxplotPlot(region_list, FMI, 'FMI', figure_path, file_lines, pval_file_lines)
+BoxplotPlot(treatment_names, FMI, 'FMI', figure_path, file_lines, pval_file_lines)
 
 
 #track lengths of data
