@@ -46,11 +46,27 @@ for ind,treat_name in enumerate(data_paths):
   region_data_path = data_paths[treat_name]
   tracks_region[treat_name], tracks_geo_region[treat_name], region_cells[treat_name], region_endpointcells[treat_name] = compile_data_tracks(region_data_path, min_track_length, region_list[ind], pixel_size)
 
+
+#check to see if the path exists, if not make the directory
+if not os.path.exists('sentinels'):
+  os.mkdir('sentinels')
+
 #clears out sentinel file if it exists
 open('sentinels/ACF_figures.txt','w').close()
 #create new sentinel file to write to
 acf_fig_region = open('sentinels/ACF_figures.txt','w')
 file_lines = []
+
+#check to see if the path exists, if not make the directory
+if not os.path.exists(save_path):
+  os.mkdir(save_path)
+
+#where figures are saved
+figure_path = save_path + '/acf_figures'
+
+#check to see if the path exists, if not make the directory
+if not os.path.exists(figure_path):
+  os.mkdir(figure_path)
 
 for name in tracks_geo_region:
 
@@ -170,9 +186,9 @@ for name in tracks_geo_region:
   plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err)
   plt.xlabel('lag (5 min)')
   plt.title("Autocorrelaton velocity_angle {}".format(name))
-  plt.savefig('figures/acf_figures/{}_velocity_angle_acf_avg.png'.format(name))
+  plt.savefig('{}/{}_velocity_angle_acf_avg.png'.format(figure_path,name))
   plt.clf()
-  file_lines.append('{}/acf_figures/{}_velocity_angle_acf_avg.png \n'.format(save_path,name))
+  file_lines.append('{}/{}_velocity_angle_acf_avg.png \n'.format(figure_path,name))
 
   #autocorrelation velocity 
   poslagaverage = np.zeros(300)
@@ -200,9 +216,9 @@ for name in tracks_geo_region:
   plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err)
   plt.xlabel('lag (5 min)')
   plt.title("Autocorrelaton velocity {}".format(name))
-  plt.savefig('figures/acf_figures/{}_velocity_acf_avg.png'.format(name))
+  plt.savefig('{}/{}_velocity_acf_avg.png'.format(figure_path,name))
   plt.clf()
-  file_lines.append('{}/acf_figures/{}_velocity_acf_avg.png \n'.format(save_path,name))
+  file_lines.append('{}/{}_velocity_acf_avg.png \n'.format(figure_path,name))
 
   #Autocorrelation speed
   poslagaverage = np.zeros(300)
@@ -231,9 +247,9 @@ for name in tracks_geo_region:
   plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err)
   plt.xlabel('lag (5 min)')
   plt.title("Autocorrelation speed {}".format(name))
-  plt.savefig('figures/acf_figures/{}_speed_acf_avg.png'.format(name))
+  plt.savefig('{}/{}_speed_acf_avg.png'.format(figure_path,name))
   plt.clf()
-  file_lines.append('{}/acf_figures/{}_speed_acf_avg.png \n'.format(save_path,name))
+  file_lines.append('{}/{}_speed_acf_avg.png \n'.format(figure_path,name))
 
 
   #Autocorrelation speed_x
@@ -262,9 +278,9 @@ for name in tracks_geo_region:
   plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err)
   plt.xlabel('lag (5 min)')
   plt.title(" Autocorrelation speed_x {}".format(name))
-  plt.savefig('figures/acf_figures/{}_speed_x_acf_avg.png'.format(name))
+  plt.savefig('{}/{}_speed_x_acf_avg.png'.format(figure_path,name))
   plt.clf()
-  file_lines.append('{}/acf_figures/{}_speed_x_acf_avg.png \n'.format(save_path,name))
+  file_lines.append('{}/{}_speed_x_acf_avg.png \n'.format(figure_path,name))
 
   #Autocorrelation speed_y
   poslagaverage = np.zeros(300)
@@ -292,9 +308,9 @@ for name in tracks_geo_region:
   plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err)
   plt.xlabel('lag (5 min)')
   plt.title(" Autocorrelation speed_y {}".format(name))
-  plt.savefig('figures/acf_figures/{}_speed_y_acf_avg.png'.format(name))
+  plt.savefig('{}/{}_speed_y_acf_avg.png'.format(figure_path,name))
   plt.clf()
-  file_lines.append('{}/acf_figures/{}_speed_y_acf_avg.png \n'.format(save_path,name))
+  file_lines.append('{}/{}_speed_y_acf_avg.png \n'.format(figure_path,name))
 
   #cross correlation velocity vector and polarity vector
   poslagaverage = np.zeros(300)
@@ -333,9 +349,9 @@ for name in tracks_geo_region:
   plt.xlabel('lag (10 min)')
   plt.legend()
   plt.title("Cross correlation velocity and polarity vectors {}".format(name))
-  plt.savefig('figures/acf_figures/{}_vel_pol_crosscorr_avg.png'.format(name))
+  plt.savefig('{}/{}_vel_pol_crosscorr_avg.png'.format(figure_path,name))
   plt.clf()
-  file_lines.append('{}/acf_figures/{}_vel_pol_crosscorr_avg.png \n'.format(save_path,name))
+  file_lines.append('{}/{}_vel_pol_crosscorr_avg.png \n'.format(figure_path,name))
 
   # #cross correlation polarity vector and velocity vector
   # poslagaverage = np.zeros(300)
