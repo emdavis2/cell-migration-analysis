@@ -59,7 +59,8 @@ def BoxplotPlot(region_list, metric_list, metric, save_path, sentinel_path, pval
     sns.boxplot(data=data_boxplot)
     plt.xlabel("Source")
     plt.ylabel("{}".format(metric))
-    plt.savefig('{}/{}_boxplot.png'.format(save_path, metric))
+    plt.xticks(rotation=90)
+    plt.savefig('{}/{}_boxplot.png'.format(save_path, metric),bbox_inches='tight')
     plt.clf()
     sentinel_path.append('{}/{}_boxplot.png \n'.format(save_path, metric))
 
