@@ -112,13 +112,16 @@ for region in x_velocities:
 #Compile a dictionary of abs-skew and solidity indexed by region
 absskews = {}
 solidities = {}
+eccentricities = {}
+areas = {}
 for region in tracks_geo_region:
-  absskews[region], solidities[region] = ExtractAbsskewSolidity(tracks_geo_region[region])
+  absskews[region], solidities[region], eccentricities[region], areas[region] = ExtractAbsskewSolidityEccenArea(tracks_geo_region[region], pixel_size)
 
 #Plot histograms for abs-skew and solidity
 for region in absskews:
   HistogramPlot(absskews[region], region, 'absskew', 50, figure_path, file_lines)
   HistogramPlot(solidities[region], region, 'solidity', 50, figure_path, file_lines)
+  HistogramPlot(eccentricities[region], region, 'eccentricity', 50, figure_path, file_lines)
 
 
 #Compile a dictionary of dx and dy indexed by regions
@@ -144,6 +147,10 @@ for region in dx:
 #make boxplots
 
 BoxplotPlot(treatment_names, solidities, 'solidity', figure_path, file_lines, pval_file_lines)
+
+BoxplotPlot(treatment_names, eccentricities, 'eccentricity', figure_path, file_lines, pval_file_lines)
+
+BoxplotPlot(treatment_names, areas, 'area', figure_path, file_lines, pval_file_lines)
 
 BoxplotPlot(treatment_names, velocities, 'velocity', figure_path, file_lines, pval_file_lines)
 

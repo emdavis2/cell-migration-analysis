@@ -23,17 +23,23 @@ def ExtractVelocity(tracks_geo_region, sampling_t):
 
 #Get abs-skew and solidity for specified region using corresponding tracks_geo_region list of dataframes
 #returns absskew and solidity as single lists for entire region
-def ExtractAbsskewSolidity(tracks_geo_region):
+def ExtractAbsskewSolidityEccenArea(tracks_geo_region, pixel_size):
     absskew_region = []
     solidity_region = []
+    eccentricity_region = []
+    area_region = []
     for i in range(len(tracks_geo_region)):
         absskew_region.append(tracks_geo_region[i]['abs-skew'].dropna().tolist())
         solidity_region.append(tracks_geo_region[i]['solidity'].dropna().tolist())
+        eccentricity_region.append(tracks_geo_region[i]['eccentricity'].dropna().tolist())
+        area_region.append((tracks_geo_region[i]['area'].iloc[:,0]/(pixel_size**2)).dropna().tolist())
 
     absskew_region = np.concatenate(absskew_region).ravel()
     solidity_region = np.concatenate(solidity_region).ravel()
+    eccentricity_region = np.concatenate(eccentricity_region).ravel()
+    area_region = np.concatenate(area_region).ravel()
 
-    return absskew_region, solidity_region
+    return absskew_region, solidity_region, eccentricity_region, area_region
 
 
 #Plot a histogram of data of interest for one region
