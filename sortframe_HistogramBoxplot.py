@@ -52,35 +52,18 @@ for ind,treat_name in enumerate(data_paths):
 
 #Determine which tracks are in first half of movie and which are in second half of movie
 filtered_tracks_geo_region = {}
-filtered_tracks_region = {}
-filtered_region_endpointcells = {}
-# experiment_names = {}
 for treat_name in tracks_geo_region:
   filtered_tracks_geo_region['firsthalf_{}'.format(treat_name)] = []
   filtered_tracks_geo_region['secondhalf_{}'.format(treat_name)] = []
-  filtered_tracks_region['firsthalf_{}'.format(treat_name)] = []
-  filtered_tracks_region['secondhalf_{}'.format(treat_name)] = []
-  filtered_region_endpointcells['firsthalf_{}'.format(treat_name)] = []
-  filtered_region_endpointcells['secondhalf_{}'.format(treat_name)] = []
-#   experiment_names['firsthalf_{}'.format(treat_name)] = []
-#   experiment_names['secondhalf_{}'.format(treat_name)] = []
-  for i,df in enumerate(tracks_geo_region[treat_name]):
-    if df['frame'][0] < 108:
-      filtered_tracks_geo_region['firsthalf_{}'.format(treat_name)].append(df)
-      filtered_tracks_region['firsthalf_{}'.format(treat_name)].append(tracks_region[treat_name][i])
-      filtered_region_endpointcells['firsthalf_{}'.format(treat_name)] = region_endpointcells[treat_name][region_endpointcells[treat_name]['experiment'] == df['experiment'][0]]
-    #   experiment_names['firsthalf_{}'.format(treat_name)].append(df['experiment'][0])
-    else:
-      filtered_tracks_geo_region['secondhalf_{}'.format(treat_name)].append(df)
-      filtered_tracks_region['secondhalf_{}'.format(treat_name)].append(tracks_region[treat_name][i])
-      filtered_region_endpointcells['secondhalf_{}'.format(treat_name)] = region_endpointcells[treat_name][region_endpointcells[treat_name]['experiment'] == df['experiment'][0]]
-    #   experiment_names['secondhalf_{}'.format(treat_name)].append(df['experiment'][0])
-
-
+  for df in tracks_geo_region[treat_name]:
+    firsthalf_df = df.loc[df['frame']<108]
+    secondhalf_df = df.loc[df['frame']>=108]
+    if len(firsthalf_df) > 0:
+      filtered_tracks_geo_region['firsthalf_{}'.format(treat_name)].append(firsthalf_df)
+    if len(secondhalf_df) > 0:
+      filtered_tracks_geo_region['secondhalf_{}'.format(treat_name)].append(secondhalf_df)
 
 tracks_geo_region = filtered_tracks_geo_region
-tracks_region = filtered_tracks_region
-region_endpointcells = filtered_region_endpointcells
 
 treatment_names = list(tracks_geo_region.keys())
 
@@ -111,19 +94,6 @@ open('{}/pvals_and_tvals.txt'.format(figure_path),'w').close()
 pval_tval_txt = open('{}/pvals_and_tvals.txt'.format(figure_path),'w')
 pval_file_lines = []
 
-#Plot histogram for D/T
-for region in region_endpointcells:
-  HistogramPlot(region_endpointcells[region]['DoverT'], region, 'DoverT', 30, figure_path, file_lines)
-
-
-#Plot histogram for speed
-for region in region_endpointcells:
-  HistogramPlot(region_endpointcells[region]['speed'], region, 'speed', 30, figure_path, file_lines)
-
-
-#Plot histogram for FMI
-for region in region_endpointcells:
-  HistogramPlot(region_endpointcells[region]['FMI'], region, 'FMI', 30, figure_path, file_lines)
 
 #Compile a dictionary of velocities indexed by region
 velocities = {}
@@ -198,31 +168,11 @@ BoxplotPlot(treatment_names, dx, 'dx', figure_path, file_lines, pval_file_lines)
 
 BoxplotPlot(treatment_names, dy, 'dy', figure_path, file_lines, pval_file_lines)
 
-speeds = {}
-for region in region_endpointcells:
-  speeds[region] = region_endpointcells[region]['speed']/sampling_t
-
-BoxplotPlot(treatment_names, speeds, 'speed', figure_path, file_lines, pval_file_lines)
-
-DoverT = {}
-for region in region_endpointcells:
-  DoverT[region] = region_endpointcells[region]['DoverT']
-
-BoxplotPlot(treatment_names, DoverT, 'DoverT', figure_path, file_lines, pval_file_lines)
-
-FMI = {}
-for region in region_endpointcells:
-  FMI[region] = region_endpointcells[region]['FMI']
-
-BoxplotPlot(treatment_names, FMI, 'FMI', figure_path, file_lines, pval_file_lines)
 
 
 #track lengths of data
 PlotTrackLengthHist(tracks_geo_region, figure_path, file_lines)
 
-
-#Trajectories
-PlotTrajectories(tracks_region, figure_path, file_lines)
 
 
 #write lines to text file 
