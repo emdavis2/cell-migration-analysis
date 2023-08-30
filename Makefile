@@ -37,14 +37,30 @@ sentinels/ACF_figures.txt: .created-dirs data/stiff_gel\
  functions/acf_functions.py functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
-	python3 GenerateDataACF.py ['data/glass/polyacrylamide','data/stiff_gel/polyacrylamide','data/soft_gel/polyacrylamide','data/glass/7_21_PDMS','data/soft_gel/7_21_PDMS'] 30 ['glass','stiff_gel','soft_gel','glass','soft_gel'] 'figures'
+	python3 GenerateDataACF.py ['data/glass/epi_noepi_comb','data/stiff_gel/epi_noepi_comb'] 30 ['glass','stiff_gel'] 'epicomb_figures'
 
 # Create the boxplot and histogram figures for both glass and gel data
 sentinels/histogram_boxplot.txt: .created-dirs 2023_03_30_Data/glass_data\
  2023_03_30_Data/soft_gel_data 2023_03_30_Data/stiff_gel_data functions/compile_data_tracks_function.py\
  functions/libraries/track_functions.py functions/libraries/qc_functions.py\
  functions/libraries/filter_cells_fns.py functions/libraries/centers.py
-	python3 GenerateDataHistogramBoxplot.py ['data/glass/polyacrylamide','data/stiff_gel/polyacrylamide','data/soft_gel/polyacrylamide','data/glass/7_21_PDMS','data/soft_gel/7_21_PDMS'] 30 ['glass','stiff_gel','soft_gel','glass','soft_gel'] 'figures'
+	python3 GenerateDataHistogramBoxplot.py ['data/glass/epi_noepi_comb','data/glass/7_21_PDMS','data/stiff_gel/epi_noepi_comb','data/stiff_gel/7_21_PDMS'] 30 ['glass','glass','stiff_gel','soft_gel'] 'figures'
+
+
+# Create the autocorrelation figures 
+sentinels/sortframe_ACF_figures.txt: .created-dirs data/stiff_gel\
+ functions/acf_functions.py functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3 sortframe_ACF.py ['data/glass/polyacrylamide','data/stiff_gel/polyacrylamide'] 30 ['glass','stiff_gel'] 'sortframe_figures'
+
+# Create the boxplot and histogram figures for split in half glass and gel data
+sentinels/sortframe_histogram_boxplot.txt: .created-dirs 2023_03_30_Data/glass_data\
+ 2023_03_30_Data/soft_gel_data 2023_03_30_Data/stiff_gel_data functions/compile_data_tracks_function.py\
+ functions/libraries/track_functions.py functions/libraries/qc_functions.py\
+ functions/libraries/filter_cells_fns.py functions/libraries/centers.py
+	python3 sortframe_HistogramBoxplot.py ['data/glass/polyacrylamide','data/stiff_gel/polyacrylamide'] 30 ['glass','stiff_gel'] 'sortframe_figures'
+
 
 # Create the autocorrelation figures 
 sentinels/filter_ACF_figures.txt: .created-dirs data/stiff_gel\
