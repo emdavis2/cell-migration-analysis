@@ -160,7 +160,7 @@ for name in tracks_geo_region:
   # plt.savefig('figures/acf_figures/{}_abs_skew_acf_avg.png'.format(region))
   # plt.clf()
   # file_lines.append('figures/acf_figures/{}_abs_skew_acf_avg.png \n'.format(region))
-
+  '''
   #autocorrelation velocity angle
   poslagaverage = np.zeros(300)
   Nposlagtotal = np.zeros(300)
@@ -189,7 +189,7 @@ for name in tracks_geo_region:
   plt.savefig('{}/{}_velocity_angle_acf_avg.png'.format(figure_path,name))
   plt.clf()
   file_lines.append('{}/{}_velocity_angle_acf_avg.png \n'.format(figure_path,name))
-
+  '''
   #autocorrelation velocity 
   poslagaverage = np.zeros(300)
   Nposlagtotal = np.zeros(300)
@@ -209,17 +209,17 @@ for name in tracks_geo_region:
 
   std_err = np.std(all_ac,axis=0,ddof=1)/np.sqrt(np.shape(all_ac)[0])
 
-  #plt.plot(poslagaverage,label = "positive lag")
+  plt.plot(poslagaverage,label = "positive lag")
   plt.hlines(y=0,xmin=0,xmax=100,color='k')
   plt.xlim(0,min_track_length-4)
   plt.ylim(-0.5,1)
-  plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err)
+  #plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err)
   plt.xlabel('lag (5 min)')
   plt.title("Autocorrelaton velocity {}".format(name))
   plt.savefig('{}/{}_velocity_acf_avg.png'.format(figure_path,name))
   plt.clf()
   file_lines.append('{}/{}_velocity_acf_avg.png \n'.format(figure_path,name))
-
+  '''
   #Autocorrelation speed
   poslagaverage = np.zeros(300)
   Nposlagtotal = np.zeros(300)
@@ -388,3 +388,4 @@ for name in tracks_geo_region:
 #write lines to text file 
 acf_fig_region.writelines(file_lines)
 acf_fig_region.close() 
+'''
