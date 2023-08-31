@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-#from scipy.stats import ttest_ind
+from scipy.stats import ttest_ind
 from scipy.stats import f_oneway
 
 ### Treatment input is the list of paths to the data-the data should be structured such that the pkl files are organized as:
@@ -114,15 +114,19 @@ absskews = {}
 solidities = {}
 eccentricities = {}
 areas = {}
+DoverT_win5 = {}
+speedwin5 = {}
 for region in tracks_geo_region:
   absskews[region], solidities[region], eccentricities[region], areas[region] = ExtractAbsskewSolidityEccenArea(tracks_geo_region[region], pixel_size)
+  DoverT_win5[region], speedwin5[region] = ExtractDoverTwin5_speedwin5(tracks_geo_region[region],sampling_t)
 
 #Plot histograms for abs-skew and solidity
 for region in absskews:
   HistogramPlot(absskews[region], region, 'absskew', 50, figure_path, file_lines)
   HistogramPlot(solidities[region], region, 'solidity', 50, figure_path, file_lines)
   HistogramPlot(eccentricities[region], region, 'eccentricity', 50, figure_path, file_lines)
-
+  HistogramPlot(DoverT_win5[region], region, 'DoverTwindow5', 50, figure_path, file_lines)
+  HistogramPlot(speedwin5[region], region, 'Speedwin5', 50, figure_path, file_lines)
 
 #Compile a dictionary of dx and dy indexed by regions
 dx = {}
@@ -151,6 +155,10 @@ BoxplotPlot(treatment_names, solidities, 'solidity', figure_path, file_lines, pv
 BoxplotPlot(treatment_names, eccentricities, 'eccentricity', figure_path, file_lines, pval_file_lines)
 
 BoxplotPlot(treatment_names, areas, 'area', figure_path, file_lines, pval_file_lines)
+
+BoxplotPlot(treatment_names, DoverT_win5, 'DoverTwindow5', figure_path, file_lines, pval_file_lines)
+
+BoxplotPlot(treatment_names, speedwin5, 'speedwindow5', figure_path, file_lines, pval_file_lines)
 
 BoxplotPlot(treatment_names, velocities, 'velocity', figure_path, file_lines, pval_file_lines)
 
