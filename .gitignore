@@ -16,9 +16,11 @@ figures
 2023_04_19_Data
 2023_07_21_Data
 2023_08_04_Data
+2023_08_26_Data
 sortframe_figures
 epitest_figures
 epicomb_figures
+density_figures
 data_oldstructure
 test_import_list.py
 old_GenerateDataHistogramBoxplot.py
