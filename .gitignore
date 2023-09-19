@@ -21,6 +21,12 @@ sortframe_figures
 epitest_figures
 epicomb_figures
 density_figures
+combined_cutfilterdist_figures
+combined_figures
+combined_filterdist_figures
+cuttrack_combined_figures
+CutTrack_figures
+
 data_oldstructure
 test_import_list.py
 old_GenerateDataHistogramBoxplot.py
