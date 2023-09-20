@@ -32,7 +32,7 @@ def ExtractAbsskewSolidityEccenArea(tracks_geo_region, pixel_size):
     area_region = []
     for i in range(len(tracks_geo_region)):
         absskew_region.append(tracks_geo_region[i]['abs-skew'].dropna().tolist())
-        solidity_region.append(tracks_geo_region[i]['solidity'].dropna().tolist())
+        solidity_region.append(tracks_geo_region[i]['solidity'].fillna(0).tolist())
         eccentricity_region.append(tracks_geo_region[i]['eccentricity'].dropna().tolist())
         area_region.append((tracks_geo_region[i]['area'].iloc[:,0]/(pixel_size**2)).dropna().tolist())
 
@@ -58,6 +58,20 @@ def ExtractDoverTwin5_speedwin5(tracks_geo_region, sampling_t):
 
     return DoverTwin5_region, speedwin5_region
 
+#Get polarity_turn and dvelang for specified region using corresponding tracks_geo_region list of dataframes
+#returns polarity_turn and dvelang as single lists for entire region
+def ExtractPolTurn_Dvelang(tracks_geo_region):
+    polturn_region = []
+    dvelang_region = []
+    for i in range(len(tracks_geo_region)):
+        polturn_region.append(tracks_geo_region[i]['polarity_turn'].fillna(0).tolist())
+        dvelang_region.append(tracks_geo_region[i]['dvelang'].fillna(0).tolist())
+
+    polturn_region = np.concatenate(polturn_region).ravel()
+    dvelang_region = np.concatenate(dvelang_region).ravel()
+
+    return polturn_region, dvelang_region
+
 #Plot a histogram of data of interest for one region
 def HistogramPlot(data_to_plot, region, metric, bin_num, save_path, sentinel_name):
     plt.hist(data_to_plot,bins=bin_num)
@@ -67,6 +81,16 @@ def HistogramPlot(data_to_plot, region, metric, bin_num, save_path, sentinel_nam
     plt.savefig('{}/{}_hist_{}.png'.format(save_path, metric, region))
     plt.clf()
     sentinel_name.append('{}/{}_hist_{}.png \n'.format(save_path, metric, region))
+
+#Plot a scatter plot of two features to see if correlation
+def ScatterPlot(data_to_plot1, data_to_plot2, region, metric1, metric2, save_path, sentinel_name):
+    plt.plot(data_to_plot1, data_to_plot2,'.')
+    plt.title('{} and {} for {}'.format(metric1, metric2, region))
+    plt.xlabel('{}'.format(metric1))
+    plt.ylabel('{}'.format(metric2))
+    plt.savefig('{}/{}and{}_scatter_{}.png'.format(save_path, metric1, metric2, region))
+    plt.clf()
+    sentinel_name.append('{}/{}and{}_scatter_{}.png'.format(save_path, metric1, metric2, region))
 
 
 #Plot boxplots comparing all regions for specified metric
