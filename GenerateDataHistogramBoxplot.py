@@ -116,9 +116,12 @@ eccentricities = {}
 areas = {}
 DoverT_win5 = {}
 speedwin5 = {}
+polturns = {}
+dvelangs = {}
 for region in tracks_geo_region:
   absskews[region], solidities[region], eccentricities[region], areas[region] = ExtractAbsskewSolidityEccenArea(tracks_geo_region[region], pixel_size)
   DoverT_win5[region], speedwin5[region] = ExtractDoverTwin5_speedwin5(tracks_geo_region[region],sampling_t)
+  polturns[region], dvelangs[region] = ExtractPolTurn_Dvelang(tracks_geo_region[region])
 
 #Plot histograms for abs-skew and solidity
 for region in absskews:
@@ -127,6 +130,7 @@ for region in absskews:
   HistogramPlot(eccentricities[region], region, 'eccentricity', 50, figure_path, file_lines)
   HistogramPlot(DoverT_win5[region], region, 'DoverTwindow5', 50, figure_path, file_lines)
   HistogramPlot(speedwin5[region], region, 'Speedwin5', 50, figure_path, file_lines)
+  ScatterPlot(solidities[region], dvelangs[region], region, 'solidity', 'turnangle', figure_path, file_lines)
 
 #Compile a dictionary of dx and dy indexed by regions
 dx = {}

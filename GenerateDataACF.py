@@ -207,7 +207,7 @@ for name in tracks_geo_region:
     #Nposlagtotal[0:len(Nposlags)] += Nposlags
   poslagaverage /= len(tracks_geo_region[name]) #Nposlagtotal 
 
-  std_err = np.std(all_ac,axis=0,ddof=1)/np.sqrt(np.shape(all_ac)[0])
+  #std_err = np.std(all_ac,axis=0,ddof=1)/np.sqrt(np.shape(all_ac)[0])
 
   plt.plot(poslagaverage,label = "positive lag")
   plt.hlines(y=0,xmin=0,xmax=100,color='k')
@@ -219,6 +219,47 @@ for name in tracks_geo_region:
   plt.savefig('{}/{}_velocity_acf_avg.png'.format(figure_path,name))
   plt.clf()
   file_lines.append('{}/{}_velocity_acf_avg.png \n'.format(figure_path,name))
+
+
+  #Crosscorrelation of polarity turn and dvelang
+  poslagaverage = np.zeros(300)
+  neglagaverage = np.zeros(300)
+  #Nposlagtotal = np.zeros(300)
+  all_ac_pos = []
+  all_ac_neg = []
+  for df in tracks_geo_region[name]:
+    track=df
+    combined = pd.concat([track[['polarity_turn']].reset_index(drop=True),track[['dvelang']].reset_index(drop=True)], axis = 1 )
+    poslagsmean, Nposlags, neglagsmean, Nneglags = xcorr(combined, min_track_length)
+
+    #remove nans here
+    poslagsmean[np.isnan(poslagsmean)] = 0
+    neglagsmean[np.isnan(neglagsmean)] = 0
+    all_ac_pos.append(poslagsmean)
+    all_ac_neg.append(neglagsmean)
+    poslagaverage[0:len(poslagsmean)] += poslagsmean # Nposlags*poslagsmean
+    neglagaverage[0:len(neglagsmean)] += neglagsmean
+    #Nposlagtotal[0:len(Nposlags)] += Nposlags
+  poslagaverage /= len(tracks_geo_region[name]) #Nposlagtotal 
+  neglagaverage /= len(tracks_geo_region[name])
+
+  #std_err_pos = np.std(all_ac_pos,axis=0,ddof=1)/np.sqrt(np.shape(all_ac_pos)[0])
+  #std_err_neg = np.std(all_ac_neg,axis=0,ddof=1)/np.sqrt(np.shape(all_ac_neg)[0])
+
+  plt.plot(poslagaverage,label = "positive lag")
+  plt.plot(neglagaverage,label = "negative lag")
+  plt.hlines(y=0,xmin=0,xmax=100,color='k')
+  plt.xlim(0,min_track_length-4)
+  #plt.ylim(-0.5,1)
+  #plt.errorbar(np.arange(0,min_track_length-4),poslagaverage[0:min_track_length-4],yerr=std_err_pos,label='pos lag')
+  #plt.errorbar(np.arange(0,min_track_length-4),neglagaverage[0:min_track_length-4],yerr=std_err_neg,label='neg lag')
+  plt.xlabel('lag (10 min)')
+  plt.legend()
+  plt.title("Cross correlation polarity angle and turn angle {}".format(name))
+  plt.savefig('{}/{}_polang_velang_crosscorr_avg.png'.format(figure_path,name))
+  plt.clf()
+  file_lines.append('{}/{}_polang_velang_crosscorr_avg.png \n'.format(figure_path,name))
+
   '''
   #Autocorrelation speed
   poslagaverage = np.zeros(300)
